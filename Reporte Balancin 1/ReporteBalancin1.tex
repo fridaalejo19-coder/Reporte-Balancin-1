@@ -3,13 +3,15 @@
 
 % Language setting
 % Replace `english' with e.g. `spanish' to change the document language
-\usepackage[spanish]{babel} % Manejo de idiomas
+\usepackage[spanish,es-noshorthands]{babel}
 \usepackage[utf8]{inputenc}
 % Set page size and margins
 % Replace `letterpaper' with`a4paper' for UK/EU standard size
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 % Useful packages
+\usepackage[table]{xcolor} % Para colores en tablas
+\usepackage{array}         % Para mejor manejo de columnas
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{float}
@@ -17,7 +19,6 @@
 \usepackage{natbib}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \spanishdecimal{.}
-\usepackage{geometry}
 \usepackage{graphics}
 %\usepackage[sf,bf,tiny,center,compact]{titlesec}
 \usepackage{subfigure}
@@ -26,6 +27,7 @@
 \usepackage{mathrsfs}
 \usepackage{hyphenat}
 \usepackage{tikz}
+\usetikzlibrary{arrows, positioning}
 \usepackage{blox}
 \hyphenation{co-mer-cial rea-li-zan si-guien-te si-mu-la-ción ke-lly con-si-de-ra-da}
 \bibpunct{(}{)}{;}{a}{,}{,}
@@ -69,12 +71,16 @@
 \par
 	Sánchez Alejo Frida Alexandra \rule{70mm}{0.1mm}
 \par
+\vspace{0.4cm}
+\par
+	Zeron Marin Luis Alejandro \rule{70mm}{0.1mm}
+\par
 	
 	\vfill
 
 % Bottom of the page
 	{\large Fecha compromiso: 5 de marzo del 2026\par
-    Fecha en que se entregó: 28 de marzo del 2026}.
+    Fecha en que se entregó: 5 de marzo del 2026}.
 \end{titlepage}
 
 %\frontmatter	%fija la numeración romana
@@ -90,7 +96,7 @@
 
 
 \section{Objetivo}
-Construir, instrumentar y controlar de manera embebida un robot de péndulo invertido sobre dos ruedas seguidor de línea (PISDRSL) que suba y baje pendientes de $15\ [^\circ]$
+Construir, instrumentar y controlar de manera embebida un robot de péndulo invertido sobre dos ruedas seguidor de línea (PISDRSL), con capacidad para superar pendientes de 15~[$^\circ$] y realizar trayectorias curvas (giros a la izquierda y derecha) siguiendo una línea blanca sobre un fondo negro. Para ello, se empleará un microcontrolador PIC18F4550 y comunicación inalámbrica vía Bluetooth con una estación base para la monitorización y graficación del comportamiento de las variables dinámicas del sistema durante su recorrido experimental en la pista.
 
 \section{Marco Teórico}
 \subsection{Modelo no lineal del péndulo con dos ruedas}
@@ -330,7 +336,7 @@ Empecemos definiendo el esfuerzo de control $u$ como sigue \citep{HernandezBook2
 \end{equation}
 
 Así usando (\ref{eq:24}), (\ref{eq:33}) y (\ref{eq:35}) se puede construir el diagrama de simulación analógica de la Figura \ref{fig:2}:
-
+\shorthandoff{;}
 \begin{figure}[H]
     \centering
         \begin{tikzpicture}
@@ -359,7 +365,7 @@ Así usando (\ref{eq:24}), (\ref{eq:33}) y (\ref{eq:35}) se puede construir el d
         \caption{Diagrama de simulación analógica de (\ref{eq:24}) y (\ref{eq:33}).}
         \label{fig:2}
     \end{figure}
-    
+    \shorthandon{;}
 Aplicando transformada de Laplace al diagrama de la Figura \ref{fig:2} se obtiene el diagrama de bloques siguiente \citep{HernandezBook2024}:
 
 \begin{figure}[H]
@@ -501,36 +507,121 @@ Una vez posicionados los ceros en $z_1$, $z_2$ y $z_3$ se puede encontrar el val
         \caption{Diagrama de bloques del sistema en lazo cerrado con retroalimentación negativa, $U_n(s)=-U(s)$.}
         \label{fig:6}
     \end{figure}
+Es importante reflexionar sobre los efectos de las ganancias en los términos del controlador (\ref{eq:40}). Los dos primeros términos representan un controlador del tipo proporcional con retroalimentación de velocidad para balancear el robot, donde la ganancia $k_1$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la
+ganancia $k_2$ pondera el efecto proporcional. Los últimos dos términos representan un controlador proporcional integral de velocidad traslacional del robot, donde la ganancia $k_3$ pondera el efecto proporcional mientras la ganancia $k_4$ pondera el efecto integral.
+
+Debido a que el robot cuenta con dos actuadores (motor de la rueda derecha y motor de la rueda izquierda) es necesario que los esfuerzos de control $\tau_a$ en (\ref{eq:29}) y $u$ en (\ref{eq:35}) comanden dichos actuadores, por lo que la relación que tienen con $\tau_r$ y $\tau_l$ está dada por \citep{HernandezBook2024}:
+
+\begin{equation}
+    \begin{bmatrix}
+        \tau_a \\
+        u \\
+    \end{bmatrix} 
+    = Q \begin{bmatrix}
+        \tau_r\\
+        \tau_l\\
+    \end{bmatrix}, \quad 
+    Q=\begin{bmatrix}
+        1 & -1 \\
+        1 & 1 \\
+    \end{bmatrix}
+    \label{eq:45}
+\end{equation}
+
+Como $det(Q)=2$ entonces $Q^{-1}$ existe y para calcular $\tau_r$ y $\tau_l$ en función de $\tau_a$ y $u$ se requiere:
+
+\begin{equation}
+    \begin{bmatrix}
+        \tau_r \\
+        \tau_l \\
+    \end{bmatrix} 
+    = Q^{-1} \begin{bmatrix}
+        \tau_a\\
+        u\\
+    \end{bmatrix}, \quad 
+    Q^{-1}=\begin{bmatrix}
+        \frac{1}{2} & \frac{1}{2} \\
+        -\frac{1}{2} & \frac{1}{2} \\
+    \end{bmatrix}
+    \label{eq:46}
+\end{equation}
+
+Finalmente los pares aplicados a las ruedas son:
+
+\begin{equation}
+    \tau_r=\dfrac{\tau_a}{2}+\dfrac{u}{2}
+    \label{eq:47}
+\end{equation}
+\begin{equation}
+    \tau_l=-\dfrac{\tau_a}{2}+\dfrac{u}{2}
+    \label{eq:48}
+\end{equation}
 
 \section{Materiales y Métodos}
 \subsection{Materiales}
-En el Cuadro \ref{tabla:materiales} se muestran los materiales empleados para el desarrollo de la práctica.  
+En el Cuadro \ref{tabla:materiales} se muestran los materiales empleados para el desarrollo del PISDRSL.  
 
 \begin{table}[H]
 \centering
-\caption{Componentes electrónicos utilizados.} 
+\caption{Componentes electrónicos y mecánicos utilizados.}
 \begin{tabular}{|c|c|}\hline
+    \rowcolor{gray!30}
 Material: & Cantidad: \\ \hline
-Micrcontrolador PIC18F4550 & 1\\
-Amplificador operacional TL084 & 1\\
-Potenciómetro $5\ [k\Omega]$ & 1\\
-Capacitor cerámico $15\ [pF]$ & 2\\
-Capacitor cerámico $0.1\,[\mu\text{F}]$ & 3\\
-Capacitor cerámico $0.01\,[\mu\text{F}]$ & 1\\
-Cristal de cuarzo $20\ [MHz]$ & 1\\
-Resistencia $4.7\ [k\Omega]$ & 4\\
-Resistencia $1\ [k\Omega]$ & 3\\
-Resistencia $330\ [k\Omega]$ & 1\\
-Resistencia $100\ [k\Omega]$ & 1\\
-Resistencia $53\ [k\Omega]$ & 1\\
-Micro switch 2 patas & 1\\
-Alambre de cobre estañado calibre 22 de $1\ [m]$ & 1\\
+Microcontrolador PIC18F4550 & 1\\ \hline
+Sensor óptico reflexivo infrarrojo TCRT5000 & 2\\ \hline
+Módulo bluetooth HC-05 $5\ [k\Omega]$ & 1\\ \hline
+Driver de Puente H L298N & 1\\ \hline
+Sensor MPU6050 & 1\\ \hline
+Capacitor cerámico $100\ [nF]$ & 2\\ \hline
+Capacitor cerámico $0.1\,[\mu\text{F}]$ & 1\\ \hline
+Capacitor cerámico $15\ [pF]$ & 2\\ \hline
+Capacitor cerámico $22\ [pF]$ & 2\\ \hline
+Cristal de cuarzo $20\ [MHz]$ & 1\\ \hline
+Resistencia $100\ [Omega]$ & 1\\ \hline
+Resistencia $100\ [k\Omega]$ & 1\\ \hline
+Resistencia $2.2\ [k\Omega]$ & 4\\ \hline
+Interruptor de 2 polos & 1\\ \hline
+Batería LiPo Spard $2100 [mAh], 11.1 [V]$, 15C 3S RC & 1\\ \hline
+Espárragos de $\frac{3}{16}$ $[in]$ & $4$\\ \hline
+Cargador balanceador para batería & 1\\ \hline
+Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ & $2$ \\ \hline
+Llanta & 2\\ \hline
+Cople de motor & 2\\ \hline
+Placas de acrílico de $14.5\:[cm]\times6.5\:[cm]$ con un grosor de $5.5\:[mm]$&$2$\\ \hline
+Fusible $2\:[A]$ & $1$ \\ \hline
+Tornillos de cabeza hexagonal M3 & $18$ \\
+
 \hline
 \end{tabular}
 \label{tabla:materiales}
 \end{table}
 
-En el Cuadro \ref{tabla:computadora} se muestra el equipo de cómputo utilizado para el desarrollo de la práctica.  
+\begin{table}[H]
+	\centering
+	\caption{ Descripción de componentes.} 
+	\begin{tabular}{|p{6cm}|p{9cm}|l|}\hline
+		\textbf{Material} & \textbf{Descripción general} \\ \hline
+		Batería RC & Batería de polímero de litio de alta descarga utilizada para alimentar circuitos y motores \\\hline
+		Espárragos de $\frac{3}{16}$ $[in]$ & Barras roscadas utilizadas para ensamblajes mecánicos y estructurales\\ \hline
+		Módulo puente H L298N & Módulo controlador de motores de corriente continua que permite cambiar la dirección y velocidad de los motores \\ \hline
+		Cargador balanceador para batería LiPo & Dispositivo que permite cargar baterías LiPo asegurando una distribución equilibrada de la carga en sus celdas \\ \hline
+		Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ & Motor de corriente continua con reducción de velocidad y sensor \textit{encoder} para control de posición y velocidad \\ \hline
+		Llanta & Ruedas que permiten el desplazamiento del PISDRSL \\ \hline
+		Cople de motor & Acople mecánico utilizado para conectar el eje del motor con otros elementos mecánicos \\ \hline
+		Tarjeta MPU6050 & Sensor de movimiento que integra un acelerómetro y giroscopio de 6 ejes para medición de inclinación y movimiento \\ \hline
+		Tarjeta Tcrt 5000 & Sensor óptico de reflexión utilizado para la detección de línea \\ \hline
+		Microcontrolador PIC18F4550 & Microcontrolador de $8\;[b]$ utilizado para el control del sistema \\ \hline
+		Placas de acrílico de $14.5\:[cm]\times6.5\:[cm]$ con un grosor de $5.5\:[mm]$ & Acrílico utilizado para las placas del PISDRSL\\ \hline
+		Fusible $2\:[A]$ & Dispositivo de protección que interrumpe el circuito en caso de sobre corriente \\ \hline
+		Capacitores cerámicos ($22 \; [pF]$, $0.1 \;[\mu F]$) & Componentes electrónicos utilizados para el filtrado, estabilización de señales eléctricas y en circuitos de osciladores \\\hline
+		Resistencias ($2.2 \:[k\Omega]$, $100 \:[\Omega]$) & Resistores utilizados en circuitos electrónicos para limitar corriente, formar divisores de voltaje y controlar señales \\\hline
+		Conectores JST & Conectores de uso común en sistemas electrónicos para conexiones seguras y rápidas \\ \hline
+		Interruptor de 2 polos & Dispositivo mecánico utilizado para controlar el encendido y apagado del circuito \\ \hline
+	\end{tabular}
+	\label{tabla:descripcion}
+\end{table}
+
+En el Cuadro \ref{tabla:computadora} se muestra el equipo de cómputo utilizado para el desarrollo del PISDRSL.  
 
 \begin{table}[H]
 \centering
@@ -549,7 +640,7 @@ Especificaciones de Windows & 11 \textit{Home Single Language}
 \label{tabla:computadora}
 \end{table}
 
-En el Cuadro \ref{tabla:software} se muestran los software utilizados para el desarrollo de la práctica.  
+En el Cuadro \ref{tabla:software} se muestran los software utilizados para el desarrollo del PISDRSL.  
 
 \begin{table}[H]
 \centering
@@ -557,306 +648,61 @@ En el Cuadro \ref{tabla:software} se muestran los software utilizados para el de
 \begin{tabular}{|c|c|}\hline
 Software: & Versión: \\ \hline
 CCS Compiler & Versión 5.083\\
-Proteus & Versión 8.15 \\
+MATLAB & R2021a\\
 \hline
 \end{tabular}
 \label{tabla:software}
 \end{table}
 
-En el Cuadro \ref{tabla:materialLab} se muestra el equipo de laboratorio utilizado para el desarrollo de la práctica. 
-\begin{table}[H]
-\centering
-\caption{El material del laboratorio empleado para el desarrollo de la práctica.} 
-\begin{tabular}{|c|c|}\hline
-Equipo: & Características: \\ \hline
-Osciloscopio & Tektronix TDS2024B 4 canales, 200 $[MHz]$ de ancho de banda\\
-Generador de funciones & Agilent 33210A \\
-Fuente conmutada & Propiedad del docente \\
-\hline
-\end{tabular}
-\label{tabla:materialLab}
-\end{table}
-
 \subsection{Diagrama de conexiones entre componentes}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/Diagrama.jpg}
-    \caption{Conexión eléctrica de los componentes de la práctica.}
+    \includegraphics[width=0.95\textwidth]{img/ConexionesElectricasBalancin.jpeg}
+    \caption{Conexión eléctrica de los componentes en el PISDRSL.}
     \label{fig:foto}
 \end{figure}
 
 \subsection{Metodología}
-\subsubsection{Procedimiento}
-La metodología utilizada para el desarrollo de la práctica se compone de diversas etapas:
+La metodología utilizada para el desarrollo del PISDRSL se compone de diversas etapas: 
 
 \begin{enumerate}
-\item Contrucción de prototipo físico de acuerdo con la Figura \ref{fig:foto} siguiendo todas las conexiones. 
+    \item \textbf{Recopilación de información:} Se realiza un análisis exhaustivo de los requerimientos de los componentes del PISDRSL, además del marco teórico relacionado con su comportamiento dinámico y los principios de control aplicables. Asimismo, se consideran mejoras potenciales y la retroalimentación proporcionada tanto por los integrantes del equipo como por el docente. En esta etapa también se identifican y adquieren los componentes electrónicos, materiales y herramientas necesarios para la construcción del sistema.
 
-\item Desarrollo de programa en CCS Compiler para poder leer una señal analógica y convertirla en una señal digital. 
+    \item \textbf{Medición preliminar:} Se determinan las dimensiones y la disposición de los componentes electrónicos dentro de la estructura del PISDRSL para su ensamblaje. Además, se mide la masa de cada componente con el fin de distribuir adecuadamente la carga dentro de la estructura y calcular los momentos de inercia correspondientes, tanto del sistema completo como de sus elementos individuales. También se registra la velocidad de giro de los motores midiendo el número de vueltas por minuto, lo que permite estimar la velocidad angular máxima y los voltajes.
 
-\item Cálculos de el filtro que se utilizó para tener una señal más limpia. 
+    \item \textbf{Diseño estructural y electrónico:} Se desarrolla el diseño de la estructura del PISDRSL considerando sus especificaciones, restricciones mecánicas y distribución de peso. Paralelamente, se diseña la PCB, definiendo el trazado de las pistas de conexión eléctrica, la ubicación precisa de los componentes y la integración de los distintos subsistemas.
 
-\item Configuramos la fuente dual con un voltaje de $\pm$ 12 $[V]$ para alimentar el amplificador operacional y +5V para alimentar el microcontrolador, además, en el osciloscopio configuramos los canales 1 y 2 con un acoplamiento de corriente continua (CC). Por último configuramos nuestros dos generadores de funciones, el primero va a ser el que va a introducir el ruido, va a tener una frecuencia de 10 $[Hz]$ y una amplitud de 3 $[V]$ y un offset de -2.5 $[V]$. El segundo osciloscopio se configuró con una amplitud de 2 $[V]$, sin offset y la frecuencia fue variable.
+    \item \textbf{Fabricación y ensamblaje:} Se procede a la manufactura de la PCB y al montaje de los componentes sobre la estructura del sistema. Para ello, se emplean elementos de sujeción como tornillos y tuercas, asegurando una fijación estable. Se realizan las conexiones eléctricas mediante cables con conectores tipo Molex, garantizando una interconexión correcta entre los distintos elementos del sistema.
 
-\item Pruebas con diferentes frecuencias para ver como se comporta el fenómeno de \textit{aliasing}. 
+    \item \textbf{Verificación dimensional final:} Se obtienen mediciones precisas de la estructura final del PISDRSL, verificando la distancia entre los ejes de los motorreductores y los distintos componentes del sistema, asegurando la coherencia con el diseño previsto.
 
-\end{enumerate} 
+    \item \textbf{Cálculo de parámetros:} Se determinan los parámetros físicos y matemáticos necesarios para modelar la dinámica del sistema, incluyendo los coeficientes de fricción, las inercias y la respuesta de los motores. También se calculan las ganancias del controlador que se implementará posteriormente.
 
-\subsubsection{Cálculos}
-Se muestra el análisis de un filtro \textit{RC} de primer orden. La función de transferencia del sistema en el dominio de Laplace está dada por:
+    \item \textbf{Implementación del control:} Se genera el algoritmo de control en el microcontrolador PIC18F4550 del PISDRSL, asegurando una programación correcta para la operación del sistema en tiempo real.
 
-\begin{equation}
-\frac{V_o(s)}{V_i(s)} = \frac{a}{s+a}
-\end{equation}
-donde:
+    \item \textbf{Integración de comunicación inalámbrica:} Se establece la comunicación inalámbrica mediante \textit{bluetooth}, permitiendo el monitoreo remoto del sistema.
 
-\begin{equation}
-a = \frac{1}{RC}
-\end{equation}
-
-La frecuencia angular de corte está definida como:
-
-\begin{equation}
-\omega_c = a = \frac{1}{RC}
-\end{equation}
-donde \textit{R} es la resistencia y \textit{C} es el capacitor, esto se relaciona con la frecuencia de corte en Hertz mediante:
-
-\begin{equation}
-\omega_c = 2\pi f_c
-\end{equation}
-
-Para una frecuencia de corte deseada tal que:
-
-\begin{equation}
-\omega_c = 188.49 \, \text{rad/s}
-\end{equation}
-y considerando un capacitor de:
-
-\begin{equation}
-C = 0.1 \, \mu F
-\end{equation}
-se despeja el valor de la resistencia:
-
-\begin{equation}
-R = \frac{1}{\omega_c C}
-\end{equation}
-
-Sustituyendo valores:
-
-\begin{equation}
-R = \frac{1}{(188.49)(0.1 \times 10^{-6})}
-\end{equation}
-obteniéndose:
-
-\begin{equation}
-R = 53 \, k\Omega
-\end{equation}
-
-Dado que se selecciona el valor comercial más cercano, se emplea una resistencia de:
-
-\begin{equation}
-R = 51 \, k\Omega
-\end{equation}
-
-Con este valor comercial, la nueva frecuencia angular de corte es:
-
-\begin{equation}
-\omega_c = \frac{1}{RC} = 196.07 \, \left[\frac{\text{rad}}{\text{s}}\right]
-\end{equation}
-y por lo tanto, la frecuencia de corte real resulta:
-
-\begin{equation}
-f_c = 31.2 \, [Hz]
-\end{equation}
+    \item \textbf{Sintonización y ajuste final:} Se realizan pruebas de funcionamiento para evaluar el desempeño del controlador. En esta etapa, se ajustan finamente las ganancias del control, mejorando la respuesta del sistema para que realice el recorrido especificado de manera precisa, estable y robusta ante cambios de iluminación.
+\end{enumerate}  
 
 \section{Resultados y Discusión}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/45Hz - Esquema_1.png}
+    \includegraphics[width=0.5\textwidth]{img/Esquema_1.png}
     \caption{Imagen de oscilocopio con un muestreo de 10 $[ms]$ y la señal tiene una frecuencia de 45 $[Hz]$ sin filtro.}
     \label{fig:Esquema_1}
 \end{figure}
 
 
-
-
 \subsection{Aguilar Sarabia Diego Eugenio}
 En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
-
-\subsection{Alanis Martínez Jose Jeancarlo}
-Durante el desarrollo de la práctica se pudo analizar de forma experimental 
-cómo influye el periodo de muestreo en la calidad de la señal digitalizada 
-y posteriormente reconstruida. Se trabajó con una señal analógica conformada 
-por una componente principal y ruido, la cual fue aplicada al convertidor 
-analógico-digital del microcontrolador PIC18F4550. Posteriormente, la señal 
-fue reconstruida mediante un convertidor digital-analógico, permitiendo 
-observar directamente los efectos del muestreo.
-
-Se comprobó que el parámetro determinante fue la frecuencia de muestreo 
-($f_s$), la cual está directamente relacionada con el periodo de muestreo 
-($T_s$) y define la frecuencia de Nyquist 
-($f_N = \frac{f_s}{2}$). 
-Cuando la frecuencia de la señal de entrada se mantuvo por debajo de dicho 
-límite, la forma de onda obtenida a la salida del \textit{DAC} presentó 
-una alta similitud con la señal original, sin deformaciones apreciables.
-
-Por ejemplo, al emplear un periodo de muestreo de 
-$1\,[\mathit{ms}]$ ($f_s = 1000\,[\mathit{Hz}]$), 
-el sistema logró reconstruir correctamente señales con frecuencias 
-inferiores a $500\,[\mathit{Hz}]$. En estas condiciones, el microcontrolador 
-capturó suficientes muestras por cada ciclo, lo que permitió representar 
-adecuadamente la información contenida en la señal y reproducirla con fidelidad. 
-De manera similar, cuando se utilizó un periodo de 
-$10\,[\mathit{ms}]$ ($f_s = 100\,[\mathit{Hz}]$), 
-la reconstrucción adecuada solo fue posible para frecuencias menores 
-a $50\,[\mathit{Hz}]$.
-
-Al incrementar la frecuencia de la señal por encima de la frecuencia de 
-Nyquist correspondiente, comenzaron a observarse alteraciones importantes 
-en la señal reconstruida. Estas modificaciones se manifestaron como cambios 
-en la forma y en la frecuencia aparente de la señal de salida. La causa de 
-este comportamiento fue la reducción en el número de muestras por ciclo, 
-lo cual impidió que el \textit{ADC} capturara información suficiente para 
-describir correctamente la señal original.
-
-Este efecto corresponde al fenómeno de \textit{aliasing}, donde componentes 
-de frecuencia superiores al límite permitido se reflejan dentro del rango 
-válido del sistema, generando frecuencias falsas o distorsionadas en la 
-señal digitalizada. En consecuencia, el \textit{DAC} reproduce una forma 
-de onda que no representa con exactitud la señal aplicada inicialmente.
-
-Como medida preventiva, se identificó la importancia de implementar un 
-filtro pasabajas previo al proceso de muestreo. Este filtro, conocido como 
-filtro \textit{antialiasing}, limita el contenido espectral de la señal 
-a valores menores que la frecuencia de Nyquist, eliminando o atenuando 
-las componentes que podrían provocar \textit{aliasing}. De esta manera, 
-se garantiza que el sistema de adquisición procese únicamente información 
-que pueda ser correctamente muestreada y reconstruida.
-
-En conclusión, la práctica permitió verificar experimentalmente que la 
-selección adecuada de la frecuencia de muestreo es un factor crítico en 
-los sistemas digitales de adquisición. Un valor insuficiente de $f_s$ 
-compromete la integridad de la señal y genera distorsiones, mientras que 
-un muestreo correctamente definido preserva la fidelidad de la información 
-durante todo el proceso de digitalización y reconstrucción.
 
 \subsection{Fernández Rendón Anna Patricia}
 Se realizaron varios  
 
-\subsection{Loredo Guillén Ulises Hiram}
-Con los resultados obtenidos durante la práctica, se pudo constatar 
-de forma experimental los efectos del fenómeno de muestreo sobre 
-una señal senoidal contaminada por ruido.  
-
-Cuando se elevó la frecuencia de muestreo a un valor por encima del 
-doble de la frecuencia máxima de la señal, la forma de onda digital 
-obtenida se vio mejorada. Se observó que la representación discreta 
-conservaba mejor la amplitud y la frecuencia de la señal analógica, 
-lo que valida experimentalmente el criterio de Nyquist.  
-
-Los resultados obtenidos con el filtro \textit{anti-aliasing} 
-mostraron una reducción considerable del ruido de alto rango de 
-frecuencias en la señal de entrada. Sin el filtro, las muestras 
-presentaban una mayor dispersión y se percibían variaciones en la señal. 
-Con el filtro, la señal digital obtenida es más estable y se asemeja 
-más a la forma de onda senoidal original. Por lo tanto, los resultados 
-experimentales coinciden con los fundamentos teóricos estudiados 
-previamente, en particular con el fenómeno de \textit{aliasing}.
-
-\subsection{Luna Loarca Raúl}
-El comportamiento observado dependió directamente del periodo de muestreo 
-$T_s$ seleccionado. Para un periodo de muestreo de 
-$1\,[\textit{ms}]$, equivalente a una frecuencia de muestreo de 
-$1\,[\textit{kHz}]$, la señal pudo reconstruirse correctamente cuando la 
-frecuencia de la señal de entrada era menor a $500\,[\textit{Hz}]$. 
-Este resultado coincide con el criterio de Nyquist, el cual establece 
-que la frecuencia de muestreo debe ser al menos el doble de la frecuencia 
-máxima presente en la señal para evitar la pérdida de información.
-
-Por debajo de este límite, el microcontrolador fue capaz de capturar 
-suficientes muestras por periodo de la señal, permitiendo que el DAC 
-reconstruyera una forma de onda similar a la señal original.
-
-Sin embargo, cuando la frecuencia de la señal de entrada superó los 
-$500\,[\textit{Hz}]$, comenzaron a observarse distorsiones significativas 
-en la señal reconstruida. Estas distorsiones se debieron directamente al 
-fenómeno de \textit{aliasing}. Al no cumplirse el criterio de Nyquist, el 
-sistema tomó un número insuficiente de muestras por ciclo de la señal, 
-lo que provocó que el microcontrolador interpretara la señal como si 
-tuviera una frecuencia diferente. Como resultado, la señal reconstruida 
-presentó deformaciones y pérdida de fidelidad respecto a la señal original.
-
-Cuando se utilizó un periodo de muestreo mayor, como 
-$10\,[\textit{ms}]$, el límite de Nyquist se redujo a 
-$50\,[\textit{Hz}]$, por lo que el \textit{aliasing} ocurrió a frecuencias 
-mucho más bajas.
-
-Se demostró que el \textit{aliasing} es un fenómeno inherente a los sistemas 
-de adquisición digital cuando la frecuencia de muestreo no es suficientemente 
-alta. La práctica permitió comprobar que la correcta selección de la 
-frecuencia de muestreo es fundamental para conservar intacta la señal y 
-evitar la aparición de distorsiones en el proceso de reconstrucción.
-
-Durante la práctica se observó experimentalmente el fenómeno de 
-\textit{aliasing} al muestrear una señal analógica compuesta por una señal 
-portadora y una señal de ruido, la cual fue introducida al ADC del 
-microcontrolador PIC18F4550 y posteriormente reconstruida mediante un DAC. 
-El comportamiento del sistema dependió directamente del periodo de muestreo 
-$T_s$ y, por lo tanto, de la frecuencia de muestreo $f_s$ y su correspondiente 
-frecuencia de Nyquist $f_N = \frac{f_s}{2}$.
-
-Se comprobó que cuando la frecuencia de la señal de entrada se mantuvo 
-por debajo de la frecuencia de Nyquist, la señal reconstruida por el DAC 
-conservó su forma original, sin presentar distorsiones ni pérdidas 
-apreciables. En el caso de un periodo de muestreo de 
-$10\,[\textit{ms}]$, las señales con frecuencia menor a 
-$50\,[\textit{Hz}]$ pudieron reconstruirse correctamente. De igual forma, 
-con un periodo de muestreo de $1\,[\textit{ms}]$, las señales con 
-frecuencia menor a $500\,[\textit{Hz}]$ también fueron reconstruidas con 
-fidelidad. Esto se debe a que el microcontrolador fue capaz de adquirir un 
-número suficiente de muestras por ciclo, permitiendo representar de manera 
-adecuada la información de la señal y reproducirla correctamente mediante 
-el DAC.
-
-En contraste, cuando la frecuencia de la señal de entrada fue mayor que la 
-frecuencia de Nyquist, es decir, superior a $50\,[\textit{Hz}]$ para 
-$T_s = 10\,[\textit{ms}]$ y superior a $500\,[\textit{Hz}]$ para 
-$T_s = 1\,[\textit{ms}]$, la señal de salida comenzó a presentar distorsiones 
-y deformaciones visibles. Esto ocurrió porque el microcontrolador no pudo 
-recopilar la cantidad de muestras necesarias para describir correctamente 
-cada ciclo de la señal. Como consecuencia, los valores digitales obtenidos 
-por el ADC no representaron la señal original, y el DAC reconstruyó una 
-señal incorrecta, con cambios en su forma y frecuencia. Este comportamiento 
-corresponde directamente al fenómeno de \textit{aliasing}.
-
-Asimismo, se identificó que una solución para evitar este problema consiste 
-en utilizar un filtro pasabajas \textit{antialiasing} antes de la etapa de 
-muestreo. Este filtro permite el paso únicamente de las frecuencias menores 
-a la frecuencia de Nyquist y atenúa o elimina las componentes de mayor 
-frecuencia que no pueden ser correctamente muestreadas. De esta forma, se 
-garantiza que el microcontrolador procese información válida y que el DAC 
-reconstruya la señal sin distorsiones.
-
-En general, los resultados obtenidos permitieron comprobar de forma práctica 
-la relación directa entre la frecuencia de muestreo y la fidelidad de la 
-señal reconstruida, así como la importancia del uso de filtros adecuados 
-para prevenir el \textit{aliasing} en sistemas de adquisición de datos 
-digitales.
-
 \subsection{Sánchez Alejo Frida Alexandra}
-Al analizar el desempeño del sistema de adquisición con el microcontrolador 
-PIC18F4550, es notable la cercanía entre los datos de simulación y los 
-experimentales. En Proteus, se observó un tiempo de levantamiento 
-($t_r$) de $0.08454\,[\textit{s}]$ y un sobrepaso ($M_p$) de 
-$76.92\,[\%]$. En contraste, las mediciones físicas mostraron un 
-$t_r$ de $0.08431\,[\textit{s}]$ y un $M_p$ de $76.98\,[\%]$.
 
-Esta mínima discrepancia indica que el circuito fue armado con alta 
-fidelidad respecto al diseño original. La decisión de utilizar una 
-resistencia comercial de $51\,\text{k}\Omega$ en lugar de la teórica 
-de $53\,\text{k}\Omega$ ajustó la frecuencia de corte a 
-$31.2\,[\textit{Hz}]$, un valor que resultó ser sumamente efectivo 
-para proteger la señal de distorsiones por \textit{aliasing}.               
+\subsection{Zeron Marin Luis Alejandro}
  
 \subsection{Resultados y discusión del equipo}
 Para el desarrollo de esta práctica, se comprobó de forma experimental qué es y cómo se comporta el fenómeno de \textit{aliasing}. A lo largo de todas las figuras, se puede observar que, a frecuencias menores que la frecuencia de Nyquist, la señal reconstruida puede distorsionarse, así como representarse de manera incorrecta, lo cual confirma la teoría de muestreo. 
@@ -869,81 +715,31 @@ Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma,
 
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
-Concluyo que el diseño e implementación de un filtro \textit{antialiasing} es un elemento determinante para garantizar la integridad de los datos en sistemas de adquisición digitales. A través de la experimentación, se comprobó que el uso de herramientas de desarrollo como CCS Compiler y Proteus permite validar el comportamiento del \textit{firmware} en el microcontrolador, pero es el acondicionamiento físico de la señal (el filtro analógico) lo que evita errores de reconstrucción irreversibles. El proyecto demostró con éxito que, al mantener las frecuencias de entrada por debajo del límite de corte diseñado, se obtiene una representación digital estable y funcional para aplicaciones de control.
- 
 
-\subsection{Alanis Martínez Jose Jeancarlo}
-El propósito de la práctica se alcanzó al diseñar y poner en funcionamiento un sistema de adquisición de datos utilizando el microcontrolador PIC18F4550. Con este sistema fue posible tomar muestras de una señal senoidal que presentaba ruido, lo que permitió analizar su comportamiento durante el proceso de digitalización. A lo largo del desarrollo se pudo reconocer cómo se presenta el fenómeno aliasing y entender por qué el límite de Nyquist es un punto clave al momento de definir la frecuencia de muestreo.
-Al incorporar un filtro antialiasing antes del proceso de conversión, se observó una mejora en la señal obtenida. Este filtro ayudó a reducir las alteraciones causadas por componentes no deseados, permitiendo conservar mejor la información importante de la señal original y obtener datos digitales de mayor calidad.
+ 
 
 \subsection{Fernández Rendón Anna Patricia}
-En esta práctica conocimos el fenómeno \textit{aliasing} que se presenta cuando la frecuencia de muestreo está por debajo de la frecuencia de Nyquist. Al no muestrar correctamente la señal, se tienen puntos insuficientes para replicar la señal deseada. Como pudimos observar en los resultados, cuando estábamos por debajo de la frecuencia de Nyquist, la señal tenia puntos que no correpondian a la señal original o incluso no alcanzaba a apreciarse la forma senoidal que debería pero también juega un papel muy impoprtante el hecho de agregar un filtro; en este caso fue un filtro RC de primer orden que permitió filtrar la señal y así obtener mejores resultados. Además, jugar con la parte de la frecuencia de la señal nos permitió ver el fenómeno de \textit{aliasing} en su máximo esplendor, ya que en cuando se tenía un tiempo de muestreo de 1 $[ms]$ y una frecuencia de 950 $[ms]$ y sin el filtro implementado, se podía observar el fenómeno de \textit{aliasing} en su máximo esplendor al ver la señal de salida del DAC con mucha saturación, nada simétrica y con mucha distorsión. Este tipo de fenómenos son importantes conocerlos ya que se pueden presentar en muchos ámbitos laborales y es importante saber cómo solucionarlos, con un filtro RC muy bien calculado es fácil poder corregirlo. 
-
-\subsection{Loredo Guillén Ulises Hiram}
-En esta práctica se llevó a cabo la construcción e implementación 
-de un sistema de adquisición de datos basado en el microcontrolador 
-PIC18F4550, el cual se utilizó para analizar de manera experimental 
-el proceso de muestreo de una señal senoidal contaminada con ruido. 
-Fue necesario establecer una frecuencia de muestreo adecuada para 
-evitar la distorsión de la señal original.
-
-Además, la inclusión de un filtro \textit{antialiasing} en la entrada 
-del ADC demostró ser una etapa fundamental del sistema, con el objetivo 
-de limitar el contenido en frecuencia de la señal y así prevenir el 
-fenómeno de \textit{aliasing}. Debido a esto, se mejoró la calidad de 
-las muestras obtenidas y se logró una representación digital más cercana 
-a la señal analógica original.
-
-En conjunto, el desarrollo de esta práctica no solo reforzó el criterio 
-de Nyquist como condición ineludible en los sistemas de muestreo, sino 
-que también permitió comprender la importancia del acondicionamiento 
-de la señal en sistemas embebidos.
  
-\subsection{Luna Loarca Raúl}
-A partir de la implementación práctica con el microcontrolador 
-PIC18F4550, se comprobó que el fenómeno de \textit{aliasing} es una 
-consecuencia directa de un muestreo insuficiente en relación con la 
-frecuencia de la señal de entrada. Se observó que cuando la frecuencia 
-de muestreo fue de $1\,[\textit{kHz}]$, la señal pudo reconstruirse 
-correctamente únicamente para frecuencias menores a $500\,[\textit{Hz}]$, 
-lo cual coincide con el criterio de Nyquist, confirmando que la 
-frecuencia de muestreo debe ser al menos el doble de la frecuencia 
-máxima de la señal para preservar su forma original.
 
-Asimismo, se verificó que al superar la frecuencia de Nyquist, el 
-microcontrolador no pudo adquirir suficientes muestras por ciclo, 
-lo que provocó una reconstrucción incorrecta mediante el DAC. 
-Esto se manifestó en forma de distorsión, evidenciando la pérdida 
-de información causada por el \textit{aliasing}. Este resultado 
-permitió comprender que el sistema digital interpreta la señal de 
-manera incorrecta debido a la limitación impuesta por la frecuencia 
-de muestreo.
-
-En general, la práctica permitió la comprensión del fenómeno 
-\textit{aliasing}, destacando la importancia de la frecuencia de 
-muestreo y del acondicionamiento de la señal para garantizar una 
-reconstrucción fiel en sistemas digitales de control.
  
 \subsection{Sánchez Alejo Frida Alexandra}
-En esta práctica, pude comprobar que un buen código en CCS Compiler 
-no es suficiente si el circuito físico no está bien diseñado y ensamblado. 
-La construcción del prototipo siguiendo el diagrama de conexiones fue 
-fundamental para que el PIC18F4550 procesara la señal correctamente. 
-Al implementar el filtro \textit{antialiasing} con una frecuencia de 
-corte real de $31.2\,[\textit{Hz}]$, logramos proteger la integridad 
-de la señal senoidal frente al ruido y las frecuencias no deseadas. 
 
-Ver que el sobrepaso experimental fue casi idéntico al de la simulación 
-me confirma que un diseño de hardware robusto es la base necesaria para 
-que cualquier sistema de adquisición de datos sea confiable.
  
+
+\subsection{Zeron Marin Luis Alejandro}
+
+
+
 \subsection{Conclusiones del equipo}
-Pudimos identificar qué es el fenómeno de \textit{aliasing} y qué puede ocurrir si se trabaja por debajo de la frecuencia de Nyquist, teniendo pérdidas de información en la señal, lo cual resulta perjudicial, ya que pueden obtenerse datos que no correspondan a los originales. En este caso, esto provocó que la señal no fuera completamente senoidal, sino asimétrica y distorsionada. 
+La materialización del prototipo PISDRSL, ejecutada sobre la arquitectura del microcontrolador PIC18F4550, ha constituido un ejercicio de ingeniería de alta exigencia. El despliegue, desde la concepción del modelo físico hasta la implementación de la placa de circuito impreso para la gestión electrónica, ha validado la capacidad técnica del equipo en la integración de sistemas de control.
 
-Por ello, se remarca la importancia de implementar un filtro \textit{antialiasing}, cuyos cálculos sean lo más precisos posible para garantizar su correcto funcionamiento. 
+El sustento teórico adquirido durante la asignatura de Control III resultó determinante para la decodificación y parametrización de las ganancias del algoritmo de control. Esta base académica permitió establecer una correlación directa entre los ajustes en el controlador y la respuesta dinámica del vehículo, optimizando así su comportamiento ante las variables del entorno.
 
-Además, se presentó un reto importante durante el armado del circuito, ya que en las primeras dos ocasiones la placa donde se realizaba el montaje generaba falsos contactos, lo que provocaba errores graves que ya no dependían directamente de la programación ni del filtro implementado.
+La sinergia operativa del equipo fue fundamental para el éxito del proyecto. La aplicación de protocolos de comunicación asertiva permitió la detección temprana de anomalías, facilitando la ejecución de medidas correctivas inmediatas y evitando el escalamiento de los errores hacia la etapa de pruebas finales.
 
+La planificación meticulosa y la validación sistemática de cada componente fueron los pilares que garantizaron el funcionamiento óptimo del PISDRSL sobre la pista. No obstante, la sintonización fina de los parámetros de control permanece como una línea de trabajo abierta; un refinamiento técnico en este aspecto es imperativo para maximizar el rendimiento y alcanzar mayores velocidades de desplazamiento.
+
+Finalmente, la plataforma PIC18F4550 ha demostrado una robustez operativa notable para la gestión de tareas embebidas. Asimismo, la implementación de cubiertas para los sensores, concebidas para neutralizar la interferencia lumínica ambiental, representó una solución de diseño crítica para garantizar la estabilidad del sistema y la coherencia de las lecturas durante el recorrido en pista.
 
 \vspace{10 mm}
 \addcontentsline{toc}{section}{Bibliografía}
@@ -953,79 +749,430 @@ Además, se presentó un reto importante durante el armado del circuito, ya que 
 \newpage
 \section{Anexos}
 
-\subsection{Programa en CSS compiler para reconstruir la señal filtrada}\label{proggsim}
-En este anexo se muestra el código fuente de CCS compiler para ver como el microcontrolador recontruia la señal con aliasing y sin aliasing a diferentes frecuencias. 
+\subsection{Código Fuente del Sistema de Control de Equilibrio y Seguimiento de Línea en C (CCS Compiler)}\label{proggsim}
+ 
 {\scriptsize
 \begin{verbatim}
-#include <18F4550.h>
-#DEVICE ADC=8
+    
+#include <18F4550.h> 
+#device ADC=8
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#FUSES NOWDT //No Watch Dog Timer
-#FUSES NOPROTECT //No Watch Dog Timer
-#FUSES NOBROWNOUT //No brownout reset
-#FUSES NOLVP //No low voltage prgming, B3(PIC16) or B5(PIC18) used for I/O
-#FUSES HS
-#use delay (clock = 20M, crystal = 20M) 
-//direcciones de los puertos
+#fuses HS,NOWDT,NOPROTECT, CPUDIV1,PLL5,NOLVP
+#use delay(CLOCK=20M)
+#use RS232(BAUD = 115200, XMIT = PIN_C6, RCV = PIN_C7, BITS = 8, PARITY = N)
+#use I2C(MASTER, SDA=PIN_B0, SCL=PIN_B1, SLOW)
+
+//Direcciones de los puertos
 #byte porta = 0xf80
 #byte portb = 0xf81
 #byte portc = 0xf82
 #byte portd = 0xf83
 #byte porte = 0xf84
-#bit PC0 = 0xf82.0 //
-#bit PC1 = 0xf82.1
-// Registros del Timer
+
+#bit  PD4   = 0xf83.4
+
+//Referencias de los lazos
+#define vd     0.1
+#define alphad 0.0
+#define thetad 0.0
+
+//Ganancias lazo de inclinación (balance)
+#define kpi 2.20//1.1961//1.94
+#define kdi 0.16//0.1403//0.19
+
+//Ganancias lazo de velocidad (avance)
+#define kpv 1//0.8757//0.90
+#define kiv 2//1.2474//2.57
+
+//Ganancias lazo de orientación (seguimiento)
+#define kpo 0.09//0.16//0.08
+#define kdo 0.01//0.016//0.008
+
+//Parámetros
+#define Ts      0.01
+#define ppr     12.0
+#define pi_     3.141593
+#define pi_s2   1.570796
+#define Ra      3.0
+#define NR      34.014
+#define R       0.035
+#define km      0.0008
+#define b       0.09
+
+#define calpha  0.145
+
+#define tauM    0.1654  //par máximo en rueda [Nm]
+#define alphaM  1.4  //1.57
+#define omegaM  44.0 //70 rev en 30 s, 140 rev/min, 14.7 rad/s 
+#define uM      11
+#define uNM     11
+
+#define deg_2_rad          0.0174533 
+#define rad_2_deg          57.29578
+#define accel_div_factor   16384.0
+#define gyro_div_factor    131.0
+#define accel_factor       0.0000610352
+#define gyro_factor        0.0076336
+
+#define c1 0.995//0.993
+
+//Direcciones de registros del IMU
+#define W_DATA         0xD0
+#define R_DATA         0xD1
+#define PWR_MGMT_1     0x6B
+#define PWR_MGMT_2     0x6C
+#define SMPRT_DIV      0x19
+#define CONFIG_R       0x1A
+#define GYRO_CONFIG    0x1B
+#define ACCEL_CONFIG   0x1C
+#define ACCEL_XOUT_H   0x3B
+#define ACCEL_XOUT_L   0x3C
+#define ACCEL_YOUT_H   0x3D
+#define ACCEL_YOUT_L   0x3E
+#define ACCEL_ZOUT_H   0x3F
+#define ACCEL_ZOUT_L   0x40
+#define GYRO_XOUT_H    0x43
+#define GYRO_XOUT_L    0x44
+#define GYRO_YOUT_H    0x45
+#define GYRO_YOUT_L    0x46
+#define GYRO_ZOUT_H    0x47
+#define GYRO_ZOUT_L    0x48
+
+//Registros del Timer
+#byte TMR0H = 0xfd7 //TMR0H
 #byte TMR0L = 0xfd6 //TMR0L
 #byte T0CON = 0xfd5 //T0CON
 #byte INTCON= 0xff2 //INTCON
 
-//Define de las pendientes 
-#define mi 0.019607
-#define mo 25.5
+//Variables a usar
+signed int16 Ax,Gy;
+int8 uWr,uWl;
+signed int8 incr,incl;
+float Sr,Sl;
+int8 posr,posl;               //Posiciones o cuentas del encoder.
+int8 puerto,AB,AB_1,CD,CD_1,auxAB,auxCD; // Variables auxiliares lectura de encoders.
+int8 vdg,vg,thetag,alphag,omegalg,omegarg,ulg,urg;
 
+signed int8 A_data_x[2];      //Lectura Ax del MPU
+signed int8 A_data_y[2];      //Lectura Ay del MPU
+signed int8 A_data_z[2];      //Lectura Az del MPU
+signed int8 G_data_y[2];      //Lectura Gy del MPU
 
-int8 tope=196, cuenta=0;
-float vi = 0.0, vo = 0.0; 
- 
-void main (void)
+//Variables para filtro complementario y ángulos
+float Xa=0.0,Yg=0.0,alpha=0.0;
+float accelx=0.15,angulox=0.15,angulox_1=0.0,c2=1.0-c1;
+//Variables auxiliares
+float t=0.0,iTs=1.0/Ts,esc=pi_/(2.0*ppr*NR),escs=255.0/uM;
+//Velocidades
+float omegar=0,omegal=0;
+//Voltajes a motores
+float ur=0.0,ul=0.0;
+float v=0.0,ei=0.0,ei_1=0.0,theta=0.0,eo=0.0,eop=0.0,taua=0.0,u=0.0;
+float eip=0.0,ev=0.0,thetap=0.0,taur=0.0,taul=0.0; 
+float Rasnkm=Ra/(NR*km),nkm=NR*km,intev=0.0,v2tauM=2.0*tauM;
+//pendientes para gráficas
+float mv=255.0/(2.0*omegaM*R),mtheta=255.0/(2.0*0.3),malpha=255.0/(2.0*alphaM),momega=255.0/(2.0*omegaM),mu=255.0/(2.0*uM);
+
+//Función para escribir al MPU6050
+void MPU6050_write(int add, int data)
 {
-   setup_adc_ports(ALL_ANALOG);
-   setup_adc(ADC_CLOCK_INTERNAL); 
-   set_adc_channel(0); 
-   delay_us(10); 
-   
-   //set_tris_a(0b11111111);
-   set_tris_b(0b11111111);
-   set_tris_c(0b11111110);    
-   set_tris_d(0b00000000);
+   i2c_start();
+   i2c_write(W_DATA);
+   i2c_write(add);
+   i2c_write(data);
+   i2c_stop();
+}
+
+//Función para leer datos del MPU
+int16 MPU6050_read(int add)
+{
+   int retval;
+   i2c_start();
+   i2c_write(W_DATA);
+   i2c_write(add);
+   i2c_start();
+   i2c_write(R_DATA);
+   retval = i2c_read(0);
+   i2c_stop();
+   return retval;
+}
+
+//Función para iniciar el MPU
+void MPU6050_init()
+{
+   MPU6050_write(PWR_MGMT_1, 0x80);
+   delay_ms(100);
+   MPU6050_write(PWR_MGMT_1, 0x00);
+   delay_ms(100);
+   MPU6050_write(CONFIG_R, 0x01);
+   delay_ms(10);
+   MPU6050_write(GYRO_CONFIG, 0x00);
+}
+
+//Función para leer el valor Ax del MPU
+void MPU6050_lee_Ax()
+{
+   A_data_x[0] = MPU6050_read(ACCEL_XOUT_H);
+   A_data_x[1] = MPU6050_read(ACCEL_XOUT_L);
+}
+
+//Función para leer el valor Ay del MPU
+void MPU6050_lee_Ay()
+{
+   A_data_y[0] = MPU6050_read(ACCEL_YOUT_H);
+   A_data_y[1] = MPU6050_read(ACCEL_YOUT_L);
+}
+
+//Función para leer el valor Az del MPU
+void MPU6050_lee_Az()
+{
+   A_data_z[0] = MPU6050_read(ACCEL_ZOUT_H);
+   A_data_z[1] = MPU6050_read(ACCEL_ZOUT_L);
+}
+
+//Función para leer el valor Gy del MPU
+void MPU6050_lee_Gy()
+{
+   G_data_y[0] = MPU6050_read(GYRO_YOUT_H);
+   G_data_y[1] = MPU6050_read(GYRO_YOUT_L);
+}
+
+//Interrupción para leer encoders en el puerto B pines B4-B7
+#int_rb
+void rb_isr()
+{
+    puerto = PORTB;
+    AB =((puerto)&(0x30)) >> 4;
+    auxAB=AB^AB_1;
+    if(auxAB!=0)
+       if(auxAB!=3)
+       {
+          if(((AB_1<<1)^AB)&(0x02))
+             posr--;
+          else
+             posr++;
+       }
+    AB_1=AB;
+    
+    CD =((puerto)&(0xC0)) >> 6;
+    auxCD=CD^CD_1;
+    if(auxCD!=0)
+       if(auxCD!=3)
+       {
+          if(((CD_1<<1)^CD)&(0x02))
+             posl--;
+          else
+             posl++;
+       }
+    CD_1 = CD;
+}
+
+int main()
+{  
+   //Configuración de pines como entradas o salidas.
+   set_tris_a(0b11111111);
+   set_tris_b(0b11110011);
+   set_tris_c(0b01000000);
+   set_tris_d(0b11100000);
    set_tris_e(0b11111111);
+   //Iniciar el MPU
+   MPU6050_init();   //Inicializa MPU6050
    
-   T0CON=0xC7; //Prescaler asignado a timer0 con relación 1:256
-   TMR0L=0;   
+   T0CON=0xC7;       //Prescaler asignado a timer0 con relación 1:256
+   TMR0L=0;
+   PD4=0;
+   //Inicializar variables para cuentas de encoder a 0
+   AB=0;
+   AB_1=0;
+   //Inicio de cuentas encoder derecho a mitad del rango para que no desborde
+   posr=127;
+   // Inicializar variables para cuentas de encoder a 0
+   CD=0;
+   CD_1=0;
+   //Inicio de cuentas encoder izquierdo a mitad del rango para que no desborde
+   posl=127;
+   
+   //Configurar timer como PWM
+   setup_timer_2(T2_DIV_BY_16,254,1);
+   
+   //Configurar pines 16 y 17 del 4550 como PWM
+   setup_ccp1(CCP_PWM);          //configurando pwm
+   setup_ccp2(CCP_PWM);          //configurando pwm 
+   
+   setup_adc(ADC_CLOCK_INTERNAL);//Configurando el convertidor ADC con reloj interno
+   setup_adc_ports(AN0_TO_AN1);
+   
+   //Se habilitan interrupciones
+   enable_interrupts(int_rb);
+   enable_interrupts(global);
+   
    while(true)
    {
-      //PORTD = read_adc();
+      PD4=1;   //Se prende bit de tiempo de ejecución
+      //Se Leen sensores de línea
+      set_adc_channel(0);
+      delay_us(15);
+      Sl=read_adc();
+
+      set_adc_channel(1);
+      delay_us(15);
+      Sr=read_adc();
       
-      vi = mi * read_adc(); 
+      //Se Leen los datos necesarios del MPU
+      MPU6050_lee_Ax();
+      MPU6050_lee_Gy();
       
-      vo=vi;
+      Ax=0;
+      Ax=A_data_x[0];
+      Ax=Ax<<8;
+      Ax=Ax+A_data_x[1]; //Lectura cargada en variable Ax
       
-      PORTD=mo*vo+127.0;
+      Gy=0;
+      Gy=G_data_y[0];
+      Gy=Gy<<8;
+      Gy=Gy+G_data_y[1]; //Lectura cargada en variable Gy
       
-      while (TMR0L<=tope)
+      theta=Sr-Sl;
+      if(theta>160.0)
+         theta=160.0;
+      if(theta<-160.0)
+         theta=-160.0;
+      theta=-0.3*theta/160.0;   //Error de seguimiento en radianes  
+      
+      //Cálculo de velocidad derecha en radianes
+      incr=127-posr;
+      posr=127;
+      omegar=incr*esc*iTs;
+      //Cálculo de velocidad izquierda en radianes
+      incl=127-posl;
+      posl=127;
+      omegal=incl*esc*iTs;
+      
+      //Los valores del MPU los paso a valores flotantes con sus respectivas escalas
+      Xa=-Ax*accel_factor; //Xa en rango de -1 a 1
+      Yg=Gy*gyro_factor;   //Yg en grados sobre segundo
+      Yg=deg_2_rad*Yg;     //Yg en rad sobre segundo 
+      //Cálculo del filtro complementario
+      accelx=Xa*pi_s2;  //Inclinación en rango de -pi/2 a pi/2 rad
+      angulox=c1*(angulox_1+Yg*Ts)+c2*accelx;//Ecuación del filtro complementario
+      angulox_1=angulox;//Respaldando valor pasado
+      alpha=-angulox;
+      alpha=alpha-calpha;//Compensación de alineación del MPU
+      if(alpha>=alphaM)
+         alpha=alphaM;
+      if(alpha<=(-alphaM))
+         alpha=-alphaM;
+
+      //Cálculo de velocidad traslacional
+      v=(omegar+omegal)*R/2.0;   
+      //Cálculo de theta punto
+      thetap=(omegar-omegal)*R/(2.0*b);
+      eop=-thetap;
+               
+      eo=thetad-theta;     //Se calcula theta tilde
+      ei=alphad-alpha;
+      eip=(ei-ei_1)*iTs;//Se calcula alpha punto
+      ei_1=ei;
+      ev=vd-v;                 //Se calcula v tilde
+      if((intev<v2tauM)&&(intev>(-v2tauM))) //Integral de v tilde
+         intev=intev+Ts*ev;
+      else
       {
-         if(PC1) 
-            tope=196;
-         else 
-            tope=20;
-         PC0 =0;
+         if(intev>=v2tauM)
+            intev=0.95*v2tauM;
+         if(intev<=(-v2tauM))
+            intev=-0.95*v2tauM; 
       }
-      PC0=1;
-      TMR0L=0;
+      //Esfuerzos de control   
+      taua=(kdo*eop+kpo*eo)*2.0*b/R;
+      //taua=0;
+      u=-kpi*ei-kdi*eip-kpv*ev-kiv*intev;
+      if(u>=v2tauM)
+         u=v2tauM;
+      if(u<=(-v2tauM))
+         u=-v2tauM; 
+                           
+      //Pares por rueda      
+      taur=(taua+u)/2.0;  // par derecho
+      taul=(-taua+u)/2.0;  // par izquierdo
+                           
+      //Voltaje rueda izquierda
+      ul=taul*Rasnkm+nkm*omegal;   
+      //ul=uNM*sin(0.314*t);
+      //ul=0.0;
+      //ul=5.0;
+      //ul=uNM;
+      if(ul>=uNM)
+         ul=uNM;
+      if(ul<=(-uNM))
+         ul=-uNM;
+      uWl=escs*fabs(ul);
+      if(ul<0)
+      {
+         output_high(pin_d0);
+         output_low(pin_d1);
+      }
+      else
+      {
+         output_low(pin_d0);
+         output_high(pin_d1);
+      }
+
+      
+      //Voltaje rueda derecha    
+      ur=taur*Rasnkm+nkm*omegar;
+      //ur=uNM*cos(0.314*t);
+      //ur=0.0;
+      //ur=-5.0;
+      //ur=uNM;
+      if(ur>=uNM)
+         ur=uNM;
+      if(ur<=(-uNM))
+         ur=-uNM;
+      uWr=escs*fabs(ur);
+      if(ur<0)
+      {
+         output_high(pin_d2);
+         output_low(pin_d3);
+      }
+      else
+      {
+         output_low(pin_d2);
+         output_high(pin_d3);
+      }
+      
+      set_pwm1_duty(uWl); //Actualizando el valor del pwm rueda izquierda
+      set_pwm2_duty(uWr); //Actualizando el valor del pwm rueda derecha
+      
+      //Se envían bytes al puerto serial para la gráfica experimental
+      putc(0xAA); //ID a la PC
+      vdg=(int8)(mv*vd+127);
+      putc(vdg);          
+      vg=(int8)(mv*v+127);
+      putc(vg);          
+      thetag=(int8)(mtheta*theta+127);
+      putc(thetag);   
+      alphag=(int8)(malpha*alpha+127);
+      putc(alphag);   
+      omegalg=(int8)(momega*omegal+127);
+      putc(omegalg);   
+      omegarg=(int8)(momega*omegar+127);
+      putc(omegarg);   
+      ulg=(int8)(mu*ul+127);
+      putc(ulg);          
+      urg=(int8)(mu*ur+127);
+      putc(urg);
+      
+      PD4=0;            //Se apaga bit de tiempo de ejecución
+      while(TMR0L<196); //Cada cuenta vale (4/FXtal)*256 seg
+      t=t+Ts;
+      TMR0L = 0;        //Reseteo contador del timer0
    }
+return 0;
 }
+
 \end{verbatim}
 }
 \end{document}
