@@ -6,3 +6,7 @@
 *.synctex.gz
 *.blg
 *.bbl
+*.out
+*.pdf
+*.lof
+*.lot
