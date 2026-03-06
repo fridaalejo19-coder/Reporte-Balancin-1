@@ -80,7 +80,7 @@
 
 % Bottom of the page
 	{\large Fecha compromiso: 5 de marzo del 2026\par
-    Fecha en que se entregó: 5 de marzo del 2026}.
+    Fecha en que se entregó: 6 de marzo del 2026}.
 \end{titlepage}
 
 %\frontmatter	%fija la numeración romana
@@ -100,6 +100,8 @@ Construir, instrumentar y controlar de manera embebida un robot de péndulo inve
 
 \section{Marco Teórico}
 \subsection{Modelo no lineal del péndulo con dos ruedas}
+El diagrama esquemático con sus marcos referenciales y principales convenciones del péndulo con dos
+ruedas se muestra en la Figura \ref{fig:Esquema 1}:
 \begin{figure} [H]
     \centering
     \includegraphics[width=0.77\linewidth]{img/Esquema_1.png}
@@ -556,6 +558,15 @@ Finalmente los pares aplicados a las ruedas son:
     \tau_l=-\dfrac{\tau_a}{2}+\dfrac{u}{2}
     \label{eq:48}
 \end{equation}
+
+Finalmente definiendo $e_v = v_d - v = -\tilde{v}$, $e_i = \alpha_d - \alpha = -\alpha$, $e_o = \theta_d - \theta = -\tilde{\theta}$, $k_{di} = k_1$, $k_{pi} = k_2$, 
+$k_{pv} = k_3$, $k_{iv} = k_4$, $k_{po} = k_p$, $k_{do} = k_v$, con las operaciones algebraicas correspondientes, se llega al diagrama 
+de bloques con controladores lineales clásicos para controlar el PISDRSL (ver Figura 1). Es importante reflexionar sobre los efectos de las 
+ganancias.La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
+proporcional en el lazo de control de inclinación del robot[cite: 269].Respecto al controlador proporcional integral de velocidad traslacional del 
+robot, la ganancia $k_{pv}$ pondera el efecto proporcional mientras la ganancia $k_{iv}$ pondera el efecto integral que elimina las perturbaciones 
+debidas al plano inclinado. En cuanto a las ganancias del controlador del lazo de orientación (seguimiento de línea), al aumentar $k_{po}$ se 
+aumenta la rapidez en la respuesta y al aumentar $k_{do}$ se aumenta el amortiguamiento en la respuesta.
 
 \section{Materiales y Métodos}
 \subsection{Materiales}
