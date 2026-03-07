@@ -10,6 +10,7 @@
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 % Useful packages
+\usepackage{tikz}
 \usepackage[table]{xcolor} % Para colores en tablas
 \usepackage{array}         % Para mejor manejo de columnas
 \usepackage{amsmath}
@@ -26,7 +27,6 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 \usepackage{hyphenat}
-\usepackage{tikz}
 \usetikzlibrary{arrows, positioning}
 \usepackage{blox}
 \hyphenation{co-mer-cial rea-li-zan si-guien-te si-mu-la-ción ke-lly con-si-de-ra-da}
@@ -54,9 +54,7 @@
 	\vspace{0.5cm}	
 	{\Large\bfseries Control III\par}
 	\vspace{0.8cm}
-	{\Large\bfseries Modelo linealizado del péndulo con dos ruedas y estrategia de control
-    para balanceo, avance traslacional y seguimiento de línea en pista con
-    planos inclinados \par}	
+	{\Large\bfseries Construcción, instrumentación y control de un Péndulo Invertido Sobre Dos Ruedas Seguidor de Línea (PISDRSL) \par}	
 	\vspace{0.8cm}
 	{\Large\itshape Primer entrega\par}
 	\vspace{0.8cm}
@@ -75,14 +73,14 @@
 \par
 \vspace{0.4cm}
 \par
-    Zeron Marin Luis Alejandro \rule{70mm}{0.1mm}
+    Marin Luis Alejandro \rule{70mm}{0.1mm}
 \par
 	
 	\vfill
 
 % Bottom of the page
 	{\large Fecha compromiso: 5 de marzo del 2026\par
-    Fecha en que se entregó: 7 de marzo del 2026}.
+    Fecha en que se entregó: 6 de marzo del 2026}.
 \end{titlepage}
 
 %\frontmatter	%fija la numeración romana
@@ -564,8 +562,8 @@ Finalmente los pares aplicados a las ruedas son:
 Finalmente definiendo $e_v = v_d - v = -\tilde{v}$, $e_i = \alpha_d - \alpha = -\alpha$, $e_o = \theta_d - \theta = -\tilde{\theta}$, $k_{di} = k_1$, $k_{pi} = k_2$, 
 $k_{pv} = k_3$, $k_{iv} = k_4$, $k_{po} = k_p$, $k_{do} = k_v$, con las operaciones algebraicas correspondientes, se llega al diagrama 
 de bloques con controladores lineales clásicos para controlar el PISDRSL (ver Figura 1). Es importante reflexionar sobre los efectos de las 
-ganancias.La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
-proporcional en el lazo de control de inclinación del robot[cite: 269].Respecto al controlador proporcional integral de velocidad traslacional del 
+ganancias. La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
+proporcional en el lazo de control de inclinación del robot. Respecto al controlador proporcional integral de velocidad traslacional del 
 robot, la ganancia $k_{pv}$ pondera el efecto proporcional mientras la ganancia $k_{iv}$ pondera el efecto integral que elimina las perturbaciones 
 debidas al plano inclinado. En cuanto a las ganancias del controlador del lazo de orientación (seguimiento de línea), al aumentar $k_{po}$ se 
 aumenta la rapidez en la respuesta y al aumentar $k_{do}$ se aumenta el amortiguamiento en la respuesta.
@@ -634,7 +632,7 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
 \begin{table}[H]
 	\centering
 	\caption{ Descripción de componentes.} 
-	\begin{tabular}{|p{6cm}|p{9cm}|l|}\hline
+	begin{tabular}{|p{5cm}|p{10cm}|}\hline
         \rowcolor{gray!30}
 		\textbf{Material} & \textbf{Descripción general} \\ \hline
 		Batería lithium polyner & Esta batería de polímero de litio (LiPo) almacena una alta cantidad de
@@ -661,7 +659,7 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
         Juego de conectores tipo Molex & Conectores eléctricos para conectar componentes eléctricos con facilidad y fiabilidad\\ \hline
         Tira \textit{header} macho & Conector de pines macho utilizado para interconectar componentes en la placa de circuito\\ \hline
         Cable AWG 22 & Cable flexible, utilizado para las conexiones eléctricas\\ \hline
-        Módulo \textit{bluetooth} HC05 & Módulo de comunicación bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
+        Módulo \textit{bluetooth} HC-05 & Módulo de comunicación bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
 		Interruptor de 2 polos & Dispositivo mecánico utilizado para controlar el encendido y apagado del circuito \\ \hline
 	\end{tabular}
 	\label{tabla:descripcion}
@@ -700,9 +698,9 @@ Software: & Versión: \\ \hline
 CCS Compiler & Versión 5.083\\
 MATLAB & R2021a\\
 PICkit 3 & 3.10.00\\
-MATLAB & R2023a\\
 SOLIDWORKS & 2024 SP5.0\\
 Draw.io & 28.2.8\\
+Eagle & 9.6\\
 \hline
 \end{tabular}
 \label{tabla:software}
@@ -717,6 +715,56 @@ Draw.io & 28.2.8\\
 \end{figure}
 
 \subsection{Metodología}
+\usetikzlibrary{positioning, arrows.meta}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance = 1cm and 1.2cm,
+        box/.style = {
+            draw, 
+            rectangle, 
+            align=center, 
+            text width=3.5cm, 
+            minimum height=1.2cm,
+            font=\small
+        },
+        arrow/.style = {
+            thick, 
+            -Stealth
+        }
+    ]
+
+    % Fila 1: De izquierda a derecha
+    \node [box] (n1) {Recopilación de información};
+    \node [box, right=of n1] (n2) {Medición preliminar};
+    \node [box, right=of n2] (n3) {Diseño estructural y electrónico};
+
+    % Fila 2: De derecha a izquierda (Efecto serpiente)
+    \node [box, below=of n3] (n4) {Fabricación y ensamblaje};
+    \node [box, left=of n4] (n5) {Verificación dimensional final};
+    \node [box, left=of n5] (n6) {Cálculo de parámetros};
+
+    % Fila 3: De izquierda a derecha
+    \node [box, below=of n6] (n7) {Implementación del control};
+    \node [box, right=of n7] (n8) {Integración de comunicación inalámbrica};
+    \node [box, right=of n8] (n9) {Sintonización y ajuste final};
+
+    % Conexiones de las flechas
+    \draw [arrow] (n1) -- (n2);
+    \draw [arrow] (n2) -- (n3);
+    \draw [arrow] (n3) -- (n4);
+    \draw [arrow] (n4) -- (n5);
+    \draw [arrow] (n5) -- (n6);
+    \draw [arrow] (n6) -- (n7);
+    \draw [arrow] (n7) -- (n8);
+    \draw [arrow] (n8) -- (n9);
+
+    \end{tikzpicture}
+    \caption{Metodología de desarrollo del sistema PISDRSL.}
+    \label{fig:metodologia}
+\end{figure}
 La metodología utilizada para el desarrollo del PISDRSL se compone de diversas etapas: 
 
 \begin{enumerate}
@@ -739,13 +787,14 @@ La metodología utilizada para el desarrollo del PISDRSL se compone de diversas 
     \item \textbf{Sintonización y ajuste final:} Se realizan pruebas de funcionamiento para evaluar el desempeño del controlador. En esta etapa, se ajustan finamente las ganancias del control, mejorando la respuesta del sistema para que realice el recorrido especificado de manera precisa, estable y robusta ante cambios de iluminación.
 \end{enumerate}  
 
+
 \section{Resultados y Discusión}
 \subsection {Desarrollo de la PCB}
-En la figura \ref{fig:Esquema_1}, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
+En la Figura \ref{fig:Esquema_1}, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/image.png}
-    \caption{Imagen de oscilocopio con un muestreo de 10 $[ms]$ y la señal tiene una frecuencia de 45 $[Hz]$ sin filtro.}
+    \includegraphics[width=1\textwidth]{img/image.png}
+    \caption{Diagrama esquemático de la PCB del PISDRSL.}
     \label{fig:Esquema_1}
 \end{figure}
 
@@ -753,18 +802,24 @@ En las Figuras \ref{fig:PCB} y \ref{fig:PCB_Inf}, se muestran ambas caras de la 
 componentes previamente mostrados en el esquemático de la Figura \ref{fig:Esquema_1}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB.png}
+    \includegraphics[width=1\textwidth]{img/PCB.png}
     \caption{Cara superior de la PCB diseñada en el software Eagle.}
     \label{fig:PCB}
 \end{figure}
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB_Inf.png}
+    \includegraphics[width=1\textwidth]{img/PCB_Inf.png}
     \caption{Cara inferior de la PCB diseñada en el software Eagle.}
     \label{fig:PCB_Inf}
 \end{figure}
 
+En la Figura \ref{fig:PCB_3D}, se muestra una vista en tres dimensiones (3D) del diseño de la PCB ya impresa
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/PCB_3D.png}
+    \caption{Vista 3D del diseño de la PCB..}
+    \label{fig:PCB_3D}
+\end{figure}
 
 \subsection {Medicíon de masas y distancias}
 Para determinar el momento de inercia del robot, es fundamental disponer de todas las mediciones de las
@@ -872,13 +927,46 @@ dimensiones.
 	\label{fig:pista sup}
 \end{figure}
 
+En la Figura \ref{fig:PistaLat} se muestra la vista lateral de la pendiente a subir y bajar por el robot PISDRSL.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/VISTA_LATERAL_PISTA.png}
+	\caption{Vista lateral de sección con pendiente.}
+	\label{fig:PistaLat}
+\end{figure}
+
+En la Figura \ref{fig:PistaIso} se presenta una vista isométrica de la pista donde se muestran los puntos importantes para
+el análisis del comportamiento del robot PISDRSL.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/VISTA_ISOMETRICA_PISTA.png}
+	\caption{Vista isométrica de la pista.}
+	\label{fig:PistaIso}
+\end{figure}
+
 \subsection {Diseño del robot PISDRSL y montaje de materiales}
+En la Figura \ref{fig:DisBal} se muestra a detalle la distribución de los componentes. En este caso no fueron incluidos los sensores infrarrojos debido a su bajo peso.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/DisBal.png}
+	\caption{Diagrama de distribución de componentes del PISDRSL (vista frontal).}
+	\label{fig:DisBal}
+\end{figure}
 
 \subsection {Modelo físico y pruebas de pista}
 
 \subsection {Ganancias del controlador}
 
+
 \subsection {Resultados experimentales graficados}
+La Figura \ref{fig:Graficas} muestra la gráfica de resultados obtenidos durante el recorrido del PISDRSL iniciando desde
+el punto 6 mostrado en la Figura \ref{fig:PistaIso}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/Graficas.jpeg}
+	\caption{Gráfica de resultados obtenidos durante el recorrido del PISDRSL.}
+	\label{fig:Graficas}
+\end{figure}
 
 \subsection {Resultados y discusión individual}
 
@@ -886,18 +974,24 @@ dimensiones.
 En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
 
 \subsubsection{Fernández Rendón Anna Patricia}
-Se realizaron varios  
+En el uso de los 
 
 \subsubsection{Sánchez Alejo Frida Alexandra}
 
 \subsubsection{Zeron Marin Luis Alejandro}
  
 \subsection{Resultados y discusión del equipo}
+\subsubsection{Resultados y discusión del equipo}
+Para el desarrollo de esta práctica, se comprobó de forma experimental qué es y cómo se comporta el fenómeno de \textit{aliasing}. A lo largo de todas las figuras, se puede observar que, a frecuencias menores que la frecuencia de Nyquist, la señal reconstruida puede distorsionarse, así como representarse de manera incorrecta, lo cual confirma la teoría de muestreo. 
+
+Sin embargo, este fenómeno puede mitigarse si se emplea un filtro \textit{antialiasing}. Para esta práctica se utilizó un filtro RC de primer orden que, al ser calculado correctamente, permitió reducir los efectos del \textit{aliasing}. 
+
+Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma, asimetría e incluso saturación. Al implementar el filtro, se pudo observar una señal mucho más limpia y simétrica con respecto a la señal original.
 
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
 
-La implementación del sistema PISDRSL mediante la arquitectura del PIC18F4550 constituyó un desafío integral, abarcando desde la concepción mecánica y electrónica hasta la arquitectura del sistema de control. A pesar de las contingencias operativas, el prototipo superó con éxito los obstáculos en la pista de pruebas. El mayor reto radicó en la gestión logística y organizacional del equipo, subrayando la necesidad de optimizar las estrategias de flujo de trabajo. Es imperativo resaltar la eficacia de los blindajes optoelectrónicos, diseñados específicamente para neutralizar las fluctuaciones lumínicas que comprometen la estabilidad del sistema durante su despliegue dinámico.
+​La implementación del sistema PISDRSL mediante la arquitectura del PIC18F4550 constituyó un desafío integral, abarcando desde la concepción mecánica y electrónica hasta la arquitectura del sistema de control. A pesar de las contingencias operativas, el prototipo superó con éxito los obstáculos en la pista de pruebas. El mayor reto radicó en la gestión logística y organizacional del equipo, subrayando la necesidad de optimizar las estrategias de flujo de trabajo. Es imperativo resaltar la eficacia de los blindajes optoelectrónicos, diseñados específicamente para neutralizar las fluctuaciones lumínicas que comprometen la estabilidad del sistema durante su despliegue dinámico.
 
 \subsection{Fernández Rendón Anna Patricia}
  
