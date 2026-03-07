@@ -905,6 +905,23 @@ dimensiones.
 	\label{fig:pista sup}
 \end{figure}
 
+En la Figura \ref{fig:PistaLat} se muestra la vista lateral de la pendiente a subir y bajar por el robot PISDRSL.
+dimensiones.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/VISTA_LATERAL_PISTA.png}
+	\caption{Vista lateral de sección con pendiente.}
+	\label{fig:PistaLat}
+\end{figure}
+
+En la Figura \ref{fig:PistaIso} se presenta una vista isométrica de la pista donde se muestran los puntos importantes para
+el análisis del comportamiento del robot PISDRSL.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/VISTA_ISOMETRICA_PISTA.png}
+	\caption{Vista isométrica de la pista.}
+	\label{fig:PistaIso}
+\end{figure}
 \subsection {Diseño del robot PISDRSL y montaje de materiales}
 
 \subsection {Modelo físico y pruebas de pista}
@@ -919,22 +936,19 @@ dimensiones.
 En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
 
 \subsubsection{Fernández Rendón Anna Patricia}
-En el uso de  
+En el uso de los 
 
 \subsubsection{Sánchez Alejo Frida Alexandra}
 
 \subsubsection{Zeron Marin Luis Alejandro}
  
-<<<<<<< HEAD
 \subsection{Resultados y discusión del equipo}
-=======
 \subsubsection{Resultados y discusión del equipo}
 Para el desarrollo de esta práctica, se comprobó de forma experimental qué es y cómo se comporta el fenómeno de \textit{aliasing}. A lo largo de todas las figuras, se puede observar que, a frecuencias menores que la frecuencia de Nyquist, la señal reconstruida puede distorsionarse, así como representarse de manera incorrecta, lo cual confirma la teoría de muestreo. 
 
 Sin embargo, este fenómeno puede mitigarse si se emplea un filtro \textit{antialiasing}. Para esta práctica se utilizó un filtro RC de primer orden que, al ser calculado correctamente, permitió reducir los efectos del \textit{aliasing}. 
 
 Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma, asimetría e incluso saturación. Al implementar el filtro, se pudo observar una señal mucho más limpia y simétrica con respecto a la señal original.
->>>>>>> acc227aac6dc79ccb8cca26a97a0efb006ad3aab
 
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
