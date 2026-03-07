@@ -639,18 +639,27 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
             energía y es recargable \\\hline
 		Espárragos de $\frac{3}{16}$ $[in]$ & Barras roscadas utilizadas para ensamblajes mecánicos y estructurales\\ \hline
 		Módulo puente H L298N & Módulo controlador de motores de corriente continua que permite cambiar la dirección y velocidad de los motores \\ \hline
-		Cargador balanceador para batería LiPo & Dispositivo que permite cargar baterías LiPo asegurando una distribución equilibrada de la carga en sus celdas \\ \hline
-		Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ & Motor de corriente continua con reducción de velocidad y sensor \textit{encoder} para control de posición y velocidad \\ \hline
-		Llanta & Ruedas que permiten el desplazamiento del PISDRSL \\ \hline
-		Cople de motor & Acople mecánico utilizado para conectar el eje del motor con otros elementos mecánicos \\ \hline
-		Tarjeta MPU6050 & Sensor de movimiento que integra un acelerómetro y giroscopio de 6 ejes para medición de inclinación y movimiento \\ \hline
-		Tarjeta Tcrt 5000 & Sensor óptico de reflexión utilizado para la detección de línea \\ \hline
+		Cargador balanceador para batería LiPo & Cargador especializado para baterías LiPo, asegura que cada celda de la
+            batería se cargue de manera uniforme \\ \hline
+		Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ marca Pololu Item \#4884 & Motor con reductor de velocidades que proporciona alto torque a bajas
+            revoluciones por minuto (RPM), ideal para el movimiento controlado del PISDRSL \\ \hline
+		Llanta marca Pololu Scooter/Skate Wheel Item \#3275 & Ruedas robustas diseñadas para proporcionar buena tracción y estabilidad al PISDRSL, esenciales para su capacidad de balancearse y desplazarse \\ \hline
+		Cople marca Pololu para llanta con opresores para flecha Item \#2672 & Acople mecánico utilizado para conectar el eje del motor con otros elementos mecánicos \\ \hline
+		Giroscopio acelerómetro 3 ejes MPU6050 & Sensor que combina un giroscopio y un acelerómetro, proporcionando mediciones precisas de la orientación del PISDRSL \\ \hline
+		Sensor infrarrojo tarjeta Tcrt 5000 & Sensor que emite y recibe luz infrarroja para detectar la presencia de obstáculos o líneas en el camino \\ \hline
 		Microcontrolador PIC18F4550 & Microcontrolador de $8\;[b]$ utilizado para el control del sistema \\ \hline
-		Placas de acrílico de $14.5\:[cm]\times6.5\:[cm]$ con un grosor de $5.5\:[mm]$ & Acrílico utilizado para las placas del PISDRSL\\ \hline
+		Placas de acrílico & Acrílico utilizado para las placas del PISDRSL\\ \hline
 		Fusible $2\:[A]$ & Dispositivo de protección que interrumpe el circuito en caso de sobre corriente \\ \hline
-		Capacitores cerámicos ($22 \; [pF]$, $0.1 \;[\mu F]$) & Componentes electrónicos utilizados para el filtrado, estabilización de señales eléctricas y en circuitos de osciladores \\\hline
-		Resistencias ($2.2 \:[k\Omega]$, $100 \:[\Omega]$) & Resistores utilizados en circuitos electrónicos para limitar corriente, formar divisores de voltaje y controlar señales \\\hline
-		Conectores JST & Conectores de uso común en sistemas electrónicos para conexiones seguras y rápidas \\ \hline
+		Capacitor cerámico & Componentes electrónicos utilizados para el filtrado, estabilización de señales eléctricas y en circuitos de osciladores \\\hline
+		Resistencia & Resistores utilizados en circuitos electrónicos para limitar corriente, formar divisores de voltaje y controlar señales \\\hline
+		Cristal de cuarzo & Oscilador que genera señales de reloj precisas \\ \hline
+        Diodo emisor de luz (LED) & Es un dispositivo semiconductor que emite luz cuando una corriente elétrica lo atraviesa\\ \hline
+        Clema bornera & Conector para cables que facilita la conexión y desconexión rápida de componentes\\ \hline
+        Interruptor deslizable & Interruptor que cambia de estado al deslizar una palanca\\ \hline
+        Juego de conectores tipo Molex & Conectores eléctricos para conectar componentes eléctricos con facilidad y fiabilidad\\ \hline
+        Tira \textit{header} macho & Conector de pines macho utilizado para interconectar componentes en la placa de circuito\\ \hline
+        Cable AWG 22 & Cable flexible, utilizado para las conexiones eléctricas\\ \hline
+        Módulo \textit{bluetooth} HC05 & Módulo de comunicación bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
 		Interruptor de 2 polos & Dispositivo mecánico utilizado para controlar el encendido y apagado del circuito \\ \hline
 	\end{tabular}
 	\label{tabla:descripcion}
@@ -662,7 +671,10 @@ En el Cuadro \ref{tabla:computadora} se muestra el equipo de cómputo utilizado 
 \centering
 \caption{Equipo de cómputo utilizado.} 
 \begin{tabular}{|c|c|}\hline
-Características: & Descripción: \\ \hline
+    \rowcolor{gray!30}
+    \multicolumn{2}{|c|}{\textbf{Laptop de Anna Patricia Fernández}} \\ \hline
+    \rowcolor{gray!30}
+    \textbf{Características} & \textbf{Descripción} \\ \hline
 Fabricante & Acer\\
 ID del dispositivo & 3C8E72CE-9F92-40F5-8A82-8D9E36929DB2 \\
 Procesador & 11th Gen Intel(R) Core(TM) i7-11800H\\
@@ -679,11 +691,16 @@ En el Cuadro \ref{tabla:software} se muestran los software utilizados para el de
 
 \begin{table}[H]
 \centering
-\caption{El software empleado para el desarrollo de la práctica.} 
+\caption{El software empleado para el desarrollo del PISDRSL.} 
 \begin{tabular}{|c|c|}\hline
+    \rowcolor{gray!30}
 Software: & Versión: \\ \hline
 CCS Compiler & Versión 5.083\\
 MATLAB & R2021a\\
+PICkit 3 & 3.10.00\\
+MATLAB & R2023a\\
+SOLIDWORKS & 2024 SP5.0\\
+Draw.io & 28.2.8\\
 \hline
 \end{tabular}
 \label{tabla:software}
@@ -727,26 +744,86 @@ La metodología utilizada para el desarrollo del PISDRSL se compone de diversas 
     \caption{Imagen de oscilocopio con un muestreo de 10 $[ms]$ y la señal tiene una frecuencia de 45 $[Hz]$ sin filtro.}
     \label{fig:Esquema_1}
 \end{figure}
+\subsection {Desarrollo de la PCB}
+En la figura pendiente, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
+
+\subsection {Medicíon de masas y distancias}
+Para determinar el momento de inercia del robot, es fundamental disponer de todas las mediciones de las
+masas de los diversos elementos que componen al PISDRSL. La masa de cada uno de los componentes está
+expresada en kilogramos \textit{[kg]}.
 
 
-\subsection{Aguilar Sarabia Diego Eugenio}
+\subsection {Pista de pruebas}
+
+\subsection {Diseño del robot PISDRSL y montaje de materiales}
+
+\subsection {Modelo físico y pruebas de pista}
+
+\subsection {Ganancias del controlador}
+
+\subsection {Resultados experimentales graficados}
+
+\subsection {Resultados y discusión individual}
+
+\subsubsection{Aguilar Sarabia Diego Eugenio}
 En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
+En el Cuadro \ref{tabla:TabMasas} se muestran todas las masas de los componentes en el robot PISDRSL.  
 
-\subsection{Fernández Rendón Anna Patricia}
+\begin{table}[H]
+\centering
+\caption{Masa de los componentes del robot PISDRSL} 
+\begin{tabular}{|c|c|}\hline
+\rowcolor{gray!30}
+Componente & Masa \textit{[kg]} \\ \hline
+Placa de acrílico & $m_{A} = 0.02600$\\
+Llanta & $m_{LL} = 0.06000$\\
+Motor & $m_{M} = 0.10200$\\
+Cople de motor & $m_{C} = 0.00900$\\
+Soporte de motor & $m_{S} = 0.01100$\\
+Espárragos con tuercas & $m_{t} = 0.01425$\\
+Batería & $m_{B} = 0.14900$\\
+PCB & $m_{Bo} = 0.03200$\\
+Tarjeta puente H & $m_{H} = 0.02400$\\
+Masa total del PISDRSL & $m_{T} = 0.79500$\\
+\hline
+\end{tabular}
+\label{tabla:TabMasas}
+\end{table}
+Posteriormente se realizaron todas las mediciones de las distancias de los componentes respecto al eje de
+rotación de las ruedas. Las mediciones están expresadas en metros \textit{[m]} y se muestran en el Cuadro \ref{tabla:TabMed}.
+
+\begin{table}[H]
+\centering
+\caption{Distancias del robot PISDRSL respecto al eje de rotación de las ruedas.} 
+\begin{tabular}{|c|c|}\hline
+\rowcolor{gray!30}
+Componente & Distancia \textit{[m]} \\ \hline
+Distancia al primer acrílico & $x_{1} = 0.01868$\\
+Distancia al puente H & $x_{2} = 0.07700$\\
+Distancia a centro de masa de los espárragos & $x_{3} = 0.07100$\\
+Distancia al segundo acrílico & $x_{4} = 0.12043$\\
+Distancia a centro de masa de batería & $x_{5} = 0.13456$\\
+Distancia a la PCB & $x_{6} = 0.15700$\\
+Distancia al soporte del motor & $x_{7} = 0.01150$\\
+Mitad de la distancia entre huellas de ruedas & $b = 0.08600$\\
+\hline
+\end{tabular}
+\label{tabla:TabMed}
+\end{table}
+
+\subsubsection{Fernández Rendón Anna Patricia}
 Se realizaron varios  
 
-\subsection{Sánchez Alejo Frida Alexandra}
+\subsubsection{Sánchez Alejo Frida Alexandra}
 
-\subsection{Zeron Marin Luis Alejandro}
+\subsubsection{Zeron Marin Luis Alejandro}
  
-\subsection{Resultados y discusión del equipo}
+\subsubsection{Resultados y discusión del equipo}
 Para el desarrollo de esta práctica, se comprobó de forma experimental qué es y cómo se comporta el fenómeno de \textit{aliasing}. A lo largo de todas las figuras, se puede observar que, a frecuencias menores que la frecuencia de Nyquist, la señal reconstruida puede distorsionarse, así como representarse de manera incorrecta, lo cual confirma la teoría de muestreo. 
 
 Sin embargo, este fenómeno puede mitigarse si se emplea un filtro \textit{antialiasing}. Para esta práctica se utilizó un filtro RC de primer orden que, al ser calculado correctamente, permitió reducir los efectos del \textit{aliasing}. 
 
 Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma, asimetría e incluso saturación. Al implementar el filtro, se pudo observar una señal mucho más limpia y simétrica con respecto a la señal original.
-
-
 
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
