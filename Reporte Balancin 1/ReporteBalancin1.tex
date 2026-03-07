@@ -568,6 +568,8 @@ robot, la ganancia $k_{pv}$ pondera el efecto proporcional mientras la ganancia 
 debidas al plano inclinado. En cuanto a las ganancias del controlador del lazo de orientación (seguimiento de línea), al aumentar $k_{po}$ se 
 aumenta la rapidez en la respuesta y al aumentar $k_{do}$ se aumenta el amortiguamiento en la respuesta.
 
+
+
 \section{Materiales y Métodos}
 \subsection{Materiales}
 En el Cuadro \ref{tabla:materiales} se muestran los materiales empleados para el desarrollo del PISDRSL.  
@@ -578,30 +580,50 @@ En el Cuadro \ref{tabla:materiales} se muestran los materiales empleados para el
 \begin{tabular}{|c|c|}\hline
     \rowcolor{gray!30}
 Material: & Cantidad: \\ \hline
-Microcontrolador PIC18F4550 & 1\\ \hline
-Sensor óptico reflexivo infrarrojo TCRT5000 & 2\\ \hline
-Módulo bluetooth HC-05 $5\ [k\Omega]$ & 1\\ \hline
+Batería Spard lithium polymer 3S YT5068 $2100\,[mAh],\,11.1\,[V]$ & 1\\ \hline
+Botón SMD de 2 pines $3\:[mm]\times6\:[mm]\times2.5\:[mm]$ & 1\\ \hline
+Cable AWG 22 de $1\:[m]$ & 8\\ \hline
+Capacitor cerámico $0.1\,[\mu F]$ & 1\\ \hline
+Capacitor cerámico $15\,[pF]$ & 2\\ \hline
+Capacitor cerámico $22\,[pF]$ & 4\\ \hline
+Capacitor cerámico $470\,[nF]$ & 2\\ \hline
+Capacitor electrolítico $1000\,[\mu F]$ & 5\\ \hline
+Cargador balanceador para batería LiPo B3 Tecneu & 1\\ \hline
+Cinta doble cara & 1\\ \hline
+Clema bornera de 2 pines $5\,[mm]$ & 1\\ \hline
+Conector XT60 & 1\\ \hline
+Conectores tipo Molex de 2 pines $2.54\,[mm]$ & 1\\ \hline
+Conectores tipo Molex de 3 pines $2.54\,[mm]$ & 3\\ \hline
+Conectores tipo Molex de 4 pines $2.54\,[mm]$ & 5\\ \hline
+Cople marca Pololu para llanta con opresores para flecha de $4\,[mm]$ & 2\\ \hline
+Cristal de cuarzo $20\,[MHz]$ & 1\\ \hline
+Diodo emisor de luz (LED) SMD 0805 & 1\\ \hline
 Driver de Puente H L298N & 1\\ \hline
-Sensor MPU6050 & 1\\ \hline
-Capacitor cerámico $100\ [nF]$ & 2\\ \hline
-Capacitor cerámico $0.1\,[\mu\text{F}]$ & 1\\ \hline
-Capacitor cerámico $15\ [pF]$ & 2\\ \hline
-Capacitor cerámico $22\ [pF]$ & 2\\ \hline
-Cristal de cuarzo $20\ [MHz]$ & 1\\ \hline
-Resistencia $100\ [Omega]$ & 1\\ \hline
-Resistencia $100\ [k\Omega]$ & 1\\ \hline
-Resistencia $2.2\ [k\Omega]$ & 4\\ \hline
+Espárragos de $\frac{3}{16}\,[in]$ & 4\\ \hline
+Fusible europeo $2\,[A]$ & 1\\ \hline
+Hoja panel MDF $1.22\,[m]\times2.44\,[m]$ con un grosor de $5.5\,[mm]$ & 2\\ \hline
+Interruptor deslizable de 2 polos y 3 pines & 3\\ \hline
 Interruptor de 2 polos & 1\\ \hline
-Batería LiPo Spard $2100 [mAh], 11.1 [V]$, 15C 3S RC & 1\\ \hline
-Espárragos de $\frac{3}{16}$ $[in]$ & $4$\\ \hline
-Cargador balanceador para batería & 1\\ \hline
-Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ & $2$ \\ \hline
-Llanta & 2\\ \hline
-Cople de motor & 2\\ \hline
-Placas de acrílico de $14.5\:[cm]\times6.5\:[cm]$ con un grosor de $5.5\:[mm]$&$2$\\ \hline
-Fusible $2\:[A]$ & $1$ \\ \hline
-Tornillos de cabeza hexagonal M3 & $18$ \\
-
+Llanta marca Pololu Scooter/Skate Wheel negro $70\,[mm]\times25\,[mm]$ & 2\\ \hline
+Microcontrolador PIC18F4550 & 1\\ \hline
+Motorreductor de metal relación 34:1 marca Pololu Item \#4884 & 2\\ \hline
+Módulo \textit{Bluetooth} HC-05 & 1\\ \hline
+Pintura blanca & 1\\ \hline
+Pintura negra mate & 1\\ \hline
+Placas de acrílico de $150\,[mm]\times70\,[mm]$ & 2\\ \hline
+Porta fusible tipo europeo Steren AMPF-1 & 1\\ \hline
+Resistencia $1\,[k\Omega]$ & 2\\ \hline
+Resistencia $10\,[k\Omega]$ & 2\\ \hline
+Resistencia $100\,[\Omega]$ & 2\\ \hline
+Resistencia SMD 1206 $100\,[\Omega]$ & 1\\ \hline
+Resistencia SMD 1206 $100\,[k\Omega]$ & 1\\ \hline
+Resistencia SMD 1206 $330\,[\Omega]$ & 1\\ \hline
+\textit{Socket} para microcontrolador de 40 pines & 1\\ \hline
+Tarjeta MPU6050 Gy-521 giroscopio y acelerómetro de 3 ejes HiLetGo & 1\\ \hline
+Tarjeta TCRT5000 sensor infrarrojo MH-Sensor Series & 2\\ \hline
+Tira Molex macho de 5 pines $2.54\,[mm]$ & 1\\ \hline
+Tornillos M3 $\times6\,[mm]$ & 16\\ \hline
+Tornillos M3 $\times12\,[mm]$ & 8\\
 \hline
 \end{tabular}
 \label{tabla:materiales}
@@ -611,8 +633,10 @@ Tornillos de cabeza hexagonal M3 & $18$ \\
 	\centering
 	\caption{ Descripción de componentes.} 
 	\begin{tabular}{|p{6cm}|p{9cm}|l|}\hline
+        \rowcolor{gray!30}
 		\textbf{Material} & \textbf{Descripción general} \\ \hline
-		Batería RC & Batería de polímero de litio de alta descarga utilizada para alimentar circuitos y motores \\\hline
+		Batería lithium polyner & Esta batería de polímero de litio (LiPo) almacena una alta cantidad de
+            energía y es recargable \\\hline
 		Espárragos de $\frac{3}{16}$ $[in]$ & Barras roscadas utilizadas para ensamblajes mecánicos y estructurales\\ \hline
 		Módulo puente H L298N & Módulo controlador de motores de corriente continua que permite cambiar la dirección y velocidad de los motores \\ \hline
 		Cargador balanceador para batería LiPo & Dispositivo que permite cargar baterías LiPo asegurando una distribución equilibrada de la carga en sus celdas \\ \hline
