@@ -27,8 +27,11 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 \usepackage{hyphenat}
-\usetikzlibrary{arrows, positioning}
+\usetikzlibrary{arrows, positioning, arrows.meta}
 \usepackage{blox}
+\makeatletter
+\renewcommand{\bXStyleBloc}{draw, rectangle, thick, minimum height=1.5em, minimum width=1.5em, fill=white}
+\makeatother
 \hyphenation{co-mer-cial rea-li-zan si-guien-te si-mu-la-ción ke-lly con-si-de-ra-da}
 \bibpunct{(}{)}{;}{a}{,}{,}
 
@@ -54,7 +57,9 @@
 	\vspace{0.5cm}	
 	{\Large\bfseries Control III\par}
 	\vspace{0.8cm}
-	{\Large\bfseries Construcción, instrumentación y control de un Péndulo Invertido Sobre Dos Ruedas Seguidor de Línea (PISDRSL) \par}	
+	{\Large\bfseries Modelo linealizado del péndulo con dos ruedas y estrategia de control
+    para balanceo, avance traslacional y seguimiento de línea en pista con
+    planos inclinados \par}	
 	\vspace{0.8cm}
 	{\Large\itshape Primer entrega\par}
 	\vspace{0.8cm}
@@ -73,14 +78,14 @@
 \par
 \vspace{0.4cm}
 \par
-    Marin Luis Alejandro \rule{70mm}{0.1mm}
+    Zeron Marin Luis Alejandro \rule{70mm}{0.1mm}
 \par
 	
 	\vfill
 
 % Bottom of the page
 	{\large Fecha compromiso: 5 de marzo del 2026\par
-    Fecha en que se entregó: 6 de marzo del 2026}.
+    Fecha en que se entregó: 7 de marzo del 2026}.
 \end{titlepage}
 
 %\frontmatter	%fija la numeración romana
@@ -569,6 +574,228 @@ debidas al plano inclinado. En cuanto a las ganancias del controlador del lazo d
 aumenta la rapidez en la respuesta y al aumentar $k_{do}$ se aumenta el amortiguamiento en la respuesta.
 
 
+\begin{figure}[H]
+    \centering
+        \begin{tikzpicture}[scale=0.8, transform shape]
+
+
+        % =======================================================
+        % PASO 1: DEFINIR LAS ENTRADAS Y SUS COMPARADORES
+        % =======================================================
+        
+        % 1. ENTRADA NIVEL SUPERIOR (Lazo Theta)
+        \bXInput{inTh} % Nodo de entrada principal
+        \bXCompSum[5]{sumTh}{inTh}{-}{}{+}{} % Comparador a 2.5 unidades
+        \bXLink[$\Theta_d(s)$]{inTh}{sumTh} % Flecha con etiqueta
+
+        % 2. ENTRADA NIVEL MEDIO (Lazo Alpha)
+        % Bajamos 4 unidades en el eje Y desde la entrada de Theta
+        \bXBranchy[10]{inTh}{inA} 
+        \bXCompSum[5]{sumA}{inA}{}{-}{+}{}
+        \bXLink[$A_d(s)$]{inA}{sumA}
+
+        % 3. ENTRADA NIVEL INFERIOR (Lazo Velocidad)
+        % Bajamos 4 unidades en el eje Y desde la entrada de Alpha
+        \bXBranchy[10]{inA}{inV}
+        \bXCompSum[5]{sumV}{inV}{}{-}{+}{}
+        \bXLink[$V_d(s)$]{inV}{sumV}
+
+        % =======================================================
+        % PASO 2: BLOQUES DE LOS CONTROLADORES Y SEÑALES DE ERROR
+        % =======================================================
+        % Hacemos los rectángulos más anchos (7em) y mantenemos la altura (3em)
+        \bXStyleBloc{minimum width=9em, minimum height=4em}
+        
+        % 1. Controlador Lazo Theta (Nivel Superior)
+        \bXBloc[4]{pdTh}{$k_{po} + k_{do}s$}{sumTh}
+        \bXLink[$E_o(s)$]{sumTh}{pdTh}
+        
+        % 2. Controlador Lazo Alpha (Nivel Medio)
+        \bXBloc[4]{pdA}{$k_{pi} + k_{di}s$}{sumA}
+        \bXLink[$E_i(s)$]{sumA}{pdA}
+
+        % 2. Conectamos la salida Este del comparador a la entrada Oeste del bloque
+      
+        
+        % 3. Controlador Lazo Velocidad (Nivel Inferior)
+        \bXBloc[4]{piV}{$k_{pv} + k_{iv}\frac{1}{s}$}{sumV}
+        \bXLink[$E_v(s)$]{sumV}{piV}
+
+        % =======================================================
+        % PASO 3: BLOQUES DE GANANCIA Y SUMADORES INTERMEDIOS
+        % =======================================================
+        \bXStyleBloc{minimum width=5em, minimum height=4em}
+        % --- Continuación Lazo Theta (Nivel Superior) ---
+        \bXBloc[2.5]{gain2b}{$\frac{2b}{R}$}{pdTh}
+        \bXLink{pdTh}{gain2b}
+
+        \bXStyleBloc{minimum width=3em, minimum height=4em}
+        \bXBloc[6]{halfT}{$\frac{1}{2}$}{gain2b}
+        \bXLink[$T_a(s)$]{gain2b}{halfT}
+        
+        % --- Ajuste del Sumador Tl usando Branch ---
+        
+        % 1. Avanzamos en X (2.5 unidades a la derecha de halfT)
+        \bXBranchx[5]{halfT}{refHorizontal}
+        
+        % 2. Bajamos en Y para quedar entre theta y alpha
+        \bXBranchy[5]{refHorizontal}{refMedio} 
+        
+        % 3. Colocamos el comparador. 
+        % Nuevo orden: {Norte}{Sur}{Oeste}{Este} -> {-}{+}{}{} 
+        % (He puesto el '-' en el Norte, cámbialo a '+' si la ecuación lo dicta)
+        \bXCompSum[0]{sumTl}{refMedio}{-}{}{+}{} 
+        
+        % 4. Conectamos la salida Este de halfT con la entrada Norte de sumTl
+        % El operador '-|' hace el codo perfecto (primero X, luego Y)
+        \draw [-stealth] (halfT.east) -| (sumTl.north);
+
+  
+        % Colocamos el nuevo comparador a 2 unidades a la derecha de pdA.
+        % Orden de signos: {Norte}{Sur}{Oeste}{Este} -> {}{}{+}{} 
+        \bXCompSum[8]{sumB}{pdA}{}{-}{-}{}
+        \bXLink{pdA}{sumB}
+
+        \bXStyleBloc{minimum width=3em, minimum height=4em}
+        \bXBloc[3]{halfU}{$\frac{1}{2}$}{sumB}
+        \bXLink[$U(s)$]{sumB}{halfU}
+
+        \bXBranchx[9]{halfU}{refHorizontal}
+        \bXBranchy[5]{refHorizontal}{refMedio} 
+        \bXCompSum[0]{sumTr}{refMedio}{+}{}{+}{}
+
+        % LA CONEXIÓN EN "S" (Escalón):
+        % 1. Sale del Este de halfU
+        % 2. "-- ++(4,0)" avanza 4 unidades en línea recta horizontal
+        % 3. "|-" baja verticalmente hasta la altura de sumTr y luego avanza horizontal hasta tocarlo
+        \draw [-stealth] (halfU.east) -- ++(0.5,0) |- (sumTr.west);
+        \draw [-stealth] (halfU.east) -- ++(0.5,0) |- (sumTl.west);
+       % 2. Dibujamos el punto negro en la bifurcación
+        \fill ([xshift=0.5cm]halfU.east) circle (3pt);
+
+        \draw [-stealth] (halfT.east) -- ++(0.5,0) -| (sumTr.north);
+        \fill ([xshift=0.5cm]halfT.east) circle (3pt);
+
+        \draw [-stealth] (piV.east) -- ++(0.5,0) -| (sumB.south);
+
+        % =======================================================
+        % PASO 5: PLANTA MIMO (PISDRSL) Y CONEXIONES DE ENTRADA
+        % =======================================================
+
+        % 1. Encontramos el punto vertical medio entre los dos sumadores para centrar la caja
+        \path (sumTl.east) -- (sumTr.east) coordinate[midway] (medioSumadores);
+
+        % 2. Dibujamos el gran bloque de la planta. 
+        % minimum height=18em lo hace alto para que quepan todas las salidas.
+        % xshift=3.5cm define qué tan a la derecha estará de los sumadores.
+        \node [draw, rectangle, minimum width=5em, minimum height=16em, thick] (plant) at ([xshift=2.5cm]medioSumadores) {$PISDRSL$};
+
+        % 3. Conectamos el sumador Tl (arriba) a la planta
+        % (sumTl.east -| plant.west) calcula mágicamente el punto de impacto exacto en la pared izquierda de la planta.
+        \draw [-stealth] (sumTl.east) -- node[above] {$T_l(s)$} (sumTl.east -| plant.west);
+
+        % 4. Conectamos el sumador Tr (abajo) a la planta
+        \draw [-stealth] (sumTr.east) -- node[above] {$T_r(s)$} (sumTr.east -| plant.west);
+
+        % =======================================================
+        % PASO 6: SALIDAS MIMO Y RETROALIMENTACIÓN
+        % =======================================================
+
+        % --- LAZO 1: Salida Theta(s) ---
+        
+        % 1. Definimos el "puerto" de salida en la pared derecha de la planta.
+        % Como la caja mide 18em de alto, subimos unos 6em desde el centro para que quede arriba.
+        \coordinate (portTheta) at ([yshift=6em]plant.east);
+
+        % 2. Trazamos el recorrido de regreso (hacia sumTh)
+        \draw [-stealth] (portTheta) 
+              -- ++(1cm,0) node[above, midway] {$\Theta(s)$} % 1. Sale a la derecha 1.5cm y pone el texto
+              -- ++(0, 3.5cm)                                  % 2. Sube 3.5cm (como un elevador) para librar el diagrama
+              -| (sumTh.north);                                % 3. Viaja a la izquierda y baja en picada al puerto Norte
+
+        % =======================================================
+        % CORRECCIÓN: LAZO DE RETROALIMENTACIÓN A(s) (RODEO)
+        % =======================================================
+        
+        % --- LAZO 2: Salida A(s) ---
+        
+        % 1. Definimos el puerto de salida para A(s) un poco más abajo que Theta
+        % (Como Theta estaba en 6em, ponemos este en 2em para separarlos bien)
+        \coordinate (portA) at ([yshift=2em]plant.east);
+
+        % 2. Trazamos el recorrido por debajo del diagrama hasta sumA
+        \draw [-stealth] (portA) 
+              -- ++(1.9cm,0) node[above, pos = 0.25] {$A(s)$} % 1. Sale a la derecha (le damos 2.5cm para que no cruce la línea de Theta si esta bajara)
+              -- ++(0, -7cm)   % 2. Baja en picada (ajusta este -12cm si necesitas que pase más abajo del lazo Vd)
+              -- ++(-19.4cm, 0) 
+              -- ++(0, 5cm)   
+              -| (sumA.south);                            % 3. Vuela a la izquierda y sube en ángulo recto al puerto Sur de sumA
+
+              % =======================================================
+        % PASO 7: SALIDAS OMEGA Y SUMADOR INFERIOR
+        % =======================================================
+
+        % 1. Definimos los puertos de salida en la planta
+        % (Acomodados simétricamente hacia abajo)
+        \coordinate (portOmegaL) at ([yshift=-2em]plant.east);
+        \coordinate (portOmegaR) at ([yshift=-6em]plant.east);
+
+        % 2. Colocamos el sumador donde se unen ambas señales.
+        % Lo ubicamos 4cm a la derecha y 10cm hacia abajo de la planta.
+        % (Ese -10cm es la profundidad de tu nueva línea de retorno, ajústalo si choca con la de A(s))
+        \coordinate (posSumOmega) at ([xshift=0.9cm, yshift=-5cm]plant.east);
+
+        % Sumador con entradas en el Norte (+) y Este (+)
+        % Orden en blox: {Norte}{Sur}{Oeste}{Este} -> {+}{}{}{+}
+        \bXCompSum[0]{sumOmega}{posSumOmega}{+}{}{}{+}
+
+        % 3. Trazamos el recorrido de Omega_l(s)
+        \draw [-stealth] (portOmegaL) 
+              -- ++(1.5cm,0) node[above, pos=0.35] {$\Omega_l(s)$} % Sale a la derecha 4cm (queda exacto sobre el sumador)
+              -- ++(0.1cm,0) 
+              -- ++(0,-3.8cm) 
+              
+              |- (sumOmega.east);                             % Cae en línea recta al puerto Norte
+
+        % 4. Trazamos el recorrido de Omega_r(s)
+        \draw [-stealth] (portOmegaR) 
+              -- ++(0.9cm,0) node[above, pos=0.6] {$\Omega_r(s)$} % Sale a la derecha 5.5cm (rebasa al sumador)
+              -- (sumOmega.north);                              % Baja y dobla a la izquierda para entrar por el Este
+
+       % =======================================================
+        % PASO 8: LAZO DE RETORNO OMEGA CON BLOX
+        % =======================================================
+
+        % 1. Mantenemos el estilo de tus bloques de ganancias
+        \bXStyleBloc{minimum width=3em, minimum height=4em}
+
+        % 2. El truco: Distancia negativa [-2.5] para que se dibuje a la izquierda de sumOmega
+        \bXBloc[-15]{halfOmega}{$\frac{1}{2}$}{sumOmega}
+
+        % 3. Conexión de reversa. 
+        % (Como \bXLink siempre intenta conectar de Este a Oeste y haría un bucle raro,
+        % aquí sí usamos el trazo directo de TikZ para conectar limpio de Oeste a Este)
+        \draw [-stealth] (sumOmega.west) -- (halfOmega.east);
+
+        % =======================================================
+        % PASO 9: BLOQUE R Y SEÑAL OMEGA(s)
+        % =======================================================
+
+        % 1. Colocamos el bloque R a la izquierda de halfOmega.
+        % (Uso [-4] para dejar espacio suficiente para la etiqueta, ajústalo si lo ves muy apretado)
+        \bXBloc[-15]{bloqueR}{$R$}{halfOmega}
+
+        % 2. Conectamos la salida Oeste de halfOmega con la entrada Este de R.
+        % Ponemos la etiqueta \Omega(s) centrada sobre la línea.
+        \draw [-stealth] (halfOmega.west) -- node[above, pos=0.25] {$\Omega(s)$} (bloqueR.east);
+        \draw [-stealth] (bloqueR.west) -- node[above, pos=0.1] {$V(s)$} (bloqueR.west -| sumV.south) -- (sumV.south);
+           
+        \end{tikzpicture}
+        \caption{Estrategia con controladores lineales clásicos para controlar el PISDRSL.}
+        \label{fig:7}
+    \end{figure}
+
+
 
 \section{Materiales y Métodos}
 \subsection{Materiales}
@@ -632,7 +859,7 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
 \begin{table}[H]
 	\centering
 	\caption{ Descripción de componentes.} 
-	begin{tabular}{|p{5cm}|p{10cm}|}\hline
+	\begin{tabular}{|p{5cm}|p{10cm}|}\hline
         \rowcolor{gray!30}
 		\textbf{Material} & \textbf{Descripción general} \\ \hline
 		Batería lithium polyner & Esta batería de polímero de litio (LiPo) almacena una alta cantidad de
@@ -715,7 +942,6 @@ Eagle & 9.6\\
 \end{figure}
 
 \subsection{Metodología}
-\usetikzlibrary{positioning, arrows.meta}
 
 
 \begin{figure}[H]
@@ -991,7 +1217,7 @@ Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma,
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
 
-​La implementación del sistema PISDRSL mediante la arquitectura del PIC18F4550 constituyó un desafío integral, abarcando desde la concepción mecánica y electrónica hasta la arquitectura del sistema de control. A pesar de las contingencias operativas, el prototipo superó con éxito los obstáculos en la pista de pruebas. El mayor reto radicó en la gestión logística y organizacional del equipo, subrayando la necesidad de optimizar las estrategias de flujo de trabajo. Es imperativo resaltar la eficacia de los blindajes optoelectrónicos, diseñados específicamente para neutralizar las fluctuaciones lumínicas que comprometen la estabilidad del sistema durante su despliegue dinámico.
+La implementación del sistema PISDRSL mediante la arquitectura del PIC18F4550 constituyó un desafío integral, abarcando desde la concepción mecánica y electrónica hasta la arquitectura del sistema de control. A pesar de las contingencias operativas, el prototipo superó con éxito los obstáculos en la pista de pruebas. El mayor reto radicó en la gestión logística y organizacional del equipo, subrayando la necesidad de optimizar las estrategias de flujo de trabajo. Es imperativo resaltar la eficacia de los blindajes optoelectrónicos, diseñados específicamente para neutralizar las fluctuaciones lumínicas que comprometen la estabilidad del sistema durante su despliegue dinámico.
 
 \subsection{Fernández Rendón Anna Patricia}
  
