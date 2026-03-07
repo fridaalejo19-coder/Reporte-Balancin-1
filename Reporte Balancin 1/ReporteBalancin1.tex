@@ -796,6 +796,52 @@ Mitad de la distancia entre huellas de ruedas & $b = 0.08600$\\
 \label{tabla:TabMed}
 \end{table}
 
+En la Figura \ref{fig:metodo_balanza} se muestra el método de la balanza donde se observa la distribución de las masas en el PISDRSL.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/METODO_BALANZA.png}
+	\caption{Método de la balanza para encontrar $M_p$ y $C_z$ del PISDRSL.}
+	\label{fig:metodo_balanza}
+\end{figure}
+
+La masa del PISDRSL, sin considerar los motores, está dada por:
+\begin{equation}
+	M_p=4m_t+2m_s+2m_A+m_B+m_H+m_{Bo}=0.3360\;[kg]
+	\label{eq:49}
+\end{equation}
+
+El centro de masa del péndulo está dado por:
+
+\begin{equation}
+	C_z=\frac{2m_Sx_7+m_Ax_1+m_Bx_5+m_Hx_2+4m_tx_3+m_Ax_4+m_{Bo}x_6}{M_p}
+	\label{eq:50}
+\end{equation}
+
+Donde el resultado es:
+
+\begin{equation}
+	C_z=0.1037\;[m]
+	\label{eq:51}
+\end{equation}
+En el Cuadro \ref{tabla:momentos_inercia} se presentan los cálculos realizados con MATLAB (código del anexo pendiente) de los momentos de inercia alrededor del eje $y$, asumiendo que el PISDRSL rota alrededor de su centro de masa.
+\begin{table}[H]
+	\centering
+	\caption{Cálculo de los momentos de inercia del PISDRSL.} 
+	\begin{tabular}{|l|c|l|}\hline
+		$I_{yy}$ \textbf{de componentes} &\textbf{Operación} & \textbf{Distancia} $[kgm^2]$ \\ \hline
+        $I_{yy\_carcazas}$ & $2\frac{m_M}{2}C_z^2 + 2\frac{m_M}{2}\left(\frac{R_m}{2}\right)^2$ & $8.5616\times 10^{-4}$ \\ \hline
+        $I_{yy\_postes}$ & $\frac{4 m_t |C_z-x_3|^2}{12}$ & $4.6499\times 10^{-6}$ \\ \hline
+        $I_{yy\_bateria}$ & $m_B|C_z-x_5|^2 + m_B\frac{0.026^2+0.034^2}{12}$ & $1.7249\times 10^{-4}$ \\ \hline
+        $I_{yy\_Bo}$ & $\frac{m_{Bo}(0.05)^2}{12}+m_{Bo}|x_6-C_z|^2$ & $5.5100\times 10^{-5}$ \\ \hline
+        $I_{yy\_acr\_inferior}$ & $\frac{m_A(0.05)^2}{12}+m_A|C_z-x_1|^2$ & $2.3511\times 10^{-4}$ \\ \hline
+        $I_{yy\_acr\_superior}$ & $\frac{m_A(0.05)^2}{12}+m_A|x_4-C_z|^2$ & $1.1434\times 10^{-5}$ \\ \hline
+        $I_{yy\_puente\_H}$ & $m_H|x_2-C_z|^2$ & $5.4691\times 10^{-6}$ \\ \hline
+		$I_{yy}$ & \textbf{Sumatoria de todos los momentos de inercia} & ${1.3\times 10^{-3}}$ \\ \hline
+		
+	\end{tabular}
+	\label{tabla:momentos_inercia}
+\end{table}
+
 
 \subsection {Pista de pruebas}
 
