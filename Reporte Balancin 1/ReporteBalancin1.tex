@@ -73,14 +73,14 @@
 \par
 \vspace{0.4cm}
 \par
-	Zeron Marin Luis Alejandro \rule{70mm}{0.1mm}
+     Marin Luis Alejandro \rule{70mm}{0.1mm}
 \par
 	
 	\vfill
 
 % Bottom of the page
 	{\large Fecha compromiso: 5 de marzo del 2026\par
-    Fecha en que se entregó: 6 de marzo del 2026}.
+    Fecha en que se entregó: 7 de marzo del 2026}.
 \end{titlepage}
 
 %\frontmatter	%fija la numeración romana
@@ -709,7 +709,7 @@ Draw.io & 28.2.8\\
 \subsection{Diagrama de conexiones entre componentes}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{img/image.png}
+    \includegraphics[width=0.95\textwidth]{img/Conexiones.jpeg}
     \caption{Conexión eléctrica de los componentes en el PISDRSL.}
     \label{fig:foto}
 \end{figure}
@@ -738,14 +738,31 @@ La metodología utilizada para el desarrollo del PISDRSL se compone de diversas 
 \end{enumerate}  
 
 \section{Resultados y Discusión}
+\subsection {Desarrollo de la PCB}
+En la figura \ref{fig:Esquema_1}, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/Esquema_1.png}
+    \includegraphics[width=0.5\textwidth]{img/image.png}
     \caption{Imagen de oscilocopio con un muestreo de 10 $[ms]$ y la señal tiene una frecuencia de 45 $[Hz]$ sin filtro.}
     \label{fig:Esquema_1}
 \end{figure}
-\subsection {Desarrollo de la PCB}
-En la figura pendiente, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
+
+En las Figuras \ref{fig:PCB} y \ref{fig:PCB_Inf}, se muestran ambas caras de la PCB, indicando el diseño y distribución de todos los
+componentes previamente mostrados en el esquemático de la Figura \ref{fig:Esquema_1}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/PCB.png}
+    \caption{Cara superior de la PCB diseñada en el software Eagle.}
+    \label{fig:PCB}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/PCB_Inf.png}
+    \caption{Cara inferior de la PCB diseñada en el software Eagle.}
+    \label{fig:PCB_Inf}
+\end{figure}
+
 
 \subsection {Medicíon de masas y distancias}
 Para determinar el momento de inercia del robot, es fundamental disponer de todas las mediciones de las
@@ -873,16 +890,7 @@ Se realizaron varios
 
 \subsubsection{Zeron Marin Luis Alejandro}
  
-<<<<<<< HEAD
 \subsection{Resultados y discusión del equipo}
-=======
-\subsubsection{Resultados y discusión del equipo}
-Para el desarrollo de esta práctica, se comprobó de forma experimental qué es y cómo se comporta el fenómeno de \textit{aliasing}. A lo largo de todas las figuras, se puede observar que, a frecuencias menores que la frecuencia de Nyquist, la señal reconstruida puede distorsionarse, así como representarse de manera incorrecta, lo cual confirma la teoría de muestreo. 
-
-Sin embargo, este fenómeno puede mitigarse si se emplea un filtro \textit{antialiasing}. Para esta práctica se utilizó un filtro RC de primer orden que, al ser calculado correctamente, permitió reducir los efectos del \textit{aliasing}. 
-
-Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma, asimetría e incluso saturación. Al implementar el filtro, se pudo observar una señal mucho más limpia y simétrica con respecto a la señal original.
->>>>>>> acc227aac6dc79ccb8cca26a97a0efb006ad3aab
 
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
