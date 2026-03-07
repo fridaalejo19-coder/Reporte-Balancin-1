@@ -299,10 +299,13 @@ OUTPUT ReporteBalancin1.pdf
 INPUT .\ReporteBalancin1.out
 INPUT .\ReporteBalancin1.out
 OUTPUT ReporteBalancin1.out
-INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
-INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
-INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
-INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
+INPUT .\img\logos_fi_uaq.png
+INPUT .\img\logos_fi_uaq.png
+INPUT .\img\logos_fi_uaq.png
+INPUT .\img\logos_fi_uaq.png
+INPUT .\img\logos_fi_uaq.png
+INPUT .\img\logos_fi_uaq.png
+INPUT .\img\logos_fi_uaq.png
 INPUT E:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
 INPUT E:\Program Files\MiKTeX\tex\latex\amsfonts\umsa.fd
@@ -330,13 +333,11 @@ INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
-INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
-INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
-INPUT C:\Users\annap\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
-INPUT E:\Program Files\MiKTeX\fonts\enc\dvips\base\8r.enc
 INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmrc8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
+INPUT C:\Users\annap\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
+INPUT E:\Program Files\MiKTeX\fonts\enc\dvips\base\8r.enc
 INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmrc8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
@@ -364,8 +365,14 @@ INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 OUTPUT ReporteBalancin1.lot
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
+INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
+INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmri8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8r.tfm
