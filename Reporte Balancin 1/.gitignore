@@ -1,0 +1,12 @@
+# Archivos auxiliares y logs de LaTeX
+*.aux
+*.bbl
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.toc
+*.pdf
