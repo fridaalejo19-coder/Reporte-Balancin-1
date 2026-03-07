@@ -1,5 +1,5 @@
 # Fdb version 4
-["bibtex ReporteBalancin1"] 1772852996.43474 "ReporteBalancin1.aux" "ReporteBalancin1.bbl" "ReporteBalancin1" 1772860654.30838 0
+["bibtex ReporteBalancin1"] 1772852996.43474 "ReporteBalancin1.aux" "ReporteBalancin1.bbl" "ReporteBalancin1" 1772861093.69062 0
   "ReporteBalancin1.aux" 1772854873 14062 60c7ae46fce5c5730163d222bc9ffaf3 "pdflatex"
   "rep.bib" 0 -1 0 ""
   "uaq_prev.bst" 0 -1 0 ""
@@ -7,7 +7,7 @@
   "ReporteBalancin1.bbl"
   "ReporteBalancin1.blg"
   (rewritten before read)
-["pdflatex"] 1772860641.87309 "ReporteBalancin1.tex" "ReporteBalancin1.pdf" "ReporteBalancin1" 1772860654.30978 2
+["pdflatex"] 1772861078.32348 "ReporteBalancin1.tex" "ReporteBalancin1.pdf" "ReporteBalancin1" 1772861093.69401 2
   "C:/Users/annap/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1772818412 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/annap/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs10.tfm" 1771217939 688 37338d6ab346c2f1466b29e195316aa4 ""
   "C:/Users/annap/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs5.tfm" 1771217940 684 3a51bd4fd9600428d5264cf25f04bb9a ""
@@ -202,16 +202,16 @@
   "E:/Program Files/MiKTeX/tex/latex/tools/tabularx.sty" 1761901070 7243 a2c17f18e2c9b702b84fad03d5f9c78b ""
   "E:/Program Files/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "E:/Program Files/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "ReporteBalancin1.aux" 1772860652 14278 1486beb97d57df9c26f15fd609a0297c "pdflatex"
+  "ReporteBalancin1.aux" 1772861091 14278 a41a5ec54e733a647bcebf9521549d19 "pdflatex"
   "ReporteBalancin1.bbl" 1772852996 0 d41d8cd98f00b204e9800998ecf8427e "bibtex ReporteBalancin1"
-  "ReporteBalancin1.lof" 1772860652 1330 7c8152446f7480ab37312c61bd1e077a "pdflatex"
-  "ReporteBalancin1.lot" 1772860652 833 633ae551f03fd85a15bab499f922109c "pdflatex"
-  "ReporteBalancin1.out" 1772860652 7137 713f19237d226f3e9dda1a686683f6b8 "pdflatex"
-  "ReporteBalancin1.tex" 1772860627 56706 d29759af2cfd87fa4ac400ce4dcb93ea ""
-  "ReporteBalancin1.toc" 1772860652 3256 5508037720ee44b56da6fc340721770c "pdflatex"
-  "img/Conexiones.jpeg" 0 -1 0 ""
+  "ReporteBalancin1.lof" 1772861091 1330 d205849e9c38f8ff419a5b1229868a27 "pdflatex"
+  "ReporteBalancin1.lot" 1772861091 833 30df776713fb67ab2041bfdd9c5a7501 "pdflatex"
+  "ReporteBalancin1.out" 1772861091 7137 713f19237d226f3e9dda1a686683f6b8 "pdflatex"
+  "ReporteBalancin1.tex" 1772861060 56700 2943e1b666f08dbb485388c827f9c705 ""
+  "ReporteBalancin1.toc" 1772861091 3256 44683f79dc3895763d8cfe5cd3f0ee1c "pdflatex"
   "img/Esquema_1.png" 0 -1 0 ""
   "img/METODO_BALANZA.png" 1772848709 39426 35b80c8646c8f1063252c91c83ecd069 ""
+  "img/image.png" 1772860928 343287 d0b3c12b9e0d710984ef3b5f8ea8328b ""
   "img/logos_fi_uaq.png" 0 -1 0 ""
   "img/pista sup.png" 1772848709 356532 99af3e6374b44c5c4ef38d644462a565 ""
   (generated)
