@@ -27,7 +27,6 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 \usepackage{hyphenat}
-\usepackage{tikz}
 \usetikzlibrary{arrows, positioning}
 \usepackage{blox}
 \hyphenation{co-mer-cial rea-li-zan si-guien-te si-mu-la-ción ke-lly con-si-de-ra-da}
@@ -563,8 +562,8 @@ Finalmente los pares aplicados a las ruedas son:
 Finalmente definiendo $e_v = v_d - v = -\tilde{v}$, $e_i = \alpha_d - \alpha = -\alpha$, $e_o = \theta_d - \theta = -\tilde{\theta}$, $k_{di} = k_1$, $k_{pi} = k_2$, 
 $k_{pv} = k_3$, $k_{iv} = k_4$, $k_{po} = k_p$, $k_{do} = k_v$, con las operaciones algebraicas correspondientes, se llega al diagrama 
 de bloques con controladores lineales clásicos para controlar el PISDRSL (ver Figura 1). Es importante reflexionar sobre los efectos de las 
-ganancias.La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
-proporcional en el lazo de control de inclinación del robot[cite: 269].Respecto al controlador proporcional integral de velocidad traslacional del 
+ganancias. La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
+proporcional en el lazo de control de inclinación del robot. Respecto al controlador proporcional integral de velocidad traslacional del 
 robot, la ganancia $k_{pv}$ pondera el efecto proporcional mientras la ganancia $k_{iv}$ pondera el efecto integral que elimina las perturbaciones 
 debidas al plano inclinado. En cuanto a las ganancias del controlador del lazo de orientación (seguimiento de línea), al aumentar $k_{po}$ se 
 aumenta la rapidez en la respuesta y al aumentar $k_{do}$ se aumenta el amortiguamiento en la respuesta.
@@ -633,7 +632,7 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
 \begin{table}[H]
 	\centering
 	\caption{ Descripción de componentes.} 
-	\begin{tabular}{|p{6cm}|p{9cm}|l|}\hline
+	begin{tabular}{|p{5cm}|p{10cm}|}\hline
         \rowcolor{gray!30}
 		\textbf{Material} & \textbf{Descripción general} \\ \hline
 		Batería lithium polyner & Esta batería de polímero de litio (LiPo) almacena una alta cantidad de
@@ -660,7 +659,7 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
         Juego de conectores tipo Molex & Conectores eléctricos para conectar componentes eléctricos con facilidad y fiabilidad\\ \hline
         Tira \textit{header} macho & Conector de pines macho utilizado para interconectar componentes en la placa de circuito\\ \hline
         Cable AWG 22 & Cable flexible, utilizado para las conexiones eléctricas\\ \hline
-        Módulo \textit{bluetooth} HC05 & Módulo de comunicación bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
+        Módulo \textit{bluetooth} HC-05 & Módulo de comunicación bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
 		Interruptor de 2 polos & Dispositivo mecánico utilizado para controlar el encendido y apagado del circuito \\ \hline
 	\end{tabular}
 	\label{tabla:descripcion}
@@ -699,9 +698,9 @@ Software: & Versión: \\ \hline
 CCS Compiler & Versión 5.083\\
 MATLAB & R2021a\\
 PICkit 3 & 3.10.00\\
-MATLAB & R2023a\\
 SOLIDWORKS & 2024 SP5.0\\
 Draw.io & 28.2.8\\
+Eagle & 9.6\\
 \hline
 \end{tabular}
 \label{tabla:software}
@@ -810,7 +809,7 @@ componentes previamente mostrados en el esquemático de la Figura \ref{fig:Esque
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{img/PCB_Inf.png}
-    \caption{Cara inferior de la PCB diseñada en el software Eagle..}
+    \caption{Cara inferior de la PCB diseñada en el software Eagle.}
     \label{fig:PCB_Inf}
 \end{figure}
 
@@ -929,7 +928,6 @@ dimensiones.
 \end{figure}
 
 En la Figura \ref{fig:PistaLat} se muestra la vista lateral de la pendiente a subir y bajar por el robot PISDRSL.
-dimensiones.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{img/VISTA_LATERAL_PISTA.png}
@@ -952,12 +950,13 @@ En la Figura \ref{fig:DisBal} se muestra a detalle la distribución de los compo
 	\centering
 	\includegraphics[width=0.6\textwidth]{img/DisBal.png}
 	\caption{Diagrama de distribución de componentes del PISDRSL (vista frontal).}
-	\label{fig:DIsBal}
+	\label{fig:DisBal}
 \end{figure}
 
 \subsection {Modelo físico y pruebas de pista}
 
 \subsection {Ganancias del controlador}
+
 
 \subsection {Resultados experimentales graficados}
 La Figura \ref{fig:Graficas} muestra la gráfica de resultados obtenidos durante el recorrido del PISDRSL iniciando desde
