@@ -10,6 +10,7 @@
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 % Useful packages
+\usepackage{tikz}
 \usepackage[table]{xcolor} % Para colores en tablas
 \usepackage{array}         % Para mejor manejo de columnas
 \usepackage{amsmath}
@@ -73,14 +74,14 @@
 \par
 \vspace{0.4cm}
 \par
-     Marin Luis Alejandro \rule{70mm}{0.1mm}
+    Marin Luis Alejandro \rule{70mm}{0.1mm}
 \par
 	
 	\vfill
 
 % Bottom of the page
 	{\large Fecha compromiso: 5 de marzo del 2026\par
-    Fecha en que se entregó: 7 de marzo del 2026}.
+    Fecha en que se entregó: 6 de marzo del 2026}.
 \end{titlepage}
 
 %\frontmatter	%fija la numeración romana
@@ -701,7 +702,6 @@ PICkit 3 & 3.10.00\\
 MATLAB & R2023a\\
 SOLIDWORKS & 2024 SP5.0\\
 Draw.io & 28.2.8\\
-Eagle & 9.6\\
 \hline
 \end{tabular}
 \label{tabla:software}
@@ -716,6 +716,56 @@ Eagle & 9.6\\
 \end{figure}
 
 \subsection{Metodología}
+\usetikzlibrary{positioning, arrows.meta}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance = 1cm and 1.2cm,
+        box/.style = {
+            draw, 
+            rectangle, 
+            align=center, 
+            text width=3.5cm, 
+            minimum height=1.2cm,
+            font=\small
+        },
+        arrow/.style = {
+            thick, 
+            -Stealth
+        }
+    ]
+
+    % Fila 1: De izquierda a derecha
+    \node [box] (n1) {Recopilación de información};
+    \node [box, right=of n1] (n2) {Medición preliminar};
+    \node [box, right=of n2] (n3) {Diseño estructural y electrónico};
+
+    % Fila 2: De derecha a izquierda (Efecto serpiente)
+    \node [box, below=of n3] (n4) {Fabricación y ensamblaje};
+    \node [box, left=of n4] (n5) {Verificación dimensional final};
+    \node [box, left=of n5] (n6) {Cálculo de parámetros};
+
+    % Fila 3: De izquierda a derecha
+    \node [box, below=of n6] (n7) {Implementación del control};
+    \node [box, right=of n7] (n8) {Integración de comunicación inalámbrica};
+    \node [box, right=of n8] (n9) {Sintonización y ajuste final};
+
+    % Conexiones de las flechas
+    \draw [arrow] (n1) -- (n2);
+    \draw [arrow] (n2) -- (n3);
+    \draw [arrow] (n3) -- (n4);
+    \draw [arrow] (n4) -- (n5);
+    \draw [arrow] (n5) -- (n6);
+    \draw [arrow] (n6) -- (n7);
+    \draw [arrow] (n7) -- (n8);
+    \draw [arrow] (n8) -- (n9);
+
+    \end{tikzpicture}
+    \caption{Metodología de desarrollo del sistema PISDRSL.}
+    \label{fig:metodologia}
+\end{figure}
 La metodología utilizada para el desarrollo del PISDRSL se compone de diversas etapas: 
 
 \begin{enumerate}
@@ -738,40 +788,16 @@ La metodología utilizada para el desarrollo del PISDRSL se compone de diversas 
     \item \textbf{Sintonización y ajuste final:} Se realizan pruebas de funcionamiento para evaluar el desempeño del controlador. En esta etapa, se ajustan finamente las ganancias del control, mejorando la respuesta del sistema para que realice el recorrido especificado de manera precisa, estable y robusta ante cambios de iluminación.
 \end{enumerate}  
 
+
 \section{Resultados y Discusión}
 \subsection {Desarrollo de la PCB}
 En la figura \ref{fig:Esquema_1}, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/image.png}
-    \caption{Imagen de oscilocopio con un muestreo de 10 $[ms]$ y la señal tiene una frecuencia de 45 $[Hz]$ sin filtro.}
+    \includegraphics[width=0.8\textwidth]{img/image.png}
+    \caption{Diagrama esquemático de la PCB del PISDRSL.}
     \label{fig:Esquema_1}
 \end{figure}
-
-En las Figuras \ref{fig:PCB} y \ref{fig:PCB_Inf}, se muestran ambas caras de la PCB, indicando el diseño y distribución de todos los
-componentes previamente mostrados en el esquemático de la Figura \ref{fig:Esquema_1}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB.png}
-    \caption{Cara superior de la PCB diseñada en el software Eagle.}
-    \label{fig:PCB}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB_Inf.png}
-    \caption{Cara inferior de la PCB diseñada en el software Eagle.}
-    \label{fig:PCB_Inf}
-\end{figure}
-
-En la Figura \ref{fig:PCB_3D}, se muestra una vista en tres dimensiones (3D) del diseño de la PCB ya impresa.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB_3D.png}
-    \caption{Cara superior de la PCB diseñada en el software Eagle.}
-    \label{fig:PCB_3D}
-\end{figure}
-
 
 \subsection {Medicíon de masas y distancias}
 Para determinar el momento de inercia del robot, es fundamental disponer de todas las mediciones de las
@@ -879,23 +905,6 @@ dimensiones.
 	\label{fig:pista sup}
 \end{figure}
 
-En la Figura \ref{fig:pistalat} se muestra la vista lateral de la pendiente a subir y bajar por el robot PISDRSL.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{img/VISTA_LATERAL_PISTA.png}
-	\caption{Vista lateral de sección con pendiente}
-	\label{fig:pistalat}
-\end{figure}
-
-En la Figura \ref{fig:pistaISO}  se presenta una vista isométrica de la pista donde se muestran los puntos importantes para
-el análisis del comportamiento del robot PISDRSL.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{img/VISTA_ISOMETRICA_PISTA.png}
-	\caption{Vista isométrica de la pista}
-	\label{fig:pistaISO}
-\end{figure}
-
 \subsection {Diseño del robot PISDRSL y montaje de materiales}
 
 \subsection {Modelo físico y pruebas de pista}
@@ -916,7 +925,16 @@ Se realizaron varios
 
 \subsubsection{Zeron Marin Luis Alejandro}
  
+<<<<<<< HEAD
 \subsection{Resultados y discusión del equipo}
+=======
+\subsubsection{Resultados y discusión del equipo}
+Para el desarrollo de esta práctica, se comprobó de forma experimental qué es y cómo se comporta el fenómeno de \textit{aliasing}. A lo largo de todas las figuras, se puede observar que, a frecuencias menores que la frecuencia de Nyquist, la señal reconstruida puede distorsionarse, así como representarse de manera incorrecta, lo cual confirma la teoría de muestreo. 
+
+Sin embargo, este fenómeno puede mitigarse si se emplea un filtro \textit{antialiasing}. Para esta práctica se utilizó un filtro RC de primer orden que, al ser calculado correctamente, permitió reducir los efectos del \textit{aliasing}. 
+
+Cuando no se utilizaba el filtro, la señal presentaba distorsiones en su forma, asimetría e incluso saturación. Al implementar el filtro, se pudo observar una señal mucho más limpia y simétrica con respecto a la señal original.
+>>>>>>> acc227aac6dc79ccb8cca26a97a0efb006ad3aab
 
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
