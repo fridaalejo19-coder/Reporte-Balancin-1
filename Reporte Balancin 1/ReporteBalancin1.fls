@@ -1,6 +1,6 @@
-PWD C:\Users\frida\OneDrive\Escritorio\ReporteBalancinBueno\Reporte-Balancin-1\Reporte Balancin 1
+PWD c:\Users\frida\OneDrive\Escritorio\ReporteBalancinBueno\Reporte-Balancin-1\Reporte Balancin 1
 INPUT C:\Users\frida\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT ReporteBalancin1.tex
+INPUT c:\Users\frida\OneDrive\Escritorio\ReporteBalancinBueno\Reporte-Balancin-1\Reporte Balancin 1\ReporteBalancin1.tex
 OUTPUT ReporteBalancin1.log
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
@@ -279,9 +279,6 @@ INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\psnfss\t1ptm.fd
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
-INPUT .\ReporteBalancin1.aux
-INPUT .\ReporteBalancin1.aux
-INPUT ReporteBalancin1.aux
 OUTPUT ReporteBalancin1.aux
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -291,14 +288,8 @@ INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstop
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
-INPUT .\ReporteBalancin1.out
-INPUT .\ReporteBalancin1.out
-INPUT ReporteBalancin1.out
-INPUT ReporteBalancin1.out
-OUTPUT ReporteBalancin1.pdf
-INPUT .\ReporteBalancin1.out
-INPUT .\ReporteBalancin1.out
 OUTPUT ReporteBalancin1.out
+OUTPUT ReporteBalancin1.pdf
 INPUT .\img\logos_fi_uaq.png
 INPUT .\img\logos_fi_uaq.png
 INPUT .\img\logos_fi_uaq.png
@@ -349,22 +340,11 @@ INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmr8t.v
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
-INPUT .\ReporteBalancin1.toc
-INPUT .\ReporteBalancin1.toc
-INPUT ReporteBalancin1.toc
-INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
 OUTPUT ReporteBalancin1.toc
-INPUT .\ReporteBalancin1.lof
-INPUT .\ReporteBalancin1.lof
-INPUT ReporteBalancin1.lof
 OUTPUT ReporteBalancin1.lof
-INPUT .\ReporteBalancin1.lot
-INPUT .\ReporteBalancin1.lot
-INPUT ReporteBalancin1.lot
-INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
-INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 OUTPUT ReporteBalancin1.lot
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
 INPUT .\img\Esquema_1.png
 INPUT .\img\Esquema_1.png
 INPUT .\img\Esquema_1.png
@@ -372,6 +352,8 @@ INPUT .\img\Esquema_1.png
 INPUT .\img\Esquema_1.png
 INPUT .\img\Esquema_1.png
 INPUT .\img\Esquema_1.png
+INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 INPUT C:\Users\frida\AppData\Local\Programs\MiKTeX\fonts\tfm\adobe\times\ptmri8t.tfm
