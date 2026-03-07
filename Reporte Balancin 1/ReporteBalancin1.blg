@@ -4,6 +4,14 @@ The top-level auxiliary file: ReporteBalancin1.aux
 Reallocating 'name_of_file' (item size: 1) to 9 items.
 The style file: uaq_prev.bst
 Reallocating 'name_of_file' (item size: 1) to 4 items.
+Illegal, another \bibstyle command---line 409 of file ReporteBalancin1.aux
+ : \bibstyle
+ :          {uaq_prev}
+I'm skipping whatever remains of this command
+Illegal, another \bibdata command---line 411 of file ReporteBalancin1.aux
+ : \bibdata
+ :         {rep}
+I'm skipping whatever remains of this command
 Database file #1: rep.bib
 You've used 1 entry,
             2874 wiz_defined-function locations,
@@ -46,3 +54,4 @@ warning$ -- 0
 while$ -- 21
 width$ -- 0
 write$ -- 20
+(There were 2 error messages)
