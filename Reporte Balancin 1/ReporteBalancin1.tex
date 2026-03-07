@@ -752,26 +752,11 @@ Para determinar el momento de inercia del robot, es fundamental disponer de toda
 masas de los diversos elementos que componen al PISDRSL. La masa de cada uno de los componentes está
 expresada en kilogramos \textit{[kg]}.
 
-
-\subsection {Pista de pruebas}
-
-\subsection {Diseño del robot PISDRSL y montaje de materiales}
-
-\subsection {Modelo físico y pruebas de pista}
-
-\subsection {Ganancias del controlador}
-
-\subsection {Resultados experimentales graficados}
-
-\subsection {Resultados y discusión individual}
-
-\subsubsection{Aguilar Sarabia Diego Eugenio}
-En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
 En el Cuadro \ref{tabla:TabMasas} se muestran todas las masas de los componentes en el robot PISDRSL.  
 
 \begin{table}[H]
 \centering
-\caption{Masa de los componentes del robot PISDRSL} 
+\caption{Masas de los componentes del robot PISDRSL} 
 \begin{tabular}{|c|c|}\hline
 \rowcolor{gray!30}
 Componente & Masa \textit{[kg]} \\ \hline
@@ -810,6 +795,22 @@ Mitad de la distancia entre huellas de ruedas & $b = 0.08600$\\
 \end{tabular}
 \label{tabla:TabMed}
 \end{table}
+
+
+\subsection {Pista de pruebas}
+
+\subsection {Diseño del robot PISDRSL y montaje de materiales}
+
+\subsection {Modelo físico y pruebas de pista}
+
+\subsection {Ganancias del controlador}
+
+\subsection {Resultados experimentales graficados}
+
+\subsection {Resultados y discusión individual}
+
+\subsubsection{Aguilar Sarabia Diego Eugenio}
+En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
 
 \subsubsection{Fernández Rendón Anna Patricia}
 Se realizaron varios  
