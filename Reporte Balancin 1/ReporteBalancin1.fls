@@ -357,12 +357,12 @@ OUTPUT ReporteBalancin1.toc
 INPUT .\ReporteBalancin1.lof
 INPUT .\ReporteBalancin1.lof
 INPUT ReporteBalancin1.lof
+INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 OUTPUT ReporteBalancin1.lof
 INPUT .\ReporteBalancin1.lot
 INPUT .\ReporteBalancin1.lot
 INPUT ReporteBalancin1.lot
-INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
-INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 OUTPUT ReporteBalancin1.lot
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
 INPUT .\img\Esquema_1.png
@@ -377,12 +377,13 @@ INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmri8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8r.tfm
-INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
-INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
-INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
-INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
-INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
-INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
+INPUT .\img\Conexiones.jpeg
+INPUT .\img\Conexiones.jpeg
+INPUT .\img\Conexiones.jpeg
+INPUT .\img\Conexiones.jpeg
+INPUT .\img\Conexiones.jpeg
+INPUT .\img\Conexiones.jpeg
+INPUT .\img\Conexiones.jpeg
 INPUT .\img\image.png
 INPUT .\img\image.png
 INPUT .\img\image.png
@@ -390,6 +391,20 @@ INPUT .\img\image.png
 INPUT .\img\image.png
 INPUT .\img\image.png
 INPUT .\img\image.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB.png
+INPUT .\img\PCB_Inf.png
+INPUT .\img\PCB_Inf.png
+INPUT .\img\PCB_Inf.png
+INPUT .\img\PCB_Inf.png
+INPUT .\img\PCB_Inf.png
+INPUT .\img\PCB_Inf.png
+INPUT .\img\PCB_Inf.png
 INPUT .\img\METODO_BALANZA.png
 INPUT .\img\METODO_BALANZA.png
 INPUT .\img\METODO_BALANZA.png
@@ -411,6 +426,9 @@ INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT .\ReporteBalancin1.bbl
 INPUT .\ReporteBalancin1.bbl
 INPUT ReporteBalancin1.bbl
+INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Users\annap\AppData\Roaming\MiKTeX\tex\latex\psnfss\t1pcr.fd
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
 INPUT E:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
 INPUT E:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
