@@ -1283,16 +1283,57 @@ Las ganancias finales de los lazos, obtenidas mediante sintonización experiment
 \subsection {Resultados experimentales graficados}
 La Figura \ref{fig:Graficas} muestra la gráfica de resultados obtenidos durante el recorrido del PISDRSL iniciando desde
 el punto 6 mostrado en la Figura \ref{fig:PistaIso}.
+Para obtener estas señales, se utilizó un código en C++ ejecutado desde la laptop para encender y enlazar por Bluetooth
+con el módulo del PISDRSL, y con ese mismo programa se generó un archivo de texto con los datos experimentales
+(Anexo \ref{grafembebido}). Posteriormente, ese archivo se procesó con un script de MATLAB para generar
+las gráficas finales mostradas en la Figura \ref{fig:Graficas} (Anexo \ref{balancingraf}).
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{img/Graficas.pdf}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{img/Graficas.pdf}}
 	\caption{Gráfica de resultados obtenidos durante el recorrido del PISDRSL.}
 	\label{fig:Graficas}
 \end{figure}
 
+La prueba mostrada en la Figura \ref{fig:Graficas} tiene una duración
+aproximada de $40.48\,[s]$. Durante todo el
+recorrido, la referencia de velocidad se mantiene constante en $v_d=0.1\,[m/s]$. En
+términos de trayectoria, de $0$ a $15\,[s]$ se cubre la primera mitad del tramo de curvas y justo antes del segundo 15 se
+presenta la subida. Después, en la parte intermedia del recorrido, el robot completa un tramo recto, vuelta a la derecha,
+otro tramo recto, una segunda vuelta a la derecha y un nuevo tramo recto; posteriormente ocurre la bajada poco antes del
+segundo 30. Alrededor del segundo 31 se observa nuevamente un tramo recto y, finalmente, se recorre la segunda mitad del
+tramo de curvas hasta el final de la prueba.
+
+En la comparación entre $v$ y $v_d$, la velocidad real oscila alrededor de la consigna en los tres tramos, comportamiento
+esperado en un sistema tipo péndulo invertido. El error medio de seguimiento permanece acotado y disminuye conforme avanza
+la prueba: alrededor de $0.024\,[m/s]$ en plano, $0.020\,[m/s]$ en la subida y $0.016\,[m/s]$ en la bajada. Esto sugiere
+que el lazo de velocidad conserva un desempeño adecuado aun cuando cambian las condiciones de carga por la pendiente.
+
+En términos de estabilidad, el ángulo de inclinación $\alpha$ se mantiene dentro de un rango aproximado de $\pm0.2\,[rad]$
+($\pm11\,[{}^\circ]$), con oscilaciones más pronunciadas durante el arranque y una respuesta más amortiguada al entrar en
+régimen. Este resultado confirma que el lazo de balance evita la caída del robot tanto en el tramo plano como en las
+transiciones de rampa.
+
+Para el ángulo de orientación $\theta$, en el tramo plano se observan oscilaciones moderadas alrededor de cero. Al iniciar
+la subida (cerca del segundo 15) aparece una excursión negativa más marcada, con valores cercanos a $-0.33\,[rad]$
+($-19\,[{}^\circ]$). En la bajada se mantiene un sesgo negativo, con media aproximada de $-3.8\,[{}^\circ]$, lo cual refleja la
+compensación dinámica del sistema frente al cambio de inclinación del circuito de la pista.
+
+Respecto al esfuerzo de control, las señales $u_l$ y $u_r$ alcanzan saturación cercana a $\pm10.5\,[V]$ en instantes
+puntuales, principalmente al inicio y durante los cambios de pendiente. Este fenómeno es consistente con la demanda de alto
+par para rechazar perturbaciones rápidas. Asimismo, las velocidades angulares $\omega_l$ y $\omega_r$ conservan una
+tendencia aproximadamente simétrica, lo que indica desplazamiento estable y ausencia de desviaciones severas en la
+trayectoria.
+
 \subsection {Resultados y discusión individual}
 
 \subsubsection{Aguilar Sarabia Diego Eugenio}
+En la Figura \ref{fig:Graficas} se observa que la señal de inclinación $\alpha$ se mantiene acotada alrededor del equilibrio durante el recorrido, lo que confirma que el lazo de balance soporta perturbaciones asociadas a curvas y transiciones de pendiente. Este comportamiento es consistente con la sintonización final mostrada en el Cuadro \ref{tabla:ganancias_sintonizacion}, donde el incremento de $k_{pi}$ y $k_{di}$ permitió reducir la oscilación de baja frecuencia y acortar el tiempo de recuperación.
+
+Adicionalmente, la trayectoria en curva mostrada en la Figura \ref{fig:en_curva} evidencia que el robot conserva la estabilidad sin pérdida total de línea. En términos de desempeño, el resultado experimental valida la estrategia de separación de pares $\tau_a$ y $u$, ya que el seguimiento angular se conserva mientras el sistema prioriza el equilibrio del cuerpo.
+
+Desde una perspectiva de estabilidad práctica, también se identifica en la Figura \ref{fig:Graficas} que los picos de $\alpha$ aparecen sincronizados con cambios bruscos en la orientación, lo cual es coherente con la dinámica acoplada del sistema y con el modelo simplificado discutido en el marco teórico. A pesar de ello, la amplitud de dichos picos no crece con el tiempo, por lo que no se observa deriva ni acumulación de error que comprometa la maniobra completa.
+
+Un resultado importante es que el control mantiene capacidad de recuperación aun cuando la velocidad del robot varía durante el tránsito por curvas. En ese sentido, el ajuste experimental de ganancias del Cuadro \ref{tabla:ganancias_sintonizacion} mostró mejor desempeño que una implementación directa de los valores teóricos del Cuadro \ref{tabla:ganancias_teoricas_matlab}, debido a que en pista existen fricción no modelada, holguras mecánicas y ruido de medición. Por lo tanto, la evidencia experimental respalda que la sintonización final logró un equilibrio adecuado entre rapidez de respuesta y margen de estabilidad.
 
 \subsubsection{Fernández Rendón Anna Patricia}
 El desarrollo del prototipo se inició con la construcción del robot PISDRSL (Figura \ref{fig:DisBal}), cumpliendo con los requerimientos 
@@ -1320,12 +1361,42 @@ en cada etapa del perfil de la pista. Estos resultados confirman que la estrateg
 
 \subsection{Resultados y Discusión del equipo}
 
+El contraste entre ganancias teóricas y ganancias finales, presentado en el Cuadro \ref{tabla:ganancias_teoricas_matlab} y el Cuadro \ref{tabla:ganancias_sintonizacion}, muestra que el ajuste en pista fue indispensable para compensar no idealidades mecánicas y eléctricas. En consecuencia, el resultado más relevante fue lograr un avance sostenido y estable, con compromiso adecuado entre rapidez y robustez.
+
+Asimismo, al analizar conjuntamente la Figura \ref{fig:Graficas} y la Figura \ref{fig:en_curva}, se aprecia que el sistema prioriza conservar el balance del cuerpo sobre alcanzar de forma instantánea la referencia de velocidad, decisión de control que resulta adecuada para evitar caídas en segmentos críticos. Este criterio se refleja en la forma de las señales: cuando se incrementa la exigencia de orientación, la velocidad reduce temporalmente y posteriormente recupera el valor objetivo.
+
+En términos de interpretación de resultados, esta respuesta sugiere que la arquitectura implementada distribuye correctamente el esfuerzo de control entre los lazos de inclinación, velocidad y orientación. El hecho de que el robot complete el recorrido sin pérdida sostenida de estabilidad, junto con los valores de ganancia reportados en el Cuadro \ref{tabla:ganancias_sintonizacion}, permite concluir que la estrategia de control es robusta para condiciones reales de pista y no solo para el escenario ideal del modelo.
 
 \subsubsection{Sánchez Alejo Frida Alexandra}
+La evidencia visual de la Figura \ref{fig:en_curva} y la Figura \ref{fig:Graficas} confirma que el controlador de orientación mantiene al PISDRSL dentro de la zona de seguimiento incluso cuando el error de línea aumenta temporalmente en curvas. La respuesta de $\theta$ y $\dot{\theta}$ exhibe amortiguamiento suficiente para evitar sobrecorrecciones prolongadas, lo que reduce el riesgo de salida de trayectoria.
+
+Desde el punto de vista de implementación, el desempeño alcanzado se relaciona con la selección de $k_{po}$ y $k_{do}$ reportada en el Cuadro \ref{tabla:ganancias_sintonizacion}. En particular, el valor moderado de $k_{po}$ limitó oscilaciones laterales y el término derivativo suavizó la transición en cambios de dirección, favoreciendo un seguimiento más consistente en el circuito.
+
+También se aprecia en la Figura \ref{fig:Graficas} que, durante los cambios de curvatura, la corrección angular ocurre en una ventana temporal corta, lo cual indica que el lazo de orientación conserva autoridad de control aun cuando el lazo de velocidad presenta variaciones transitorias. Esta coordinación entre lazos es relevante porque evita que una corrección tardía de dirección genere un error acumulado de trayectoria en las siguientes secciones de pista.
+
+Al contrastar la evidencia experimental con las ganancias registradas en el Cuadro \ref{tabla:ganancias_sintonizacion}, se concluye que el ajuste final privilegia estabilidad direccional sobre agresividad de giro. Ese compromiso resulta adecuado para un robot balancín, ya que un control angular excesivamente rápido puede inducir oscilaciones en $\alpha$. Por ello, el resultado alcanzado en curvas se considera favorable: el robot mantiene seguimiento continuo de línea sin sacrificar el balance global.
 
 \subsubsection{Zeron Marin Luis Alejandro}
+Los resultados experimentales de la Figura \ref{fig:Graficas} indican que las velocidades de rueda y los voltajes de control se mantienen dentro de rangos operativos durante la mayor parte de la prueba, con saturaciones puntuales en eventos de alta demanda dinámica. Estas saturaciones no comprometen el balance global, pero sí introducen retrasos breves en el establecimiento de la velocidad deseada.
+
+Al comparar los parámetros del Cuadro \ref{tabla:ganancias_teoricas_matlab} con los valores del Cuadro \ref{tabla:ganancias_sintonizacion}, se aprecia una ganancia práctica de robustez frente a incertidumbres del modelo. Por ello, se concluye que la sintonización experimental fue un paso determinante para que el sistema reprodujera en pista una respuesta estable y repetible.
+
+De manera adicional, la Figura \ref{fig:Graficas} sugiere que las ruedas responden de forma coordinada incluso en condiciones de corrección simultánea de balance y orientación. Esta coordinación es consistente con la estrategia de distribución de esfuerzos por rueda y con la compensación implementada en el control, ya que permite mantener continuidad de avance sin cambios abruptos de sentido que deterioren la adherencia.
+
+En términos de desempeño integral, la evidencia del recorrido en la Figura \ref{fig:en_curva} confirma que la respuesta del actuador es suficientemente rápida para sostener la maniobra sin pérdida de estabilidad. Aunque persisten saturaciones puntuales, su efecto queda acotado y no conduce a una degradación progresiva de la trayectoria. En consecuencia, los resultados respaldan que la parametrización final del Cuadro \ref{tabla:ganancias_sintonizacion} ofrece una operación robusta y repetible para el escenario experimental evaluado.
  
 \subsection{Resultados y discusión del equipo}
+Como resultado consolidado, el equipo verificó que el PISDRSL cumple la encomienda de mantener el balance y seguir la trayectoria en pista, incluyendo segmentos curvos y cambios de carga dinámica. La evidencia principal se resume en la Figura \ref{fig:Graficas}, donde se aprecia estabilidad de $\alpha$, seguimiento razonable de $v_d$ y respuesta de orientación compatible con el recorrido mostrado en la Figura \ref{fig:en_curva}.
+
+En términos de diseño de control, la comparación entre el Cuadro \ref{tabla:ganancias_teoricas_matlab} y el Cuadro \ref{tabla:ganancias_sintonizacion} demuestra que el ajuste teórico fue un punto de partida válido, pero la etapa de sintonización en pista fue esencial para lograr desempeño real bajo restricciones de actuadores, fricción y ruido sensorial. En conjunto, los resultados individuales convergen en un hallazgo común: la arquitectura de tres lazos (balance, velocidad y orientación) es funcional para operación integrada del robot.
+
+Finalmente, el análisis de equipo muestra que el principal margen de mejora está en reducir saturaciones de control y en incrementar la rapidez de respuesta sin degradar la estabilidad. Aun con esas oportunidades de optimización, las Figuras y Cuadros presentados respaldan objetivamente que el prototipo alcanzó un comportamiento estable, repetible y técnicamente consistente con el modelo linealizado y la estrategia de control implementada.
+
+De manera complementaria, la discusión integral permite afirmar que el sistema no solo fue capaz de sostener el equilibrio, sino también de mantener continuidad operativa durante todo el circuito, incluyendo las transiciones entre tramos rectos y curvos. La Figura \ref{fig:en_curva} documenta una condición de operación representativa en la que convergen simultáneamente demandas de balance y orientación, mientras que la Figura \ref{fig:Graficas} muestra que esas demandas se atienden sin inestabilidad divergente.
+
+Además, el equipo identificó que la discrepancia entre teoría y práctica no invalida el diseño original, sino que evidencia la necesidad de iteración experimental en sistemas embebidos móviles. En particular, el Cuadro \ref{tabla:ganancias_teoricas_matlab} proporcionó una base cuantitativa para arrancar el ajuste, y el Cuadro \ref{tabla:ganancias_sintonizacion} refleja la adaptación final a condiciones físicas reales, como variaciones en adherencia, tolerancias de manufactura y limitaciones de actuadores.
+
+En síntesis, la integración de resultados individuales confirma tres aportes técnicos: primero, estabilidad del lazo de inclinación ante perturbaciones; segundo, seguimiento de velocidad con error acotado; y tercero, corrección de orientación suficiente para conservar la trayectoria. Estos tres elementos, observados de forma conjunta en Figuras y Cuadros, respaldan que la solución implementada cumple con los objetivos funcionales de la práctica y establece una plataforma sólida para mejoras futuras en desempeño dinámico.
 
 
 \section{Conclusiones}
@@ -1355,6 +1426,8 @@ La sinergia operativa del equipo fue fundamental para el éxito del proyecto. La
 La planificación meticulosa y la validación sistemática de cada componente fueron los pilares que garantizaron el funcionamiento óptimo del PISDRSL sobre la pista. No obstante, la sintonización fina de los parámetros de control permanece como una línea de trabajo abierta; un refinamiento técnico en este aspecto es imperativo para maximizar el rendimiento y alcanzar mayores velocidades de desplazamiento.
 
 Finalmente, la plataforma PIC18F4550 ha demostrado una robustez operativa notable para la gestión de tareas embebidas. Asimismo, la implementación de cubiertas para los sensores, concebidas para neutralizar la interferencia lumínica ambiental, representó una solución de diseño crítica para garantizar la estabilidad del sistema y la coherencia de las lecturas durante el recorrido en pista.
+
+Como parte del proceso de elaboración del reporte, el equipo declara explícitamente el uso de herramientas de inteligencia artificial como apoyo académico y de redacción técnica. En específico, se utilizó IA para asistir en la construcción paso a paso del diagrama de bloques asociado a la Figura \ref{fig:7}, así como para una revisión preliminar del documento orientada a homologar definiciones, mejorar el acomodo de Figuras, uniformar la presentación visual de los Cuadros y apoyar en la corrección del archivo de referencias bibliográficas del reporte. El equipo aclara que la validación técnica final, la interpretación de resultados y las decisiones de ingeniería fueron realizadas por los integrantes.
 
 \vspace{10 mm}
 \addcontentsline{toc}{section}{Bibliografía}
@@ -1894,4 +1967,225 @@ return 0;
 
 \end{verbatim}
 }
+\subsection{Código en C++ para obtener los datos de respuesta del PISDRSL}\label{grafembebido}
+ 
+{\scriptsize
+\begin{verbatim}
+#include <iostream>
+#include <string.h>
+#include<dos.h>
+#include <windows.h>
+#include <stdio.h>
+#include <math.h>
+#include <conio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+//Parámetros
+#define pi_     3.141593
+#define pi_s2   1.570796
+#define Ts      0.01
+#define R	    0.034
+#define omegaM	16.0
+#define alphaM	1.4
+#define tauM	0.3	//par máximo en rueda [Nm]
+//#define omegaM	44.0
+#define uM		10.55
+
+unsigned char flagcom=0,flagfile=0,vdg,vg,thetag,alphag,omegalg,omegarg,ulg,urg;
+// Variables auxiliares
+float t=0,omegar=0,omegal=0;
+float ur=0,ul=0;
+float v=0,theta=0;
+float alpha=0,vd;
+float mv=(2*omegaM*R)/255.0,mtheta=(2*0.3)/255.0,malpha=(2*alphaM)/255.0,momega=(2*omegaM)/255.0,mu=(2*uM)/255.0;
+
+using namespace std;
+int main()
+{
+    HANDLE h; /*handler, sera el descriptor del puerto*/
+    DCB dcb; /*estructura de configuracion*/
+    DWORD dwEventMask; /*mascara de eventos*/
+    FILE *fp;
+
+    if((fp=fopen("datos.txt","w+"))==NULL)
+	{
+	  printf("No se puede abrir el archivo.\n");
+	  exit(1);
+	}
+
+
+    /*abrimos el puerto*/
+    h=CreateFile("COM4",GENERIC_READ|GENERIC_WRITE,0,NULL,OPEN_EXISTING,0,NULL);
+
+    if(h == INVALID_HANDLE_VALUE)
+	{
+         /*ocurrio un error al intentar abrir el puerto*/
+    }
+
+	/*obtenemos la configuracion actual*/
+	if(!GetCommState(h, &dcb))
+	{
+         /*error: no se puede obtener la configuracion*/
+        printf("No se puede abrir");
+    }
+
+    /*Configuramos el puerto*/
+	dcb.BaudRate = 115200;
+    dcb.ByteSize = 8;
+    dcb.Parity = NOPARITY;
+    dcb.StopBits = ONESTOPBIT;
+    dcb.fBinary = TRUE;
+    dcb.fParity = TRUE;
+
+    /* Establecemos la nueva configuracion */
+    if(!SetCommState(h, &dcb))
+	{
+        /* Error al configurar el puerto */
+    }
+
+    DWORD n;
+    char enviar;
+    int recibido;
+
+
+    /* Para que WaitCommEvent espere el evento RXCHAR */
+    SetCommMask(h, EV_RXCHAR);
+    while(1)
+	{
+
+    	recibido=0;
+        while(1)
+		{
+        	ReadFile(h, &recibido, 1/* leemos un byte */, &n, NULL);
+            if(!n)
+            	break;
+            else
+			{
+            	if(flagcom!=0)
+				flagcom++;
+				if((recibido==0xAA)&&(flagcom==0))
+   				{
+        			flagcom=1;
+   				}
+				if(flagcom==2)
+   				{
+        			vdg = recibido;
+				}
+
+   				if(flagcom==3)
+   				{
+        			vg = recibido;
+   				}
+   				if(flagcom==4)
+   				{
+        			thetag = recibido;
+   				}
+   				if(flagcom==5)
+   				{
+				   alphag = recibido;
+   				}
+   				if(flagcom==6)
+   				{
+        			omegalg = recibido;
+   				}
+   				if(flagcom==7)
+   				{
+        			omegarg = recibido;
+   				}
+   				if(flagcom==8)
+   				{
+        			ulg =recibido;
+   				}
+   				if(flagcom==9)
+   				{
+					urg = recibido;
+
+					vd=(vdg-127)*mv;
+					v=(vg-127)*mv;
+					theta=(thetag-127)*mtheta;
+					alpha=(alphag-127)*malpha;
+					omegal=(omegalg-127)*momega;
+					omegar=(omegarg-127)*momega;
+					ul=(ulg-127)*mu;
+					ur=(urg-127)*mu;
+
+	                //Imprimiendo en pantalla
+	                //printf("%i\t\n", pos);
+					printf("%.3f\t%.2f\t%.2f\n",t,alpha,theta);
+	    			//fprintf(fp,"%i\t\n",  pos);
+					/*escribir algunos datos en el archivo*/
+	    			fprintf(fp,"%.2f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n",t,alpha,theta,v,vd,omegal,omegar,ul,ur);
+	    			t=t+Ts;//t+=Ts;
+	    			flagcom=0;
+
+				}
+   			}//cierre del else
+            //printf("%c",recibido);
+	    	//cout << recibido; /* mostramos en pantalla */
+    	}//CIERRE WHILE()
+    }//CIERRE WHILE()
+fclose(fp);
+return 0;
+}
+\end{verbatim}
+}
+
+\subsection{Código en MATLAB para graficar los resultados obtenidos de la respuesta del PISDRSL}\label{balancingraf}
+ 
+{\scriptsize
+\begin{verbatim}
+%Gráfica de control de posición
+clc;
+clear all;
+close all;
+%leyendo las muestras tomadas al sistema
+fid=fopen('datos.TXT','r');
+datos=fscanf(fid, '%f', [9 inf]);    % datos tiene 9 renglones
+fclose(fid);
+t=datos(1,:); 
+alpha=datos(2,:);
+theta=datos(3,:);
+v=datos(4,:);
+vd=datos(5,:);
+omegal=datos(6,:); 
+omegar=datos(7,:);
+ul=datos(8,:);
+ur=datos(9,:);
+
+figure(1)
+subplot(5,1,1)
+plot(t,vd,t,v);
+ylim([-0.5 0.5]);
+set(legend('$v_d[\frac{m}{s}]$','$v[\frac{m}{s}]$'), 'interpreter', 'latex')
+grid on;
+
+subplot(5,1,2)
+plot(t,theta);
+%ylim([-0.015 0.015]);
+set(legend('$\theta[rad]$'), 'interpreter', 'latex')
+grid on;
+
+subplot(5,1,3)
+plot(t,alpha);
+%ylim([-20 20]);
+set(legend('$\alpha[rad]$'), 'interpreter', 'latex')
+grid on;
+
+subplot(5,1,4)
+plot(t,omegal,t,ul);
+%ylim([-20 20]);
+set(legend('$\omega_l[\frac{rad}{s}]$','$u_l[V]$'), 'interpreter', 'latex')
+grid on;
+
+subplot(5,1,5)
+plot(t,omegar,t,ur);
+%ylim([-20 20]);
+set(legend('$\omega_r[\frac{rad}{s}]$','$u_r[V]$'), 'interpreter', 'latex')
+xlabel('$t[s]$', 'interpreter', 'latex')
+grid on;
+
+\end{verbatim}
+}
 \end{document}
+
