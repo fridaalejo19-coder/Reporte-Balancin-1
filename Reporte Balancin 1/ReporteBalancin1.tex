@@ -1283,12 +1283,46 @@ Las ganancias finales de los lazos, obtenidas mediante sintonización experiment
 \subsection {Resultados experimentales graficados}
 La Figura \ref{fig:Graficas} muestra la gráfica de resultados obtenidos durante el recorrido del PISDRSL iniciando desde
 el punto 6 mostrado en la Figura \ref{fig:PistaIso}.
+Para obtener estas señales, se utilizó un código en C++ ejecutado desde la laptop para encender y enlazar por Bluetooth
+con el módulo del PISDRSL, y con ese mismo programa se generó un archivo de texto (.txt) con los datos experimentales
+(ver Anexo \ref{anexo:cpp_datos_bt}). Posteriormente, ese archivo .txt se procesó con un script de MATLAB para generar
+las gráficas finales mostradas en la Figura \ref{fig:Graficas} (ver Anexo \ref{anexo:matlab_graficas_fig27}).
 \begin{figure}[H]
 	\centering
 	\makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{img/Graficas.pdf}}
 	\caption{Gráfica de resultados obtenidos durante el recorrido del PISDRSL.}
 	\label{fig:Graficas}
 \end{figure}
+
+La prueba mostrada en la Figura \ref{fig:Graficas} tiene una duración
+aproximada de $40.48\,[s]$ con un periodo de muestreo de $T_s=10\,[ms]$, equivalente a 4,049 muestras. Durante todo el
+recorrido, la referencia de velocidad se mantiene constante en $v_d=0.034\,[m/s]$ (aproximadamente $3.4\,[cm/s]$). En
+términos de trayectoria, de $0$ a $15\,[s]$ se cubre la primera mitad del tramo de curvas y justo antes del segundo 15 se
+presenta la subida. Después, en la parte intermedia del recorrido, el robot completa un tramo recto, vuelta a la derecha,
+otro tramo recto, una segunda vuelta a la derecha y un nuevo tramo recto; posteriormente ocurre la bajada poco antes del
+segundo 30. Alrededor del segundo 31 se observa nuevamente un tramo recto y, finalmente, se recorre la segunda mitad del
+tramo de curvas hasta el final de la prueba.
+
+En la comparación entre $v$ y $v_d$, la velocidad real oscila alrededor de la consigna en los tres tramos, comportamiento
+esperado en un sistema tipo péndulo invertido. El error medio de seguimiento permanece acotado y disminuye conforme avanza
+la prueba: alrededor de $0.024\,[m/s]$ en plano, $0.020\,[m/s]$ en la subida y $0.016\,[m/s]$ en la bajada. Esto sugiere
+que el lazo de velocidad conserva un desempeño adecuado aun cuando cambian las condiciones de carga por la pendiente.
+
+En términos de estabilidad, el ángulo de inclinación $\alpha$ se mantiene dentro de un rango aproximado de $\pm0.2\,[rad]$
+($\pm11\,[{}^\circ]$), con oscilaciones más pronunciadas durante el arranque y una respuesta más amortiguada al entrar en
+régimen. Este resultado confirma que el lazo de balance evita la caída del robot tanto en el tramo plano como en las
+transiciones de rampa.
+
+Para el ángulo de orientación $\theta$, en el tramo plano se observan oscilaciones moderadas alrededor de cero. Al iniciar
+la subida (cerca del segundo 15) aparece una excursión negativa más marcada, con valores cercanos a $-0.33\,[rad]$
+($-19\,[{}^\circ]$). En la bajada se mantiene un sesgo negativo, con media aproximada de $-3.8\,[{}^\circ]$, lo cual refleja la
+compensación dinámica del sistema frente al cambio de inclinación del terreno.
+
+Respecto al esfuerzo de control, las señales $u_l$ y $u_r$ alcanzan saturación cercana a $\pm10.5\,[V]$ en instantes
+puntuales, principalmente al inicio y durante los cambios de pendiente. Este fenómeno es consistente con la demanda de alto
+par para rechazar perturbaciones rápidas. Asimismo, las velocidades angulares $\omega_l$ y $\omega_r$ conservan una
+tendencia aproximadamente simétrica, lo que indica desplazamiento estable y ausencia de desviaciones severas en la
+trayectoria.
 
 \subsection {Resultados y discusión individual}
 
