@@ -10,6 +10,7 @@
 \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 % Useful packages
+\usepackage{tikz}
 \usepackage[table]{xcolor} % Para colores en tablas
 \usepackage{array}         % Para mejor manejo de columnas
 \usepackage{amsmath}
@@ -17,7 +18,7 @@
 \usepackage{float}
 \usepackage{times}
 \usepackage{natbib}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[colorlinks=true, allcolors=blue, pageanchor=false]{hyperref}
 \spanishdecimal{.}
 \usepackage{graphics}
 %\usepackage[sf,bf,tiny,center,compact]{titlesec}
@@ -26,9 +27,11 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 \usepackage{hyphenat}
-\usepackage{tikz}
-\usetikzlibrary{arrows, positioning}
+\usetikzlibrary{arrows, positioning, arrows.meta}
 \usepackage{blox}
+\makeatletter
+\renewcommand{\bXStyleBloc}{draw, rectangle, thick, minimum height=1.5em, minimum width=1.5em, fill=white}
+\makeatother
 \hyphenation{co-mer-cial rea-li-zan si-guien-te si-mu-la-ción ke-lly con-si-de-ra-da}
 \bibpunct{(}{)}{;}{a}{,}{,}
 
@@ -41,7 +44,7 @@
 	\begin{figure}
   \begin{minipage}{1\linewidth}
      \centering\centering%\rule{2cm}{2cm}
-    % \caption{Primera figura}
+    % \caption{Primera Figura}
     \includegraphics[width=0.3\textwidth]{img/logos_fi_uaq.png}
      
   \end{minipage}
@@ -54,9 +57,11 @@
 	\vspace{0.5cm}	
 	{\Large\bfseries Control III\par}
 	\vspace{0.8cm}
-	{\Large\bfseries Construcción, instrumentación y control de un Péndulo Invertido Sobre Dos Ruedas Seguidor de Línea (PISDRSL) \par}	
+	{\Large\bfseries Modelo linealizado del péndulo con dos ruedas y estrategia de control
+    para balanceo, avance traslacional y seguimiento de línea en pista con
+    planos inclinados \par}	
 	\vspace{0.8cm}
-	{\Large\itshape Primer entrega\par}
+	{\Large\itshape Primera entrega\par}
 	\vspace{0.8cm}
 	Profesor: \par
 	Dr. Roberto Valentín Carrillo Serrano \par
@@ -73,13 +78,13 @@
 \par
 \vspace{0.4cm}
 \par
-     Marin Luis Alejandro \rule{70mm}{0.1mm}
+    Zeron Marin Luis Alejandro \rule{70mm}{0.1mm}
 \par
 	
 	\vfill
 
 % Bottom of the page
-	{\large Fecha compromiso: 5 de marzo del 2026\par
+	{\large Fecha de compromiso: 5 de marzo del 2026\par
     Fecha en que se entregó: 7 de marzo del 2026}.
 \end{titlepage}
 
@@ -96,7 +101,7 @@
 
 
 \section{Objetivo}
-Construir, instrumentar y controlar de manera embebida un robot de péndulo invertido sobre dos ruedas seguidor de línea (PISDRSL), con capacidad para superar pendientes de 15~[$^\circ$] y realizar trayectorias curvas (giros a la izquierda y derecha) siguiendo una línea blanca sobre un fondo negro. Para ello, se empleará un microcontrolador PIC18F4550 y comunicación inalámbrica vía Bluetooth con una estación base para la monitorización y graficación del comportamiento de las variables dinámicas del sistema durante su recorrido experimental en la pista.
+Diseñar, instrumentar y controlar de forma embebida un robot tipo péndulo invertido de dos ruedas (PISDRSL) para mantener el balance y seguir una línea blanca sobre fondo negro a lo largo de una trayectoria en circuito de pista, incluyendo giros a izquierda y derecha, así como superar pendientes de 15 grados, con monitoreo en tiempo real mediante enlace Bluetooth con una estación base.
 
 \section{Marco Teórico}
 \subsection{Modelo no lineal del péndulo con dos ruedas}
@@ -109,7 +114,7 @@ ruedas se muestra en la Figura \ref{fig:Esquema 1}:
     \label{fig:Esquema 1}
 \end{figure}
 
-El modelo dinámico no lineal del péndulo con dos ruedas obtenido con las ecuaciones de Euler-Lagrange está dado por \citep{HernandezBook2024}:
+El modelo dinámico no lineal del péndulo con dos ruedas obtenido con las ecuaciones de Euler-Lagrange está dado por \citep{HernandezBook2024};
 
 \begin{equation}
 M(q)\ddot{q}+C(q,\dot{q})\dot{q}+g(q)=B(q)\tau
@@ -303,7 +308,7 @@ donde $\theta_d$ es una constante y representa el valor deseado de la orientaci�
     \label{eq:30}
 \end{equation}
 
-Así, si los coeficientes de sistema lineal de segundo orden en (\ref{eq:30}) son mayores que cero se asegura que $\dot{\theta}\rightarrow0$ y $\dot{\theta}\rightarrow\theta_d$ conforme transcurre el tiempo. Al aumentar $k_p$ se aumenta la rapidez en la respuesta y al aumentar $k_v$ se aumenta el amortiguamiento en la respuesta.
+Así, si los coeficientes de sistema lineal de segundo orden en (\ref{eq:30}) son mayores que cero, se asegura que $\dot{\theta}\rightarrow0$ y $\dot{\theta}\rightarrow\theta_d$ conforme transcurre el tiempo. Al aumentar $k_p$ se aumenta la rapidez en la respuesta y al aumentar $k_v$ se aumenta el amortiguamiento en la respuesta.
 
 \subsection{Salida plana}
 Ahora considere la siguiente función que es conocida como la salida plana \citep{HernandezBook2024}:
@@ -509,8 +514,8 @@ Una vez posicionados los ceros en $z_1$, $z_2$ y $z_3$ se puede encontrar el val
         \caption{Diagrama de bloques del sistema en lazo cerrado con retroalimentación negativa, $U_n(s)=-U(s)$.}
         \label{fig:6}
     \end{figure}
-Es importante reflexionar sobre los efectos de las ganancias en los términos del controlador (\ref{eq:40}). Los dos primeros términos representan un controlador del tipo proporcional con retroalimentación de velocidad para balancear el robot, donde la ganancia $k_1$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la
-ganancia $k_2$ pondera el efecto proporcional. Los últimos dos términos representan un controlador proporcional integral de velocidad traslacional del robot, donde la ganancia $k_3$ pondera el efecto proporcional mientras la ganancia $k_4$ pondera el efecto integral.
+Es importante reflexionar sobre los efectos de las ganancias en los términos del controlador (\ref{eq:40}). Los dos primeros términos representan un controlador del tipo proporcional con retroalimentación de velocidad para balancear el robot, donde la ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la
+ganancia $k_{pi}$ pondera el efecto proporcional. Los últimos dos términos representan un controlador proporcional integral de velocidad traslacional del robot, donde la ganancia $k_{pv}$ pondera el efecto proporcional mientras la ganancia $k_{iv}$ pondera el efecto integral.
 
 Debido a que el robot cuenta con dos actuadores (motor de la rueda derecha y motor de la rueda izquierda) es necesario que los esfuerzos de control $\tau_a$ en (\ref{eq:29}) y $u$ en (\ref{eq:35}) comanden dichos actuadores, por lo que la relación que tienen con $\tau_r$ y $\tau_l$ está dada por \citep{HernandezBook2024}:
 
@@ -561,12 +566,234 @@ Finalmente los pares aplicados a las ruedas son:
 
 Finalmente definiendo $e_v = v_d - v = -\tilde{v}$, $e_i = \alpha_d - \alpha = -\alpha$, $e_o = \theta_d - \theta = -\tilde{\theta}$, $k_{di} = k_1$, $k_{pi} = k_2$, 
 $k_{pv} = k_3$, $k_{iv} = k_4$, $k_{po} = k_p$, $k_{do} = k_v$, con las operaciones algebraicas correspondientes, se llega al diagrama 
-de bloques con controladores lineales clásicos para controlar el PISDRSL (ver Figura 1). Es importante reflexionar sobre los efectos de las 
-ganancias.La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
-proporcional en el lazo de control de inclinación del robot[cite: 269].Respecto al controlador proporcional integral de velocidad traslacional del 
+de bloques con controladores lineales clásicos para controlar el PISDRSL (ver Figura \ref{fig:7}). Es importante reflexionar sobre los efectos de las 
+ganancias. La ganancia $k_{di}$ pondera el efecto anticipativo (amortigua el comportamiento) mientras la ganancia $k_{pi}$ pondera el efecto 
+proporcional en el lazo de control de inclinación del robot. Respecto al controlador proporcional integral de velocidad traslacional del 
 robot, la ganancia $k_{pv}$ pondera el efecto proporcional mientras la ganancia $k_{iv}$ pondera el efecto integral que elimina las perturbaciones 
 debidas al plano inclinado. En cuanto a las ganancias del controlador del lazo de orientación (seguimiento de línea), al aumentar $k_{po}$ se 
 aumenta la rapidez en la respuesta y al aumentar $k_{do}$ se aumenta el amortiguamiento en la respuesta.
+
+
+\begin{figure}[H]
+    \centering
+        \begin{tikzpicture}[scale=0.8, transform shape]
+
+
+        % =======================================================
+        % PASO 1: DEFINIR LAS ENTRADAS Y SUS COMPARADORES
+        % =======================================================
+        
+        % 1. ENTRADA NIVEL SUPERIOR (Lazo Theta)
+        \bXInput{inTh} % Nodo de entrada principal
+        \bXCompSum[5]{sumTh}{inTh}{-}{}{+}{} % Comparador a 2.5 unidades
+        \bXLink[$\Theta_d(s)$]{inTh}{sumTh} % Flecha con etiqueta
+
+        % 2. ENTRADA NIVEL MEDIO (Lazo Alpha)
+        % Bajamos 4 unidades en el eje Y desde la entrada de Theta
+        \bXBranchy[10]{inTh}{inA} 
+        \bXCompSum[5]{sumA}{inA}{}{-}{+}{}
+        \bXLink[$A_d(s)$]{inA}{sumA}
+
+        % 3. ENTRADA NIVEL INFERIOR (Lazo Velocidad)
+        % Bajamos 4 unidades en el eje Y desde la entrada de Alpha
+        \bXBranchy[10]{inA}{inV}
+        \bXCompSum[5]{sumV}{inV}{}{-}{+}{}
+        \bXLink[$V_d(s)$]{inV}{sumV}
+
+        % =======================================================
+        % PASO 2: BLOQUES DE LOS CONTROLADORES Y SEÑALES DE ERROR
+        % =======================================================
+        % Hacemos los rectángulos más anchos (7em) y mantenemos la altura (3em)
+        \bXStyleBloc{minimum width=9em, minimum height=4em}
+        
+        % 1. Controlador Lazo Theta (Nivel Superior)
+        \bXBloc[4]{pdTh}{$k_{po} + k_{do}s$}{sumTh}
+        \bXLink[$E_o(s)$]{sumTh}{pdTh}
+        
+        % 2. Controlador Lazo Alpha (Nivel Medio)
+        \bXBloc[4]{pdA}{$k_{pi} + k_{di}s$}{sumA}
+        \bXLink[$E_i(s)$]{sumA}{pdA}
+
+        % 2. Conectamos la salida Este del comparador a la entrada Oeste del bloque
+      
+        
+        % 3. Controlador Lazo Velocidad (Nivel Inferior)
+        \bXBloc[4]{piV}{$k_{pv} + k_{iv}\frac{1}{s}$}{sumV}
+        \bXLink[$E_v(s)$]{sumV}{piV}
+
+        % =======================================================
+        % PASO 3: BLOQUES DE GANANCIA Y SUMADORES INTERMEDIOS
+        % =======================================================
+        \bXStyleBloc{minimum width=5em, minimum height=4em}
+        % --- Continuación Lazo Theta (Nivel Superior) ---
+        \bXBloc[2.5]{gain2b}{$\frac{2b}{R}$}{pdTh}
+        \bXLink{pdTh}{gain2b}
+
+        \bXStyleBloc{minimum width=3em, minimum height=4em}
+        \bXBloc[6]{halfT}{$\frac{1}{2}$}{gain2b}
+        \bXLink[$T_a(s)$]{gain2b}{halfT}
+        
+        % --- Ajuste del Sumador Tl usando Branch ---
+        
+        % 1. Avanzamos en X (2.5 unidades a la derecha de halfT)
+        \bXBranchx[5]{halfT}{refHorizontal}
+        
+        % 2. Bajamos en Y para quedar entre theta y alpha
+        \bXBranchy[5]{refHorizontal}{refMedio} 
+        
+        % 3. Colocamos el comparador. 
+        % Nuevo orden: {Norte}{Sur}{Oeste}{Este} -> {-}{+}{}{} 
+        % (He puesto el '-' en el Norte, cámbialo a '+' si la ecuación lo dicta)
+        \bXCompSum[0]{sumTl}{refMedio}{-}{}{+}{} 
+        
+        % 4. Conectamos la salida Este de halfT con la entrada Norte de sumTl
+        % El operador '-|' hace el codo perfecto (primero X, luego Y)
+        \draw [-stealth] (halfT.east) -| (sumTl.north);
+
+  
+        % Colocamos el nuevo comparador a 2 unidades a la derecha de pdA.
+        % Orden de signos: {Norte}{Sur}{Oeste}{Este} -> {}{}{+}{} 
+        \bXCompSum[8]{sumB}{pdA}{}{-}{-}{}
+        \bXLink{pdA}{sumB}
+
+        \bXStyleBloc{minimum width=3em, minimum height=4em}
+        \bXBloc[3]{halfU}{$\frac{1}{2}$}{sumB}
+        \bXLink[$U(s)$]{sumB}{halfU}
+
+        \bXBranchx[9]{halfU}{refHorizontal}
+        \bXBranchy[5]{refHorizontal}{refMedio} 
+        \bXCompSum[0]{sumTr}{refMedio}{+}{}{+}{}
+
+        % LA CONEXIÓN EN "S" (Escalón):
+        % 1. Sale del Este de halfU
+        % 2. "-- ++(4,0)" avanza 4 unidades en línea recta horizontal
+        % 3. "|-" baja verticalmente hasta la altura de sumTr y luego avanza horizontal hasta tocarlo
+        \draw [-stealth] (halfU.east) -- ++(0.5,0) |- (sumTr.west);
+        \draw [-stealth] (halfU.east) -- ++(0.5,0) |- (sumTl.west);
+       % 2. Dibujamos el punto negro en la bifurcación
+        \fill ([xshift=0.5cm]halfU.east) circle (3pt);
+
+        \draw [-stealth] (halfT.east) -- ++(0.5,0) -| (sumTr.north);
+        \fill ([xshift=0.5cm]halfT.east) circle (3pt);
+
+        \draw [-stealth] (piV.east) -- ++(0.5,0) -| (sumB.south);
+
+        % =======================================================
+        % PASO 5: PLANTA MIMO (PISDRSL) Y CONEXIONES DE ENTRADA
+        % =======================================================
+
+        % 1. Encontramos el punto vertical medio entre los dos sumadores para centrar la caja
+        \path (sumTl.east) -- (sumTr.east) coordinate[midway] (medioSumadores);
+
+        % 2. Dibujamos el gran bloque de la planta. 
+        % minimum height=18em lo hace alto para que quepan todas las salidas.
+        % xshift=3.5cm define qué tan a la derecha estará de los sumadores.
+        \node [draw, rectangle, minimum width=5em, minimum height=16em, thick] (plant) at ([xshift=2.5cm]medioSumadores) {$PISDRSL$};
+
+        % 3. Conectamos el sumador Tl (arriba) a la planta
+        % (sumTl.east -| plant.west) calcula mágicamente el punto de impacto exacto en la pared izquierda de la planta.
+        \draw [-stealth] (sumTl.east) -- node[above] {$T_l(s)$} (sumTl.east -| plant.west);
+
+        % 4. Conectamos el sumador Tr (abajo) a la planta
+        \draw [-stealth] (sumTr.east) -- node[above] {$T_r(s)$} (sumTr.east -| plant.west);
+
+        % =======================================================
+        % PASO 6: SALIDAS MIMO Y RETROALIMENTACIÓN
+        % =======================================================
+
+        % --- LAZO 1: Salida Theta(s) ---
+        
+        % 1. Definimos el "puerto" de salida en la pared derecha de la planta.
+        % Como la caja mide 18em de alto, subimos unos 6em desde el centro para que quede arriba.
+        \coordinate (portTheta) at ([yshift=6em]plant.east);
+
+        % 2. Trazamos el recorrido de regreso (hacia sumTh)
+        \draw [-stealth] (portTheta) 
+              -- ++(1cm,0) node[above, midway] {$\Theta(s)$} % 1. Sale a la derecha 1.5cm y pone el texto
+              -- ++(0, 3.5cm)                                  % 2. Sube 3.5cm (como un elevador) para librar el diagrama
+              -| (sumTh.north);                                % 3. Viaja a la izquierda y baja en picada al puerto Norte
+
+        % =======================================================
+        % CORRECCIÓN: LAZO DE RETROALIMENTACIÓN A(s) (RODEO)
+        % =======================================================
+        
+        % --- LAZO 2: Salida A(s) ---
+        
+        % 1. Definimos el puerto de salida para A(s) un poco más abajo que Theta
+        % (Como Theta estaba en 6em, ponemos este en 2em para separarlos bien)
+        \coordinate (portA) at ([yshift=2em]plant.east);
+
+        % 2. Trazamos el recorrido por debajo del diagrama hasta sumA
+        \draw [-stealth] (portA) 
+              -- ++(1.9cm,0) node[above, pos = 0.25] {$A(s)$} % 1. Sale a la derecha (le damos 2.5cm para que no cruce la línea de Theta si esta bajara)
+              -- ++(0, -7cm)   % 2. Baja en picada (ajusta este -12cm si necesitas que pase más abajo del lazo Vd)
+              -- ++(-19.4cm, 0) 
+              -- ++(0, 5cm)   
+              -| (sumA.south);                            % 3. Vuela a la izquierda y sube en ángulo recto al puerto Sur de sumA
+
+              % =======================================================
+        % PASO 7: SALIDAS OMEGA Y SUMADOR INFERIOR
+        % =======================================================
+
+        % 1. Definimos los puertos de salida en la planta
+        % (Acomodados simétricamente hacia abajo)
+        \coordinate (portOmegaL) at ([yshift=-2em]plant.east);
+        \coordinate (portOmegaR) at ([yshift=-6em]plant.east);
+
+        % 2. Colocamos el sumador donde se unen ambas señales.
+        % Lo ubicamos 4cm a la derecha y 10cm hacia abajo de la planta.
+        % (Ese -10cm es la profundidad de tu nueva línea de retorno, ajústalo si choca con la de A(s))
+        \coordinate (posSumOmega) at ([xshift=0.9cm, yshift=-5cm]plant.east);
+
+        % Sumador con entradas en el Norte (+) y Este (+)
+        % Orden en blox: {Norte}{Sur}{Oeste}{Este} -> {+}{}{}{+}
+        \bXCompSum[0]{sumOmega}{posSumOmega}{+}{}{}{+}
+
+        % 3. Trazamos el recorrido de Omega_l(s)
+        \draw [-stealth] (portOmegaL) 
+              -- ++(1.5cm,0) node[above, pos=0.35] {$\Omega_l(s)$} % Sale a la derecha 4cm (queda exacto sobre el sumador)
+              -- ++(0.1cm,0) 
+              -- ++(0,-3.8cm) 
+              
+              |- (sumOmega.east);                             % Cae en línea recta al puerto Norte
+
+        % 4. Trazamos el recorrido de Omega_r(s)
+        \draw [-stealth] (portOmegaR) 
+              -- ++(0.9cm,0) node[above, pos=0.6] {$\Omega_r(s)$} % Sale a la derecha 5.5cm (rebasa al sumador)
+              -- (sumOmega.north);                              % Baja y dobla a la izquierda para entrar por el Este
+
+       % =======================================================
+        % PASO 8: LAZO DE RETORNO OMEGA CON BLOX
+        % =======================================================
+
+        % 1. Mantenemos el estilo de tus bloques de ganancias
+        \bXStyleBloc{minimum width=3em, minimum height=4em}
+
+        % 2. El truco: Distancia negativa [-2.5] para que se dibuje a la izquierda de sumOmega
+        \bXBloc[-15]{halfOmega}{$\frac{1}{2}$}{sumOmega}
+
+        % 3. Conexión de reversa. 
+        % (Como \bXLink siempre intenta conectar de Este a Oeste y haría un bucle raro,
+        % aquí sí usamos el trazo directo de TikZ para conectar limpio de Oeste a Este)
+        \draw [-stealth] (sumOmega.west) -- (halfOmega.east);
+
+        % =======================================================
+        % PASO 9: BLOQUE R Y SEÑAL OMEGA(s)
+        % =======================================================
+
+        % 1. Colocamos el bloque R a la izquierda de halfOmega.
+        % (Uso [-4] para dejar espacio suficiente para la etiqueta, ajústalo si lo ves muy apretado)
+        \bXBloc[-15]{bloqueR}{$R$}{halfOmega}
+
+        % 2. Conectamos la salida Oeste de halfOmega con la entrada Este de R.
+        % Ponemos la etiqueta \Omega(s) centrada sobre la línea.
+        \draw [-stealth] (halfOmega.west) -- node[above, pos=0.25] {$\Omega(s)$} (bloqueR.east);
+        \draw [-stealth] (bloqueR.west) -- node[above, pos=0.1] {$V(s)$} (bloqueR.west -| sumV.south) -- (sumV.south);
+           
+        \end{tikzpicture}
+        \caption{Estrategia con controladores lineales clásicos para controlar el PISDRSL.}
+        \label{fig:7}
+    \end{figure}
 
 
 
@@ -579,10 +806,10 @@ En el Cuadro \ref{tabla:materiales} se muestran los materiales empleados para el
 \caption{Componentes electrónicos y mecánicos utilizados.}
 \begin{tabular}{|c|c|}\hline
     \rowcolor{gray!30}
-Material: & Cantidad: \\ \hline
-Batería Spard lithium polymer 3S YT5068 $2100\,[mAh],\,11.1\,[V]$ & 1\\ \hline
-Botón SMD de 2 pines $3\:[mm]\times6\:[mm]\times2.5\:[mm]$ & 1\\ \hline
-Cable AWG 22 de $1\:[m]$ & 8\\ \hline
+\textbf{Material} & \textbf{Cantidad} \\ \hline
+Batería Spard \textit{lithium polymer} 3S YT5068 $2100\,[mAh],\,11.1\,[V]$ & 1\\ \hline
+Botón \textit{Surface Mount Device} (SMD) de 2 pines $3\:[mm]\times6\:[mm]\times2.5\:[mm]$ & 1\\ \hline
+Cable \textit{American Wire Gauge} (AWG) 22 de $1\:[m]$ & 8\\ \hline
 Capacitor cerámico $0.1\,[\mu F]$ & 1\\ \hline
 Capacitor cerámico $15\,[pF]$ & 2\\ \hline
 Capacitor cerámico $22\,[pF]$ & 4\\ \hline
@@ -598,16 +825,16 @@ Conectores tipo Molex de 4 pines $2.54\,[mm]$ & 5\\ \hline
 Cople marca Pololu para llanta con opresores para flecha de $4\,[mm]$ & 2\\ \hline
 Cristal de cuarzo $20\,[MHz]$ & 1\\ \hline
 Diodo emisor de luz (LED) SMD 0805 & 1\\ \hline
-Driver de Puente H L298N & 1\\ \hline
+\textit{driver} de puente H L298N & 1\\ \hline
 Espárragos de $\frac{3}{16}\,[in]$ & 4\\ \hline
 Fusible europeo $2\,[A]$ & 1\\ \hline
 Hoja panel MDF $1.22\,[m]\times2.44\,[m]$ con un grosor de $5.5\,[mm]$ & 2\\ \hline
 Interruptor deslizable de 2 polos y 3 pines & 3\\ \hline
 Interruptor de 2 polos & 1\\ \hline
-Llanta marca Pololu Scooter/Skate Wheel negro $70\,[mm]\times25\,[mm]$ & 2\\ \hline
+Llanta marca Pololu \textit{scooter/skate wheel} negro $70\,[mm]\times25\,[mm]$ & 2\\ \hline
 Microcontrolador PIC18F4550 & 1\\ \hline
-Motorreductor de metal relación 34:1 marca Pololu Item \#4884 & 2\\ \hline
-Módulo \textit{Bluetooth} HC-05 & 1\\ \hline
+Motorreductor de metal relación 34:1 marca Pololu número de parte \#4884 & 2\\ \hline
+Módulo Bluetooth HC-05 & 1\\ \hline
 Pintura blanca & 1\\ \hline
 Pintura negra mate & 1\\ \hline
 Placas de acrílico de $150\,[mm]\times70\,[mm]$ & 2\\ \hline
@@ -618,7 +845,7 @@ Resistencia $100\,[\Omega]$ & 2\\ \hline
 Resistencia SMD 1206 $100\,[\Omega]$ & 1\\ \hline
 Resistencia SMD 1206 $100\,[k\Omega]$ & 1\\ \hline
 Resistencia SMD 1206 $330\,[\Omega]$ & 1\\ \hline
-\textit{Socket} para microcontrolador de 40 pines & 1\\ \hline
+\textit{socket} para microcontrolador de 40 pines & 1\\ \hline
 Tarjeta MPU6050 Gy-521 giroscopio y acelerómetro de 3 ejes HiLetGo & 1\\ \hline
 Tarjeta TCRT5000 sensor infrarrojo MH-Sensor Series & 2\\ \hline
 Tira Molex macho de 5 pines $2.54\,[mm]$ & 1\\ \hline
@@ -631,35 +858,35 @@ Tornillos M3 $\times12\,[mm]$ & 8\\
 
 \begin{table}[H]
 	\centering
-	\caption{ Descripción de componentes.} 
-	\begin{tabular}{|p{6cm}|p{9cm}|l|}\hline
+		\caption{Descripción de componentes.}
+	\begin{tabular}{|p{5cm}|p{10cm}|}\hline
         \rowcolor{gray!30}
-		\textbf{Material} & \textbf{Descripción general} \\ \hline
-		Batería lithium polyner & Esta batería de polímero de litio (LiPo) almacena una alta cantidad de
+		\multicolumn{1}{|c|}{\textbf{Material}} & \multicolumn{1}{c|}{\textbf{Descripción general}} \\ \hline
+		Batería \textit{lithium polymer} & Esta batería de polímero de litio (LiPo) almacena una alta cantidad de
             energía y es recargable \\\hline
 		Espárragos de $\frac{3}{16}$ $[in]$ & Barras roscadas utilizadas para ensamblajes mecánicos y estructurales\\ \hline
 		Módulo puente H L298N & Módulo controlador de motores de corriente continua que permite cambiar la dirección y velocidad de los motores \\ \hline
 		Cargador balanceador para batería LiPo & Cargador especializado para baterías LiPo, asegura que cada celda de la
             batería se cargue de manera uniforme \\ \hline
-		Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ marca Pololu Item \#4884 & Motor con reductor de velocidades que proporciona alto torque a bajas
+		Motorreductor con \textit{encoder} $12$ $[V]$, $200$ $[rpm]$ marca Pololu número de parte \#4884 & Motor con reductor de velocidades que proporciona alto torque a bajas
             revoluciones por minuto (RPM), ideal para el movimiento controlado del PISDRSL \\ \hline
-		Llanta marca Pololu Scooter/Skate Wheel Item \#3275 & Ruedas robustas diseñadas para proporcionar buena tracción y estabilidad al PISDRSL, esenciales para su capacidad de balancearse y desplazarse \\ \hline
-		Cople marca Pololu para llanta con opresores para flecha Item \#2672 & Acople mecánico utilizado para conectar el eje del motor con otros elementos mecánicos \\ \hline
+		Llanta marca Pololu \textit{scooter/skate wheel} número de parte \#3275 & Ruedas robustas diseñadas para proporcionar buena tracción y estabilidad al PISDRSL, esenciales para su capacidad de balancearse y desplazarse \\ \hline
+		Cople marca Pololu para llanta con opresores para flecha número de parte \#2672 & Acople mecánico utilizado para conectar el eje del motor con otros elementos mecánicos \\ \hline
 		Giroscopio acelerómetro 3 ejes MPU6050 & Sensor que combina un giroscopio y un acelerómetro, proporcionando mediciones precisas de la orientación del PISDRSL \\ \hline
-		Sensor infrarrojo tarjeta Tcrt 5000 & Sensor que emite y recibe luz infrarroja para detectar la presencia de obstáculos o líneas en el camino \\ \hline
+		Sensor infrarrojo tarjeta TCRT5000 & Sensor que emite y recibe luz infrarroja para detectar la presencia de obstáculos o líneas en el camino \\ \hline
 		Microcontrolador PIC18F4550 & Microcontrolador de $8\;[b]$ utilizado para el control del sistema \\ \hline
 		Placas de acrílico & Acrílico utilizado para las placas del PISDRSL\\ \hline
 		Fusible $2\:[A]$ & Dispositivo de protección que interrumpe el circuito en caso de sobre corriente \\ \hline
 		Capacitor cerámico & Componentes electrónicos utilizados para el filtrado, estabilización de señales eléctricas y en circuitos de osciladores \\\hline
 		Resistencia & Resistores utilizados en circuitos electrónicos para limitar corriente, formar divisores de voltaje y controlar señales \\\hline
 		Cristal de cuarzo & Oscilador que genera señales de reloj precisas \\ \hline
-        Diodo emisor de luz (LED) & Es un dispositivo semiconductor que emite luz cuando una corriente elétrica lo atraviesa\\ \hline
+        Diodo emisor de luz (LED) & Es un dispositivo semiconductor que emite luz cuando una corriente eléctrica lo atraviesa\\ \hline
         Clema bornera & Conector para cables que facilita la conexión y desconexión rápida de componentes\\ \hline
         Interruptor deslizable & Interruptor que cambia de estado al deslizar una palanca\\ \hline
         Juego de conectores tipo Molex & Conectores eléctricos para conectar componentes eléctricos con facilidad y fiabilidad\\ \hline
         Tira \textit{header} macho & Conector de pines macho utilizado para interconectar componentes en la placa de circuito\\ \hline
         Cable AWG 22 & Cable flexible, utilizado para las conexiones eléctricas\\ \hline
-        Módulo \textit{bluetooth} HC05 & Módulo de comunicación bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
+        Módulo Bluetooth HC-05 & Módulo de comunicación Bluetooth que permite la comunicación entre microcontroladores y otros dispositivos\\ \hline
 		Interruptor de 2 polos & Dispositivo mecánico utilizado para controlar el encendido y apagado del circuito \\ \hline
 	\end{tabular}
 	\label{tabla:descripcion}
@@ -672,35 +899,35 @@ En el Cuadro \ref{tabla:computadora} se muestra el equipo de cómputo utilizado 
 \caption{Equipo de cómputo utilizado.} 
 \begin{tabular}{|c|c|}\hline
     \rowcolor{gray!30}
-    \multicolumn{2}{|c|}{\textbf{Laptop de Anna Patricia Fernández}} \\ \hline
+    \multicolumn{2}{|c|}{\textbf{\textit{laptop} de Anna Patricia Fernández}} \\ \hline
     \rowcolor{gray!30}
     \textbf{Características} & \textbf{Descripción} \\ \hline
 Fabricante & Acer\\
 ID del dispositivo & 3C8E72CE-9F92-40F5-8A82-8D9E36929DB2 \\
 Procesador & 11th Gen Intel(R) Core(TM) i7-11800H\\
-Memoria RAM & 8 $[GB]$, procesador x64\\
+Memoria de acceso aleatorio (RAM) & 8 $[GB]$, procesador x64\\
 Tipo de sistema operativo & Sistema operativo de 64 $[b]$, procesador x64\\
-Especificaciones de Windows & 11 \textit{Home Single Language}
+Especificaciones de Windows & 11 \textit{home single language}
 \\
 \hline
 \end{tabular}
 \label{tabla:computadora}
 \end{table}
 
-En el Cuadro \ref{tabla:software} se muestran los software utilizados para el desarrollo del PISDRSL.  
+En el Cuadro \ref{tabla:software} se muestra el \textit{software} utilizado para el desarrollo del PISDRSL.  
 
 \begin{table}[H]
 \centering
-\caption{El software empleado para el desarrollo del PISDRSL.} 
+\caption{El \textit{software} empleado para el desarrollo del PISDRSL.} 
 \begin{tabular}{|c|c|}\hline
     \rowcolor{gray!30}
-Software: & Versión: \\ \hline
+\textbf{Software} & \textbf{Versión} \\ \hline
 CCS Compiler & Versión 5.083\\
 MATLAB & R2021a\\
 PICkit 3 & 3.10.00\\
-MATLAB & R2023a\\
 SOLIDWORKS & 2024 SP5.0\\
-Draw.io & 28.2.8\\
+draw.io & 28.2.8\\
+Eagle & 9.6\\
 \hline
 \end{tabular}
 \label{tabla:software}
@@ -715,6 +942,55 @@ Draw.io & 28.2.8\\
 \end{figure}
 
 \subsection{Metodología}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance = 1cm and 1.2cm,
+        box/.style = {
+            draw, 
+            rectangle, 
+            align=center, 
+            text width=3.5cm, 
+            minimum height=1.2cm,
+            font=\small
+        },
+        arrow/.style = {
+            thick, 
+            -Stealth
+        }
+    ]
+
+    % Fila 1: De izquierda a derecha
+    \node [box] (n1) {Recopilación de información};
+    \node [box, right=of n1] (n2) {Medición preliminar};
+    \node [box, right=of n2] (n3) {Diseño estructural y electrónico};
+
+    % Fila 2: De derecha a izquierda (Efecto serpiente)
+    \node [box, below=of n3] (n4) {Fabricación y ensamblaje};
+    \node [box, left=of n4] (n5) {Verificación dimensional final};
+    \node [box, left=of n5] (n6) {Cálculo de parámetros};
+
+    % Fila 3: De izquierda a derecha
+    \node [box, below=of n6] (n7) {Implementación del control};
+    \node [box, right=of n7] (n8) {Integración de comunicación inalámbrica};
+    \node [box, right=of n8] (n9) {Sintonización y ajuste final};
+
+    % Conexiones de las flechas
+    \draw [arrow] (n1) -- (n2);
+    \draw [arrow] (n2) -- (n3);
+    \draw [arrow] (n3) -- (n4);
+    \draw [arrow] (n4) -- (n5);
+    \draw [arrow] (n5) -- (n6);
+    \draw [arrow] (n6) -- (n7);
+    \draw [arrow] (n7) -- (n8);
+    \draw [arrow] (n8) -- (n9);
+
+    \end{tikzpicture}
+    \caption{Metodología de desarrollo del sistema PISDRSL.}
+    \label{fig:metodologia}
+\end{figure}
 La metodología utilizada para el desarrollo del PISDRSL se compone de diversas etapas: 
 
 \begin{enumerate}
@@ -722,7 +998,7 @@ La metodología utilizada para el desarrollo del PISDRSL se compone de diversas 
 
     \item \textbf{Medición preliminar:} Se determinan las dimensiones y la disposición de los componentes electrónicos dentro de la estructura del PISDRSL para su ensamblaje. Además, se mide la masa de cada componente con el fin de distribuir adecuadamente la carga dentro de la estructura y calcular los momentos de inercia correspondientes, tanto del sistema completo como de sus elementos individuales. También se registra la velocidad de giro de los motores midiendo el número de vueltas por minuto, lo que permite estimar la velocidad angular máxima y los voltajes.
 
-    \item \textbf{Diseño estructural y electrónico:} Se desarrolla el diseño de la estructura del PISDRSL considerando sus especificaciones, restricciones mecánicas y distribución de peso. Paralelamente, se diseña la PCB, definiendo el trazado de las pistas de conexión eléctrica, la ubicación precisa de los componentes y la integración de los distintos subsistemas.
+    \item \textbf{Diseño estructural y electrónico:} Se desarrolla el diseño de la estructura del PISDRSL considerando sus especificaciones, restricciones mecánicas y distribución de peso. Paralelamente, se diseña la placa de circuito impreso (\textit{Printed Circuit Board}, PCB), definiendo el trazado de las pistas de conexión eléctrica, la ubicación precisa de los componentes y la integración de los distintos subsistemas.
 
     \item \textbf{Fabricación y ensamblaje:} Se procede a la manufactura de la PCB y al montaje de los componentes sobre la estructura del sistema. Para ello, se emplean elementos de sujeción como tornillos y tuercas, asegurando una fijación estable. Se realizan las conexiones eléctricas mediante cables con conectores tipo Molex, garantizando una interconexión correcta entre los distintos elementos del sistema.
 
@@ -732,18 +1008,19 @@ La metodología utilizada para el desarrollo del PISDRSL se compone de diversas 
 
     \item \textbf{Implementación del control:} Se genera el algoritmo de control en el microcontrolador PIC18F4550 del PISDRSL, asegurando una programación correcta para la operación del sistema en tiempo real.
 
-    \item \textbf{Integración de comunicación inalámbrica:} Se establece la comunicación inalámbrica mediante \textit{bluetooth}, permitiendo el monitoreo remoto del sistema.
+    \item \textbf{Integración de comunicación inalámbrica:} Se establece la comunicación inalámbrica mediante Bluetooth, permitiendo el monitoreo remoto del sistema.
 
     \item \textbf{Sintonización y ajuste final:} Se realizan pruebas de funcionamiento para evaluar el desempeño del controlador. En esta etapa, se ajustan finamente las ganancias del control, mejorando la respuesta del sistema para que realice el recorrido especificado de manera precisa, estable y robusta ante cambios de iluminación.
 \end{enumerate}  
 
+
 \section{Resultados y Discusión}
 \subsection {Desarrollo de la PCB}
-En la figura \ref{fig:Esquema_1}, se muestra el diagrama esquemático que se realizó para el diseño de la PCB
+En la Figura \ref{fig:Esquema_1}, se muestra el diagrama esquemático que se realizó para el diseño de la PCB.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/image.png}
-    \caption{Imagen de oscilocopio con un muestreo de 10 $[ms]$ y la señal tiene una frecuencia de 45 $[Hz]$ sin filtro.}
+    \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{img/image.png}}
+    \caption{Diagrama esquemático de la PCB del PISDRSL.}
     \label{fig:Esquema_1}
 \end{figure}
 
@@ -751,20 +1028,26 @@ En las Figuras \ref{fig:PCB} y \ref{fig:PCB_Inf}, se muestran ambas caras de la 
 componentes previamente mostrados en el esquemático de la Figura \ref{fig:Esquema_1}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB.png}
-    \caption{Cara superior de la PCB diseñada en el software Eagle.}
+    \includegraphics[width=1\textwidth]{img/PCB.png}
+    \caption{Cara superior de la PCB diseñada en el \textit{software} Eagle.}
     \label{fig:PCB}
 \end{figure}
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/PCB_Inf.png}
-    \caption{Cara inferior de la PCB diseñada en el software Eagle.}
+    \includegraphics[width=1\textwidth]{img/PCB_Inf.png}
+    \caption{Cara inferior de la PCB diseñada en el \textit{software} Eagle.}
     \label{fig:PCB_Inf}
 \end{figure}
 
+En la Figura \ref{fig:PCB_3D}, se muestra una vista en tres dimensiones (3D) del diseño de la PCB ya impresa.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/PCB_3D.png}
+    \caption{Vista 3D del diseño de la PCB.}
+    \label{fig:PCB_3D}
+\end{figure}
 
-\subsection {Medicíon de masas y distancias}
+\subsection {Medición de masas y distancias}
 Para determinar el momento de inercia del robot, es fundamental disponer de todas las mediciones de las
 masas de los diversos elementos que componen al PISDRSL. La masa de cada uno de los componentes está
 expresada en kilogramos \textit{[kg]}.
@@ -773,10 +1056,10 @@ En el Cuadro \ref{tabla:TabMasas} se muestran todas las masas de los componentes
 
 \begin{table}[H]
 \centering
-\caption{Masas de los componentes del robot PISDRSL} 
+\caption{Masas de los componentes del robot PISDRSL.}
 \begin{tabular}{|c|c|}\hline
 \rowcolor{gray!30}
-Componente & Masa \textit{[kg]} \\ \hline
+\textbf{Componente} & \textbf{Masa} \textit{[kg]} \\ \hline
 Placa de acrílico & $m_{A} = 0.02600$\\
 Llanta & $m_{LL} = 0.06000$\\
 Motor & $m_{M} = 0.10200$\\
@@ -799,7 +1082,7 @@ rotación de las ruedas. Las mediciones están expresadas en metros \textit{[m]}
 \caption{Distancias del robot PISDRSL respecto al eje de rotación de las ruedas.} 
 \begin{tabular}{|c|c|}\hline
 \rowcolor{gray!30}
-Componente & Distancia \textit{[m]} \\ \hline
+\textbf{Componente} & \textbf{Distancia} \textit{[m]} \\ \hline
 Distancia al primer acrílico & $x_{1} = 0.01868$\\
 Distancia al puente H & $x_{2} = 0.07700$\\
 Distancia a centro de masa de los espárragos & $x_{3} = 0.07100$\\
@@ -840,12 +1123,13 @@ Donde el resultado es:
 	C_z=0.1037\;[m]
 	\label{eq:51}
 \end{equation}
-En el Cuadro \ref{tabla:momentos_inercia} se presentan los cálculos realizados con MATLAB (código del anexo pendiente) de los momentos de inercia alrededor del eje $y$, asumiendo que el PISDRSL rota alrededor de su centro de masa.
-\begin{table}[H]
-	\centering
-	\caption{Cálculo de los momentos de inercia del PISDRSL.} 
-	\begin{tabular}{|l|c|l|}\hline
-		$I_{yy}$ \textbf{de componentes} &\textbf{Operación} & \textbf{Distancia} $[kgm^2]$ \\ \hline
+En el Cuadro \ref{tabla:momentos_inercia} se presentan los cálculos realizados con MATLAB (código en el Anexo \ref{anexo:matlab_ganancias}) de los momentos de inercia alrededor del eje $y$, asumiendo que el PISDRSL rota alrededor de su centro de masa.
+	\begin{table}[H]
+		\centering
+		\caption{Cálculo de los momentos de inercia del PISDRSL.} 
+		\begin{tabular}{|c|c|c|}\hline
+			\rowcolor{gray!30}
+			\textbf{$I_{yy}$ de componentes} & \textbf{Operación} & \textbf{Distancia} $[kgm^2]$ \\ \hline
         $I_{yy\_carcazas}$ & $2\frac{m_M}{2}C_z^2 + 2\frac{m_M}{2}\left(\frac{R_m}{2}\right)^2$ & $8.5616\times 10^{-4}$ \\ \hline
         $I_{yy\_postes}$ & $\frac{4 m_t |C_z-x_3|^2}{12}$ & $4.6499\times 10^{-6}$ \\ \hline
         $I_{yy\_bateria}$ & $m_B|C_z-x_5|^2 + m_B\frac{0.026^2+0.034^2}{12}$ & $1.7249\times 10^{-4}$ \\ \hline
@@ -853,7 +1137,10 @@ En el Cuadro \ref{tabla:momentos_inercia} se presentan los cálculos realizados 
         $I_{yy\_acr\_inferior}$ & $\frac{m_A(0.05)^2}{12}+m_A|C_z-x_1|^2$ & $2.3511\times 10^{-4}$ \\ \hline
         $I_{yy\_acr\_superior}$ & $\frac{m_A(0.05)^2}{12}+m_A|x_4-C_z|^2$ & $1.1434\times 10^{-5}$ \\ \hline
         $I_{yy\_puente\_H}$ & $m_H|x_2-C_z|^2$ & $5.4691\times 10^{-6}$ \\ \hline
-		$I_{yy}$ & \textbf{Sumatoria de todos los momentos de inercia} & ${1.3\times 10^{-3}}$ \\ \hline
+			$I_{yy}$ & $\begin{aligned}
+			I_{yy\_carcazas}+I_{yy\_postes}+I_{yy\_bateria}+I_{yy\_Bo} \\
+			+I_{yy\_acr\_inferior}+I_{yy\_acr\_superior}+I_{yy\_puente\_H}
+			\end{aligned}$ & ${1.3\times 10^{-3}}$ \\ \hline
 		
 	\end{tabular}
 	\label{tabla:momentos_inercia}
@@ -866,25 +1153,149 @@ dimensiones.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{img/pista sup.png}
-	\caption{Vista superior de la pista}
+		\caption{Vista superior de la pista.}
 	\label{fig:pista sup}
 \end{figure}
 
+En la Figura \ref{fig:PistaLat} se muestra la vista lateral de la pendiente a subir y bajar por el robot PISDRSL.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/VISTA_LATERAL_PISTA.png}
+	\caption{Vista lateral de sección con pendiente.}
+	\label{fig:PistaLat}
+\end{figure}
+
+En la Figura \ref{fig:PistaIso} se presenta una vista isométrica de la pista donde se muestran los puntos importantes para
+el análisis del comportamiento del robot PISDRSL.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/VISTA_ISOMETRICA_PISTA.png}
+	\caption{Vista isométrica de la pista.}
+	\label{fig:PistaIso}
+\end{figure}
+
 \subsection {Diseño del robot PISDRSL y montaje de materiales}
+En la Figura \ref{fig:DisBal} se muestra a detalle la distribución de los componentes. En este caso no fueron incluidos los sensores infrarrojos debido a su bajo peso.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{img/DisBal.png}
+	\caption{Diagrama de distribución de componentes del PISDRSL (vista frontal).}
+	\label{fig:DisBal}
+\end{figure}
 
 \subsection {Modelo físico y pruebas de pista}
+La Figura \ref{fig:instalacion_bateria_pcb} muestra la instalación de la batería debajo del PCB, configuración que permitió compactar el sistema y mantener una distribución de masa adecuada. En la Figura \ref{fig:pisdrsl_vista_frontal_foto} se presenta la vista frontal del PISDRSL ya ensamblado, mientras que en la Figura \ref{fig:pcb_foto_nueva} se observa el montaje final de la tarjeta PCB. Por su parte, la Figura \ref{fig:vista_lateral_foto} permite apreciar el perfil lateral del prototipo y la disposición de sus componentes en altura.
+
+Las pruebas de pista se realizaron en condiciones de sombra, dentro de un salón, para mantener una iluminación más estable y reducir variaciones por luz ambiental directa sobre los sensores infrarrojos. En la Figura \ref{fig:bajando_rampa} se observa al PISDRSL durante el descenso de la rampa, y en la Figura \ref{fig:subiendo_rampa} durante la maniobra de ascenso. Asimismo, en la Figura \ref{fig:tramo_recto} se aprecia el seguimiento de línea en un tramo recto, y en la Figura \ref{fig:en_curva} se puede observar que el PISDRSL está realizando el seguimiento de línea en la sección de curvas de la pista.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/Instalación de Batería debajo del PCB.jpeg}
+    \caption{Instalación de batería debajo del PCB.}
+    \label{fig:instalacion_bateria_pcb}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/PISDRSL vista frontal.jpeg}
+    \caption{PISDRSL en vista frontal.}
+    \label{fig:pisdrsl_vista_frontal_foto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/PCB.jpeg}
+    \caption{Vista de la PCB del sistema.}
+    \label{fig:pcb_foto_nueva}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/Vista Lateral.jpeg}
+    \caption{Vista lateral del PISDRSL.}
+    \label{fig:vista_lateral_foto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/Bajando rampa.jpeg}
+    \caption{PISDRSL durante la prueba bajando rampa.}
+    \label{fig:bajando_rampa}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/Subiendo rampa.jpeg}
+    \caption{PISDRSL durante la prueba subiendo rampa.}
+    \label{fig:subiendo_rampa}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/Tramo recto.jpeg}
+    \caption{PISDRSL en el tramo recto de la pista.}
+    \label{fig:tramo_recto}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/En curva.jpeg}
+    \caption{PISDRSL durante el recorrido en curva.}
+    \label{fig:en_curva}
+\end{figure}
 
 \subsection {Ganancias del controlador}
+A partir del script de MATLAB (Anexo \ref{anexo:matlab_ganancias}) se obtuvo el punto seleccionado en el lugar de raíces y las ganancias teóricas, resumidas en el Cuadro \ref{tabla:ganancias_teoricas_matlab}.
+
+\begin{table}[H]
+\centering
+\caption{Punto seleccionado y ganancias teóricas obtenidas con MATLAB.}
+\begin{tabular}{|c|c|}\hline
+    \rowcolor{gray!30}
+    \textbf{Parámetro} & \textbf{Valor} \\ \hline
+    Punto seleccionado en lugar de raíces & $-20.9498 + 19.1436i$ \\ \hline
+    $k_{di}$ & 0.0887 \\ \hline
+    $k_{pi}$ & 0.9853 \\ \hline
+    $k_{pv}$ & 1.1979 \\ \hline
+    $k_{iv}$ & 1.8193 \\ \hline
+\end{tabular}
+\label{tabla:ganancias_teoricas_matlab}
+\end{table}
+
+Las ganancias finales de los lazos, obtenidas mediante sintonización experimental en pista para lograr una velocidad de referencia de $0.1\,[m/s]$ y completar el circuito, se presentan en el Cuadro \ref{tabla:ganancias_sintonizacion}.
+
+\begin{table}[H]
+\centering
+\caption{Ganancias de sintonización experimental del controlador del PISDRSL.}
+\begin{tabular}{|c|c|c|}\hline
+    \rowcolor{gray!30}
+    \textbf{Lazo} & \textbf{Ganancia} & \textbf{Valor} \\ \hline
+    Inclinación (balance) & $k_{pi}$ & 2.20 \\ \hline
+    Inclinación (balance) & $k_{di}$ & 0.16 \\ \hline
+    Velocidad (avance) & $k_{pv}$ & 1.00 \\ \hline
+    Velocidad (avance) & $k_{iv}$ & 2.00 \\ \hline
+    Orientación (seguimiento) & $k_{po}$ & 0.09 \\ \hline
+    Orientación (seguimiento) & $k_{do}$ & 0.01 \\ \hline
+\end{tabular}
+\label{tabla:ganancias_sintonizacion}
+\end{table}
 
 \subsection {Resultados experimentales graficados}
+La Figura \ref{fig:Graficas} muestra la gráfica de resultados obtenidos durante el recorrido del PISDRSL iniciando desde
+el punto 6 mostrado en la Figura \ref{fig:PistaIso}.
+\begin{figure}[H]
+	\centering
+	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{img/Graficas.jpeg}}
+	\caption{Gráfica de resultados obtenidos durante el recorrido del PISDRSL.}
+	\label{fig:Graficas}
+\end{figure}
 
 \subsection {Resultados y discusión individual}
 
 \subsubsection{Aguilar Sarabia Diego Eugenio}
-En esta práctica se analizó la importancia del filtrado previo a la etapa de conversión analógico-digital para mitigar el fenómeno de \textit{aliasing}. Al observar los resultados experimentales en el osciloscopio, se identificó que la señal senoidal presentaba componentes de alta frecuencia (ruido) que distorsionaban la información original. Para solucionar esto, se diseñó un filtro RC de primer orden con una frecuencia de corte teórica de 30 $[Hz]$. Debido a la disponibilidad de componentes, se empleó una resistencia comercial de $51\ [k\Omega]$, lo que ajustó la frecuencia de corte real a 31.2 $[Hz]$. Esta implementación permitió que el microcontrolador PIC18F4550 procesara una señal más limpia, cumpliendo con el objetivo de adquirir datos de manera fiel al limitar el ancho de banda de entrada conforme a los criterios de muestreo.
 
 \subsubsection{Fernández Rendón Anna Patricia}
-Se realizaron varios  
+
 
 \subsubsection{Sánchez Alejo Frida Alexandra}
 
@@ -892,10 +1303,11 @@ Se realizaron varios
  
 \subsection{Resultados y discusión del equipo}
 
+
 \section{Conclusiones}
 \subsection{Aguilar Sarabia Diego Eugenio}
 
-​La implementación del sistema PISDRSL mediante la arquitectura del PIC18F4550 constituyó un desafío integral, abarcando desde la concepción mecánica y electrónica hasta la arquitectura del sistema de control. A pesar de las contingencias operativas, el prototipo superó con éxito los obstáculos en la pista de pruebas. El mayor reto radicó en la gestión logística y organizacional del equipo, subrayando la necesidad de optimizar las estrategias de flujo de trabajo. Es imperativo resaltar la eficacia de los blindajes optoelectrónicos, diseñados específicamente para neutralizar las fluctuaciones lumínicas que comprometen la estabilidad del sistema durante su despliegue dinámico.
+La implementación del sistema PISDRSL mediante la arquitectura del PIC18F4550 constituyó un desafío integral, abarcando desde la concepción mecánica y electrónica hasta la arquitectura del sistema de control. A pesar de las contingencias operativas, el prototipo superó con éxito los obstáculos en la pista de pruebas. El mayor reto radicó en la gestión logística y organizacional del equipo, subrayando la necesidad de optimizar las estrategias de flujo de trabajo. Es imperativo resaltar la eficacia de los blindajes optoelectrónicos, diseñados específicamente para neutralizar las fluctuaciones lumínicas que comprometen la estabilidad del sistema durante su despliegue dinámico.
 
 \subsection{Fernández Rendón Anna Patricia}
  
@@ -927,6 +1339,110 @@ Finalmente, la plataforma PIC18F4550 ha demostrado una robustez operativa notabl
 
 \newpage
 \section{Anexos}
+
+\subsection{Código MATLAB para el cálculo de parámetros y ganancias del controlador}\label{anexo:matlab_ganancias}
+
+{\scriptsize
+\begin{verbatim}
+clc
+clear
+mT=0.795; % [kg], masa total del robot
+mM=0.102; % [kg], masa de un motor
+mC=0.009; % [kg], masa de un cople de rueda
+mt=0.041/4 + 0.001*4; % [kg], masa de un esparrago con tuercas y arandelas
+mS=0.011; % [kg], masa de un soporte de motor
+mH=0.024; % [kg], masa tarjeta puente H
+mB=0.149; % [kg], masa bateria
+mBo=0.032; % [kg], masa tarjeta microcontrolador (PCB)
+mA=0.026; % [kg], masa de una placa de acrilico
+R=0.070/2; % [m], radio de rueda
+mLL=0.060; % [kg], masa de llanta
+mR=mLL+mC+mM/2; % [kg], masa equivalente de una rueda
+
+mTCalculada=2*mM+2*mLL+2*mC+4*mt+2*mS+mH+mB+mBo+2*mA
+
+% Masa del pendulo sin considerar motores
+Mp=2*mS+2*mA+mB+mH+4*mt+mBo
+
+% Distancias medidas desde el eje de rotacion de las ruedas [m]
+x1=0.01868;  % primer acrilico
+x2=0.07700;  % puente H
+x3=0.07100;  % centro de masa de esparragos
+x4=0.12043;  % segundo acrilico
+x5=0.13456;  % centro de masa de bateria
+x6=0.15700;  % PCB
+x7=0.01150;  % soporte del motor
+
+% Centro de masa del pendulo
+Cz=(2*mS*x7 + mA*x1 + mB*x5 + mH*x2 + 4*mt*x3 + mA*x4 + mBo*x6) / Mp
+
+b=0.172/2; % mitad de la distancia entre huellas de llantas
+
+% Inercias
+Iyy_carcazas=(2*mM/2)*Cz^2;
+Iyy_postes=4*mt*(abs(Cz-x3))^2/12;
+Iyy_bateria=mB*(Cz-x5)^2+mB*(0.034^2+0.025^2)/12;
+Iyy_Bo=mBo*(0.050)^2/12+mBo*(abs(x6-Cz))^2;
+Iyy_acrilico_inferior=mA*(0.05)^2/12+mA*(abs(Cz-x1))^2;
+Iyy_acrilico_superior=mA*(0.05)^2/12+mA*(abs(x4-Cz))^2;
+Iyy_H=mH*(x2-Cz)^2;
+Iyy=Iyy_carcazas+Iyy_postes+Iyy_bateria+Iyy_Bo+Iyy_acrilico_inferior+Iyy_acrilico_superior+Iyy_H
+
+Iwa=mR*R^2/2;
+Iwd=mR*(R^2/4+0.024^2/12);
+g=9.81;
+
+M22=Mp*Cz^2+Iyy
+
+Iphi=mR*R^2+Iwa;
+s=Mp*Cz+2*Iphi/R;                 % sigma
+s1=Mp*Cz*g;                       % sigma1
+s2=(1+Mp*Cz*R/(2*Iphi))/M22;      % sigma2
+
+Gp=tf(s1*s2,[1 0 -s1/M22 0 0]);
+figure(4)
+rlocus(Gp)
+grid on
+title('Root Locus - Planta')
+
+% Polos deseados
+z1=-2;
+z2=-11.3;
+z3=-14.3;
+
+num1=conv([1 -z1],[1 -z2]);
+nume=conv(num1,[1 -z3])
+a0=nume(4)
+a1=nume(3)
+a2=nume(2)
+a3=nume(1)
+
+GH=Gp*tf(nume,1);
+figure(2)
+rlocus(GH)
+axis([-120 20 -40 40])
+grid on
+title('Root Locus - Lazo abierto con compensador')
+
+k=rlocfind(GH)
+
+kdi=k*(Mp*Cz*g+a1*M22)
+kpi=k*(a2*Mp*Cz*g+a0*M22)
+kpv=k*a1*sigma
+kiv=k*a0*sigma
+
+S=1/(1+k*GH);
+W=0:0.1:200;
+[magnitud,fase] = bode(S,W);
+magnit=magnitud(:);
+figure(3)
+plot(W,magnit(:))
+xlabel({'$\omega$ [rad/s]'},'interpreter','latex','FontSize',14)
+ylabel({'$\vert S_o(j\omega)\vert$'},'interpreter','latex','FontSize',14)
+title('Sensitivity')
+grid on
+\end{verbatim}
+}
 
 \subsection{Código Fuente del Sistema de Control de Equilibrio y Seguimiento de Línea en C (CCS Compiler)}\label{proggsim}
  
@@ -1177,8 +1693,8 @@ int main()
    setup_timer_2(T2_DIV_BY_16,254,1);
    
    //Configurar pines 16 y 17 del 4550 como PWM
-   setup_ccp1(CCP_PWM);          //configurando pwm
-   setup_ccp2(CCP_PWM);          //configurando pwm 
+   setup_ccp1(CCP_PWM);          //configurando PWM
+   setup_ccp2(CCP_PWM);          //configurando PWM 
    
    setup_adc(ADC_CLOCK_INTERNAL);//Configurando el convertidor ADC con reloj interno
    setup_adc_ports(AN0_TO_AN1);
@@ -1322,8 +1838,8 @@ int main()
          output_high(pin_d3);
       }
       
-      set_pwm1_duty(uWl); //Actualizando el valor del pwm rueda izquierda
-      set_pwm2_duty(uWr); //Actualizando el valor del pwm rueda derecha
+      set_pwm1_duty(uWl); //Actualizando el valor del PWM rueda izquierda
+      set_pwm2_duty(uWr); //Actualizando el valor del PWM rueda derecha
       
       //Se envían bytes al puerto serial para la gráfica experimental
       putc(0xAA); //ID a la PC
@@ -1331,7 +1847,7 @@ int main()
       putc(vdg);          
       vg=(int8)(mv*v+127);
       putc(vg);          
-      thetag=(int8)(mtheta*theta+127);
+      thetag=(int8)(mtheta*theta+128);
       putc(thetag);   
       alphag=(int8)(malpha*alpha+127);
       putc(alphag);   
