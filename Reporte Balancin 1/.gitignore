@@ -11,3 +11,7 @@
 *.toc
 *.pdf
 *.blg
+
+#excepción con las gráficas en pdf
+!Graficas.pdf
+
