@@ -1295,6 +1295,30 @@ el punto 6 mostrado en la Figura \ref{fig:PistaIso}.
 \subsubsection{Aguilar Sarabia Diego Eugenio}
 
 \subsubsection{Fernández Rendón Anna Patricia}
+El desarrollo del prototipo se inició con la construcción del robot PISDRSL (Figura \ref{fig:DisBal}), cumpliendo con los requerimientos 
+de diseño y considerando la distribución estratégica de los componentes (Figura \ref{fig:DisBal}), así como las masas (Cuadro \ref{tabla:TabMasas}) y las distancias 
+(Cuadro \ref{tabla:TabMed}) medidas clave para el calculo de los momentos de inercia. No obstante, durante la fase de ensamble surgieron desafíos técnicos significativos; 
+se requirió una inversión considerable de tiempo en la detección y corrección de fallas de hardware, tales como conexiones deficientes.
+
+El diseño electrónico de la PCB se llevó a cabo en el software Eagle (Figuras \ref{fig:PCB} y \ref{fig:PCB_Inf}), permitiendo una organización óptima de las pistas 
+y la ubicación precisa del microcontrolador PIC18F4550 y todos los demas elementos. Esta planificación previa fue fundamental para lograr una integración física compacta, 
+facilitando el montaje de la batería debajo de la PCB para mantener un centro de masa $C_z$ controlado de $0.1037$ [m].
+
+En el ámbito del control, se identificó una variación relevante entre el modelo matemático linealizado y el comportamiento dinámico real. Las ganancias teóricas calculadas 
+inicialmente en MATLAB (Cuadro \ref{tabla:ganancias_teoricas_matlab}) proporcionaron una base de estabilidad, pero resultaron insuficientes para manejar las perturbaciones del entorno 
+real, como las transiciones en planos inclinados de 15 grados. Este desfase fue de gran importancia para la sintonización del prototipo; mediante pruebas de campo, se ajustaron las ganancias finales 
+(Cuadro \ref{tabla:ganancias_sintonizacion}), logrando una rapidez de respuesta del lazo de orientación y el amortiguamiento del balanceo, garantizando un seguimiento de línea fluido a la velocidad de referencia de $v_d = 0.175$ [m/s].
+
+Al ejecutar el recorrido completo en la pista de pruebas (Figura \ref{fig:PistaIso}), la gráfica de resultados experimentales (Figura \ref{fig:Graficas}) validó la robustez del sistema. 
+En el primer canal, se observa que la velocidad traslacional $v$ se mantiene oscilando controladamente alrededor de la referencia, incluso ante la carga inercial de las pendientes. 
+El segundo canal muestra la orientación $\theta$, donde el robot ejecuta correcciones precisas en las curvas, mientras que el tercer canal registra las variaciones de 
+inclinación $\alpha$, evidenciando picos de esfuerzo de control en los motores durante el ascenso y descenso de la rampa. Se identifica un aumento alrededor de $t \approx 9\,[s]$, asociado a la subida que inclina el 
+sistema hacia adelante, y una disminución hacia $t \approx 28\,[s]$, correspondiente a la bajada que genera una leve inclinación hacia atrás. Este comportamiento en la variable de inclinación $\alpha$ es consistente con el esfuerzo 
+de control requerido para compensar el par gravitatorio inducido por la pendiente de la pista. Se observa un incremento en los niveles de tensión suministrados a ambos actuadores durante la fase de ascenso (aproximadamente en $t \approx 9\,[s]$), 
+seguido de una atenuación en el voltaje durante el descenso (cerca de $t \approx 20\,[s]$). Estas variaciones resultan congruentes con las demandas de torque necesarias para compensar los efectos gravitacionales y mantener la velocidad de referencia 
+en cada etapa del perfil de la pista. Estos resultados confirman que la estrategia de control compensa eficazmente las no linealidades del sistema en movimiento.
+
+\subsection{Resultados y Discusión del equipo}
 
 
 \subsubsection{Sánchez Alejo Frida Alexandra}
