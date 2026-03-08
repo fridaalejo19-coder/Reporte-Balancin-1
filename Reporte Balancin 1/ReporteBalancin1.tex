@@ -1284,12 +1284,12 @@ Las ganancias finales de los lazos, obtenidas mediante sintonización experiment
 La Figura \ref{fig:Graficas} muestra la gráfica de resultados obtenidos durante el recorrido del PISDRSL iniciando desde
 el punto 6 mostrado en la Figura \ref{fig:PistaIso}.
 Para obtener estas señales, se utilizó un código en C++ ejecutado desde la laptop para encender y enlazar por Bluetooth
-con el módulo del PISDRSL, y con ese mismo programa se generó un archivo de texto (.txt) con los datos experimentales
-(ver Anexo \ref{anexo:cpp_datos_bt}). Posteriormente, ese archivo .txt se procesó con un script de MATLAB para generar
-las gráficas finales mostradas en la Figura \ref{fig:Graficas} (ver Anexo \ref{anexo:matlab_graficas_fig27}).
+con el módulo del PISDRSL, y con ese mismo programa se generó un archivo de texto con los datos experimentales
+(Anexo \ref{grafembebido}). Posteriormente, ese archivo se procesó con un script de MATLAB para generar
+las gráficas finales mostradas en la Figura \ref{fig:Graficas} (Anexo \ref{balancingraf}).
 \begin{figure}[H]
 	\centering
-	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{img/Graficas.jpeg}}
+	\makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{img/Graficas.pdf}}
 	\caption{Gráfica de resultados obtenidos durante el recorrido del PISDRSL.}
 	\label{fig:Graficas}
 \end{figure}
@@ -1904,7 +1904,7 @@ return 0;
 
 \end{verbatim}
 }
-\subsection{Código grafembebido}\label{grafembebido}
+\subsection{Código en C++ para obtener los datos de respuesta del PISDRSL}\label{grafembebido}
  
 {\scriptsize
 \begin{verbatim}
@@ -2068,7 +2068,7 @@ return 0;
 \end{verbatim}
 }
 
-\subsection{Código balancin graf}\label{balancingraf}
+\subsection{Código en MATLAB para graficar los resultados obtenidos de la respuesta del PISDRSL}\label{balancingraf}
  
 {\scriptsize
 \begin{verbatim}
